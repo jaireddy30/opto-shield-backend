@@ -1,0 +1,13 @@
+{
+  "name": "pbx-shield-frontend",
+  "version": "2.0.0",
+  "description": "Standalone SOC Frontend Dashboard for PBX Shield",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}

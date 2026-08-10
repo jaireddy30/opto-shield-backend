@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PBX SHIELD — Autonomous Security Operations Center</title>
+    
+    <!-- Google Fonts & Libraries -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js and Socket.IO -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.7.4/dist/socket.io.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #0a0e1a;
+            --panel-bg: rgba(17, 24, 39, 0.85);
+            --border-color: rgba(255, 255, 255, 0.08);
+            --text-main: #f0f4f8;
+            --text-muted: #8892a4;
+            --text-subtle: #4a5568;
+            
+            --safe: #00ff88;
+            --danger: #ff3366;
+            --warning: #ff8800;
+            --primary: #00d4ff;
+            --purple: #a855f7;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside {
+            width: 260px;
+            background: rgba(13, 17, 28, 0.95);
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 1.5rem 1rem;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 1.1rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: #fff;
+        }
+
+        .brand-text p {
+            font-size: 0.65rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .nav-menu {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(0, 212, 255, 0.1);
+            color: #fff;
+            border-left: 3px solid var(--primary);
+        }
+
+        .sidebar-bottom {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .server-connection-card {
+            background: rgba(0, 212, 255, 0.04);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            padding: 0.8rem;
+            border-radius: 10px;
+            font-size: 0.75rem;
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--safe);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--safe);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0); }
+        }
+
+        .sidebar-time {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Main Workspace */
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            background: radial-gradient(circle at top right, rgba(0, 212, 255, 0.05), transparent 40%);
+        }
+
+        header {
+            padding: 1.25rem 2rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 14, 26, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-title h2 {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .header-title p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .badge-monitoring {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--safe);
+            padding: 0.35rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .content-area {
+            padding: 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Tab Visibility */
+        .tab-view {
+            display: none;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .tab-view.active {
+            display: flex;
+        }
+
+        /* Stats Row */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.25rem;
+        }
+
+        .stat-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-info h3 {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.4rem;
+        }
+
+        .stat-val {
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        /* Threat Alert Banner */
+        .alert-banner {
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .alert-banner.safe {
+            background: rgba(0, 255, 136, 0.08);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+            color: var(--safe);
+        }
+
+        .middle-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 1.25rem;
+        }
+
+        .panel {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .panel-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .events-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.78rem;
+            text-align: left;
+        }
+
+        .events-table th {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text-muted);
+            padding: 0.6rem 0.8rem;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+
+        .events-table td {
+            padding: 0.6rem 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+            white-space: nowrap;
+        }
+
+        .events-table tr.row-attack {
+            background: rgba(255, 51, 102, 0.12);
+            border-left: 3px solid var(--danger);
+        }
+
+        .events-table tr.row-normal {
+            border-left: 3px solid var(--safe);
+        }
+
+        .alert-pill {
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+        }
+        .alert-pill.danger { background: rgba(255, 51, 102, 0.2); color: var(--danger); }
+        .alert-pill.info { background: rgba(0, 212, 255, 0.2); color: var(--primary); }
+    </style>
+</head>
+<body>
+
+    <!-- Connection Setup Modal Overlay -->
+    <div id="connection-modal" style="position: fixed; inset: 0; background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(20px); z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.3s ease;">
+        <div style="background: #111827; border: 1px solid rgba(255, 255, 255, 0.12); width: 100%; max-width: 480px; padding: 2.5rem 2rem; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center;">
+            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 1rem;">🛡️</div>
+            <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem;">PBX SHIELD FRONTEND</h2>
+            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.8rem;">Connect to Remote Asterisk Backend Server</p>
+            
+            <form onsubmit="handleConnectionSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+                <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;">
+                    <div>
+                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Backend Server IP / Host</label>
+                        <input type="text" id="conn-backend-ip" placeholder="13.126.90.199" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; font-family: monospace; outline: none;">
+                    </div>
+                    <div>
+                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Port</label>
+                        <input type="number" id="conn-backend-port" placeholder="5000" value="5000" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; outline: none;">
+                    </div>
+                </div>
+
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">API Secret Authentication Key</label>
+                    <input type="text" id="conn-api-secret" placeholder="pbx-shield-secret-2026" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--primary); padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; font-family: monospace; font-weight: 600; outline: none;">
+                </div>
+
+                <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-top: 0.5rem; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">Connect & Authenticate Server</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Sidebar Navigation -->
+    <aside>
+        <div>
+            <div class="brand">
+                <div class="brand-logo">🛡️</div>
+                <div class="brand-text">
+                    <h1>PBX SHIELD</h1>
+                    <p>Remote SOC Console</p>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item active" onclick="switchTab('dashboard', this)">
+                    <span class="nav-icon">🏠</span> Dashboard
+                </li>
+                <li class="nav-item" onclick="switchTab('events', this)">
+                    <span class="nav-icon">📜</span> Live Events
+                </li>
+                <li class="nav-item" onclick="switchTab('settings', this)">
+                    <span class="nav-icon">⚙️</span> Connection Settings
+                </li>
+            </ul>
+        </div>
+
+        <div class="sidebar-bottom">
+            <div class="server-connection-card">
+                <div style="font-weight: 700; color: var(--primary); font-size: 0.75rem;" id="remote-server-label">Server: 13.126.90.199:5000</div>
+                <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 0.2rem;" id="conn-status-pill">🟢 Authenticated via API Key</div>
+                <button onclick="openConnectionModal()" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); color: #fff; width: 100%; margin-top: 0.5rem; padding: 0.3rem; border-radius: 4px; font-size: 0.68rem; cursor: pointer;">Change Server</button>
+            </div>
+
+            <div class="sidebar-time">
+                <span>🕒</span>
+                <span id="sidebar-clock">--:--:--</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main>
+        <header>
+            <div class="header-title">
+                <h2 id="page-title">Dashboard</h2>
+                <p id="page-subtitle">Real-time overview of your remote PBX security</p>
+            </div>
+            <div class="badge-monitoring">
+                <div class="pulse-dot"></div>
+                LIVE FEED ACTIVE
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- TAB 1: DASHBOARD -->
+            <div id="tab-dashboard" class="tab-view active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Total Analyzed Events</h3>
+                            <div class="stat-val" id="stat-total-events">0</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(0,212,255,0.1); color: var(--primary);">📊</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>60s Windows Analyzed</h3>
+                            <div class="stat-val" id="stat-total-windows">0</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(168,85,247,0.1); color: var(--purple);">⏱️</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Attacks Blocked</h3>
+                            <div class="stat-val" id="stat-total-attacks" style="color: var(--danger);">0</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(255,51,102,0.1); color: var(--danger);">🛡️</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-info">
+                            <h3>Threat Status</h3>
+                            <div class="stat-val" id="stat-threat-level" style="color: var(--safe); font-size: 1.3rem;">LOW</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(0,255,136,0.1); color: var(--safe);">✅</div>
+                    </div>
+                </div>
+
+                <div id="alert-banner" class="alert-banner safe">
+                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                        <span style="font-size: 1.2rem;" id="banner-icon">✅</span>
+                        <div>
+                            <strong id="banner-title" style="font-size: 0.95rem;">All Systems Secure</strong>
+                            <div id="banner-subtitle" style="font-size: 0.8rem; opacity: 0.8;">LightGBM Model actively analyzing incoming SIP telemetry streams</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">📜 Real-Time Call Telemetry & SIP Event Stream</span>
+                    </div>
+                    <div class="table-container">
+                        <table class="events-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Caller ID</th>
+                                    <th>Ext</th>
+                                    <th>Method</th>
+                                    <th>Context</th>
+                                    <th>Response</th>
+                                </tr>
+                            </thead>
+                            <tbody id="live-events-tbody">
+                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Connecting to backend...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: SETTINGS -->
+            <div id="tab-settings" class="tab-view">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">Remote PBX Server Connection Configuration</span>
+                    </div>
+                    <form onsubmit="handleConnectionSubmit(event)" style="display: flex; flex-direction: column; gap: 1.2rem; max-width: 600px;">
+                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
+                            <div>
+                                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Remote Server Host / IP</label>
+                                <input type="text" id="setting-host" placeholder="13.126.90.199" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-family: monospace;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Port Number</label>
+                                <input type="number" id="setting-port" placeholder="5000" min="1" max="65535" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem;">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">API Secret Authentication Key</label>
+                            <input type="text" id="setting-secret" placeholder="pbx-shield-secret-2026" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--primary); padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-family: monospace; font-weight: 600;">
+                        </div>
+
+                        <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; width: 220px;">Save & Reconnect Backend</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let SERVER_HOST = localStorage.getItem('pbx_server_host') || '13.126.90.199';
+        let SERVER_PORT = localStorage.getItem('pbx_server_port') || '5000';
+        let API_SECRET = localStorage.getItem('pbx_api_secret') || 'pbx-shield-secret-2026';
+
+        let socket = null;
+        const renderedEventIds = new Set();
+
+        function openConnectionModal() {
+            document.getElementById('conn-backend-ip').value = SERVER_HOST;
+            document.getElementById('conn-backend-port').value = SERVER_PORT;
+            document.getElementById('conn-api-secret').value = API_SECRET;
+            const modal = document.getElementById('connection-modal');
+            modal.style.display = 'flex';
+            modal.style.opacity = '1';
+        }
+
+        function handleConnectionSubmit(e) {
+            e.preventDefault();
+            const host = document.getElementById('conn-backend-ip')?.value.trim() || document.getElementById('setting-host')?.value.trim();
+            const port = document.getElementById('conn-backend-port')?.value || document.getElementById('setting-port')?.value;
+            const secret = document.getElementById('conn-api-secret')?.value.trim() || document.getElementById('setting-secret')?.value.trim();
+
+            if (!host || !secret) return;
+
+            SERVER_HOST = host;
+            SERVER_PORT = port;
+            API_SECRET = secret;
+
+            localStorage.setItem('pbx_server_host', SERVER_HOST);
+            localStorage.setItem('pbx_server_port', SERVER_PORT);
+            localStorage.setItem('pbx_api_secret', API_SECRET);
+
+            const modal = document.getElementById('connection-modal');
+            modal.style.opacity = '0';
+            setTimeout(() => modal.style.display = 'none', 300);
+
+            initSocketIOConnection();
+        }
+
+        function initSocketIOConnection() {
+            const serverUrl = `http://${SERVER_HOST}:${SERVER_PORT}`;
+            document.getElementById('remote-server-label').textContent = `Server: ${SERVER_HOST}:${SERVER_PORT}`;
+
+            if (socket) socket.disconnect();
+
+            console.log(`Connecting to PBX Backend SocketIO at ${serverUrl}...`);
+            socket = io(serverUrl, {
+                extraHeaders: { 'X-API-Key': API_SECRET },
+                query: { api_key: API_SECRET }
+            });
+
+            socket.on('connect', () => {
+                console.log('✅ SocketIO Connected successfully');
+                document.getElementById('conn-status-pill').textContent = '🟢 Authenticated & Connected';
+            });
+
+            socket.on('disconnect', () => {
+                document.getElementById('conn-status-pill').textContent = '🔴 Disconnected (Check Credentials)';
+            });
+
+            socket.on('new_window', function(data) {
+                updateDashboardUI(data);
+            });
+        }
+
+        function updateDashboardUI(data) {
+            if (!data) return;
+            if (data.stats) {
+                document.getElementById('stat-total-events').textContent = data.stats.total_events || 0;
+                document.getElementById('stat-total-windows').textContent = data.stats.total_windows || 0;
+                document.getElementById('stat-total-attacks').textContent = data.stats.total_attacks || 0;
+            }
+
+            if (data.events && data.events.length > 0) {
+                const tbody = document.getElementById('live-events-tbody');
+                if (tbody.children.length === 1 && tbody.children[0].children.length === 1) {
+                    tbody.innerHTML = '';
+                }
+                data.events.forEach(ev => {
+                    const rowId = (ev.timestamp || '') + '_' + (ev.caller_id || '') + '_' + (ev.event || '');
+                    if (renderedEventIds.has(rowId)) return;
+                    renderedEventIds.add(rowId);
+
+                    const tr = document.createElement('tr');
+                    tr.className = data.is_attack ? 'row-attack' : 'row-normal';
+                    tr.innerHTML = `
+                        <td>${(ev.timestamp || '').split('T')[1]?.split('.')[0] || ev.timestamp}</td>
+                        <td style="font-weight:700; color:var(--primary);">${ev.caller_id || 'Unknown'}</td>
+                        <td>${ev.extension || '-'}</td>
+                        <td><span class="alert-pill info">${ev.sip_method || 'INVITE'}</span></td>
+                        <td>${ev.context || 'from-internal'}</td>
+                        <td>${ev.response || '200'}</td>
+                    `;
+                    tbody.insertBefore(tr, tbody.firstChild);
+                });
+            }
+        }
+
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('tab-' + tabId)?.classList.add('active');
+            if (el) el.classList.add('active');
+        }
+
+        // Initialize connection on load
+        if (!localStorage.getItem('pbx_server_host')) {
+            openConnectionModal();
+        } else {
+            initSocketIOConnection();
+        }
+
+        setInterval(() => {
+            document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString();
+        }, 1000);
+    </script>
+</body>
+</html>
