@@ -1,37 +1,48 @@
-# 🖥️ PBX SHIELD — Standalone Decoupled Frontend
+# 🛡️ PBX SHIELD — STANDALONE FRONTEND SOC CONSOLE
 
-This repository contains the **Standalone Frontend Dashboard** for **PBX Shield**. It can be deployed on any web host (**Vercel, Netlify, GitHub Pages, AWS S3**) or run locally on any laptop.
+A modern, responsive, standalone Security Operations Center (SOC) dashboard for monitoring real-time SIP traffic and AI threat telemetry across **multiple Asterisk PBX servers**.
 
 ---
 
-## 🚀 1-Click Deployment Instructions
+## ⚙️ Configuration (`.env`)
 
-### Option 1: Deploy on Vercel
-1. Import this repository (`PBX_ml_frontend`) into **Vercel**.
-2. Click **Deploy**! (Vercel automatically detects `index.html`).
+The frontend application uses a `.env` file for configuration. Copy `.env.example` to `.env` and adjust the variables:
 
-### Option 2: Deploy on Netlify
-1. Drag and drop this folder into **Netlify Drop**, or connect this repository.
-2. Click **Deploy Site**!
+```env
+# Frontend Server Host & Port (0.0.0.0 listens on all interfaces)
+HOST=0.0.0.0
+PORT=9000
 
-### Option 3: Deploy on GitHub Pages
-1. Go to Repository **Settings -> Pages**.
-2. Set Source to `main` branch and `/ (root)`.
-3. Click **Save**!
+# Default PBX Shield Asterisk Backend Target
+DEFAULT_BACKEND_HOST=13.126.90.199
+DEFAULT_BACKEND_PORT=5000
+DEFAULT_API_KEY=5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78
+```
 
-### Option 4: Run Locally
+---
+
+## 🚀 Running the Frontend Server
+
+You can run the frontend server using **Node.js** or **Python**:
+
+### Option 1: Node.js
 ```bash
 npm install
 npm start
 ```
-Open **`http://localhost:3000`** in your browser.
+
+### Option 2: Python
+```bash
+python server.py
+```
+
+* The frontend listens on **`http://0.0.0.0:9000`** (accessible at `http://<YOUR_SERVER_IP>:9000`).
 
 ---
 
-## 🔑 Connecting to Your Remote Backend
+## 🖥️ Multi-Backend Server Management
 
-When opening the Frontend for the first time, enter your Asterisk Server details:
-
-* **Remote Server Host / IP**: `13.126.90.199` (Your Asterisk Server IP)
-* **Port Number**: `5000`
-* **API Secret Authentication Key**: `pbx-shield-secret-2026`
+The SOC dashboard supports connecting to and switching between **multiple Asterisk PBX servers** running PBX Shield:
+1. **Server Selector Dropdown**: Located in the sidebar to switch live telemetry streams between configured Asterisk servers.
+2. **Add New Server**: Click **"+ Add New PBX Server"** in the sidebar or Managed Servers tab to add new PBX Shield backends (Name, IP/Host, Port, API Secret Key).
+3. **Persistent Storage**: Saved servers are retained in your browser's local storage.

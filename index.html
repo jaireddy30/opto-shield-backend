@@ -47,7 +47,7 @@
 
         /* Sidebar */
         aside {
-            width: 260px;
+            width: 280px;
             background: rgba(13, 17, 28, 0.95);
             border-right: 1px solid var(--border-color);
             display: flex;
@@ -128,9 +128,23 @@
         .server-connection-card {
             background: rgba(0, 212, 255, 0.04);
             border: 1px solid rgba(0, 212, 255, 0.2);
-            padding: 0.8rem;
+            padding: 0.85rem;
             border-radius: 10px;
             font-size: 0.75rem;
+        }
+
+        .server-select-dropdown {
+            width: 100%;
+            background: rgba(17, 24, 39, 0.9);
+            border: 1px solid var(--border-color);
+            color: var(--primary);
+            font-weight: 700;
+            padding: 0.45rem 0.6rem;
+            border-radius: 6px;
+            font-size: 0.78rem;
+            margin-top: 0.4rem;
+            outline: none;
+            cursor: pointer;
         }
 
         .pulse-dot {
@@ -274,10 +288,10 @@
             color: var(--safe);
         }
 
-        .middle-grid {
-            display: grid;
-            grid-template-columns: 1.4fr 1fr;
-            gap: 1.25rem;
+        .alert-banner.danger {
+            background: rgba(255, 51, 102, 0.12);
+            border: 1px solid rgba(255, 51, 102, 0.4);
+            color: var(--danger);
         }
 
         .panel {
@@ -311,7 +325,7 @@
         /* Table */
         .table-container {
             overflow-x: auto;
-            max-height: 380px;
+            max-height: 420px;
             overflow-y: auto;
         }
 
@@ -355,35 +369,69 @@
         }
         .alert-pill.danger { background: rgba(255, 51, 102, 0.2); color: var(--danger); }
         .alert-pill.info { background: rgba(0, 212, 255, 0.2); color: var(--primary); }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(11, 15, 25, 0.96);
+            backdrop-filter: blur(20px);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-box {
+            background: #111827;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            width: 100%;
+            max-width: 520px;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
     </style>
 </head>
 <body>
 
     <!-- Connection Setup Modal Overlay -->
-    <div id="connection-modal" style="position: fixed; inset: 0; background: rgba(11, 15, 25, 0.96); backdrop-filter: blur(20px); z-index: 99999; display: flex; align-items: center; justify-content: center; opacity: 1; transition: opacity 0.3s ease;">
-        <div style="background: #111827; border: 1px solid rgba(255, 255, 255, 0.12); width: 100%; max-width: 480px; padding: 2.5rem 2rem; border-radius: 16px; box-shadow: 0 20px 50px rgba(0,0,0,0.6); text-align: center;">
-            <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 1rem;">🛡️</div>
-            <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff; margin-bottom: 0.3rem;">PBX SHIELD FRONTEND</h2>
-            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 1.8rem;">Connect to Remote Asterisk Backend Server</p>
+    <div id="connection-modal" class="modal-overlay">
+        <div class="modal-box">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); margin-bottom: 0.5rem;">🛡️</div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">ADD ASTERISK PBX BACKEND SERVER</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted);">Register a new PBX Shield backend host for real-time monitoring</p>
+            </div>
             
-            <form onsubmit="handleConnectionSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem; text-align: left;">
+            <form onsubmit="handleBackendFormSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Server Label / Name</label>
+                    <input type="text" id="conn-server-name" placeholder="AWS Asterisk Server 1" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; outline: none;">
+                </div>
+
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;">
                     <div>
-                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Backend Server IP / Host</label>
-                        <input type="text" id="conn-backend-ip" placeholder="13.126.90.199" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; font-family: monospace; outline: none;">
+                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Backend IP / Hostname</label>
+                        <input type="text" id="conn-backend-ip" placeholder="13.126.90.199" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; font-family: monospace; outline: none;">
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Port</label>
-                        <input type="number" id="conn-backend-port" placeholder="5000" value="5000" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; outline: none;">
+                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Port</label>
+                        <input type="number" id="conn-backend-port" placeholder="5000" value="5000" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; outline: none;">
                     </div>
                 </div>
 
                 <div>
-                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">API Secret Authentication Key</label>
-                    <input type="text" id="conn-api-secret" placeholder="pbx-shield-secret-2026" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--primary); padding: 0.75rem; border-radius: 8px; font-size: 0.9rem; font-family: monospace; font-weight: 600; outline: none;">
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">API Secret Authentication Key</label>
+                    <input type="text" id="conn-api-secret" placeholder="5e2930ea32cdf5c8cc6f6a..." required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--primary); padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; font-family: monospace; font-weight: 600; outline: none;">
                 </div>
 
-                <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; margin-top: 0.5rem; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">Connect & Authenticate Server</button>
+                <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
+                    <button type="button" onclick="closeConnectionModal()" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                    <button type="submit" style="flex: 2; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">Save & Connect Server</button>
+                </div>
             </form>
         </div>
     </div>
@@ -395,7 +443,7 @@
                 <div class="brand-logo">🛡️</div>
                 <div class="brand-text">
                     <h1>PBX SHIELD</h1>
-                    <p>Remote SOC Console</p>
+                    <p>Multi-PBX SOC Console</p>
                 </div>
             </div>
 
@@ -406,17 +454,24 @@
                 <li class="nav-item" onclick="switchTab('events', this)">
                     <span class="nav-icon">📜</span> Live Events
                 </li>
-                <li class="nav-item" onclick="switchTab('settings', this)">
-                    <span class="nav-icon">⚙️</span> Connection Settings
+                <li class="nav-item" onclick="switchTab('servers', this)">
+                    <span class="nav-icon">🖥️</span> Managed Servers
                 </li>
             </ul>
         </div>
 
         <div class="sidebar-bottom">
             <div class="server-connection-card">
-                <div style="font-weight: 700; color: var(--primary); font-size: 0.75rem;" id="remote-server-label">Server: 13.126.90.199:5000</div>
-                <div style="font-size: 0.68rem; color: var(--text-muted); margin-top: 0.2rem;" id="conn-status-pill">🟢 Authenticated via API Key</div>
-                <button onclick="openConnectionModal()" style="background: rgba(255,255,255,0.06); border: 1px solid var(--border-color); color: #fff; width: 100%; margin-top: 0.5rem; padding: 0.3rem; border-radius: 4px; font-size: 0.68rem; cursor: pointer;">Change Server</button>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">ACTIVE BACKEND SERVER</span>
+                    <span id="conn-status-indicator" style="font-size: 0.65rem; color: var(--safe); font-weight: 700;">🟢 ONLINE</span>
+                </div>
+                <select id="sidebar-server-select" class="server-select-dropdown" onchange="switchActiveServer(this.value)">
+                    <!-- Dynamically populated -->
+                </select>
+                <button onclick="openConnectionModal()" style="background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); color: var(--primary); width: 100%; margin-top: 0.6rem; padding: 0.4rem; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
+                    <span>➕</span> Add New PBX Server
+                </button>
             </div>
 
             <div class="sidebar-time">
@@ -431,11 +486,11 @@
         <header>
             <div class="header-title">
                 <h2 id="page-title">Dashboard</h2>
-                <p id="page-subtitle">Real-time overview of your remote PBX security</p>
+                <p id="page-subtitle">Real-time overview of your remote Asterisk PBX security</p>
             </div>
             <div class="badge-monitoring">
                 <div class="pulse-dot"></div>
-                LIVE FEED ACTIVE
+                <span id="header-server-display">CONNECTED TO 13.126.90.199:5000</span>
             </div>
         </header>
 
@@ -500,102 +555,246 @@
                                 </tr>
                             </thead>
                             <tbody id="live-events-tbody">
-                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Connecting to backend...</td></tr>
+                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Connecting to PBX Shield server...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 3: SETTINGS -->
-            <div id="tab-settings" class="tab-view">
+            <!-- TAB 2: LIVE EVENTS -->
+            <div id="tab-events" class="tab-view">
                 <div class="panel">
                     <div class="panel-header">
-                        <span class="panel-title">Remote PBX Server Connection Configuration</span>
+                        <span class="panel-title">📜 Detailed SIP Traffic Event History</span>
                     </div>
-                    <form onsubmit="handleConnectionSubmit(event)" style="display: flex; flex-direction: column; gap: 1.2rem; max-width: 600px;">
-                        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 1rem;">
-                            <div>
-                                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Remote Server Host / IP</label>
-                                <input type="text" id="setting-host" placeholder="13.126.90.199" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-family: monospace;">
-                            </div>
-                            <div>
-                                <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Port Number</label>
-                                <input type="number" id="setting-port" placeholder="5000" min="1" max="65535" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.6rem; border-radius: 6px; font-size: 0.85rem;">
-                            </div>
-                        </div>
+                    <div class="table-container" style="max-height: 600px;">
+                        <table class="events-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Caller ID</th>
+                                    <th>Ext</th>
+                                    <th>Method</th>
+                                    <th>Context</th>
+                                    <th>Response</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full-events-tbody">
+                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Awaiting telemetry...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
 
-                        <div>
-                            <label style="font-size: 0.8rem; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">API Secret Authentication Key</label>
-                            <input type="text" id="setting-secret" placeholder="pbx-shield-secret-2026" style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--primary); padding: 0.6rem; border-radius: 6px; font-size: 0.85rem; font-family: monospace; font-weight: 600;">
-                        </div>
-
-                        <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; width: 220px;">Save & Reconnect Backend</button>
-                    </form>
+            <!-- TAB 3: MANAGED SERVERS -->
+            <div id="tab-servers" class="tab-view">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">🖥️ Managed Asterisk PBX Backend Servers</span>
+                        <button onclick="openConnectionModal()" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">+ Add Server</button>
+                    </div>
+                    
+                    <div id="servers-list-container" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
+                        <!-- Server cards dynamically injected -->
+                    </div>
                 </div>
             </div>
         </div>
     </main>
 
     <script>
-        let SERVER_HOST = localStorage.getItem('pbx_server_host') || '13.126.90.199';
-        let SERVER_PORT = localStorage.getItem('pbx_server_port') || '5000';
-        let API_SECRET = localStorage.getItem('pbx_api_secret') || 'pbx-shield-secret-2026';
-
+        let servers = [];
+        let activeServerId = null;
         let socket = null;
         const renderedEventIds = new Set();
 
-        function openConnectionModal() {
-            document.getElementById('conn-backend-ip').value = SERVER_HOST;
-            document.getElementById('conn-backend-port').value = SERVER_PORT;
-            document.getElementById('conn-api-secret').value = API_SECRET;
-            const modal = document.getElementById('connection-modal');
-            modal.style.display = 'flex';
-            modal.style.opacity = '1';
+        // 1. Fetch .env defaults from /config.json
+        async function loadRuntimeConfig() {
+            try {
+                const res = await fetch('/config.json');
+                if (res.ok) {
+                    const cfg = await res.json();
+                    return cfg;
+                }
+            } catch (e) {
+                console.log('Using default runtime fallback');
+            }
+            return {
+                backend_host: '13.126.90.199',
+                backend_port: '5000',
+                api_key: '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78'
+            };
         }
 
-        function handleConnectionSubmit(e) {
-            e.preventDefault();
-            const host = document.getElementById('conn-backend-ip')?.value.trim() || document.getElementById('setting-host')?.value.trim();
-            const port = document.getElementById('conn-backend-port')?.value || document.getElementById('setting-port')?.value;
-            const secret = document.getElementById('conn-api-secret')?.value.trim() || document.getElementById('setting-secret')?.value.trim();
+        // 2. Initialize Servers List
+        async function initServerManagement() {
+            const saved = localStorage.getItem('pbx_servers_list');
+            if (saved) {
+                try { servers = JSON.parse(saved); } catch (e) { servers = []; }
+            }
 
-            if (!host || !secret) return;
+            if (servers.length === 0) {
+                const defaultConfig = await loadRuntimeConfig();
+                servers = [{
+                    id: 'server_default',
+                    name: 'Primary Asterisk EC2 Server',
+                    host: defaultConfig.backend_host || '13.126.90.199',
+                    port: defaultConfig.backend_port || '5000',
+                    secret: defaultConfig.api_key || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78'
+                }];
+                saveServersToStorage();
+            }
 
-            SERVER_HOST = host;
-            SERVER_PORT = port;
-            API_SECRET = secret;
+            activeServerId = localStorage.getItem('pbx_active_server_id') || servers[0].id;
+            if (!servers.find(s => s.id === activeServerId)) {
+                activeServerId = servers[0].id;
+            }
 
-            localStorage.setItem('pbx_server_host', SERVER_HOST);
-            localStorage.setItem('pbx_server_port', SERVER_PORT);
-            localStorage.setItem('pbx_api_secret', API_SECRET);
+            updateServerDropdown();
+            renderManagedServersTab();
+            connectToActiveServer();
+        }
 
+        function saveServersToStorage() {
+            localStorage.setItem('pbx_servers_list', JSON.stringify(servers));
+        }
+
+        function updateServerDropdown() {
+            const select = document.getElementById('sidebar-server-select');
+            select.innerHTML = '';
+            servers.forEach(srv => {
+                const opt = document.createElement('option');
+                opt.value = srv.id;
+                opt.textContent = `${srv.name} (${srv.host}:${srv.port})`;
+                if (srv.id === activeServerId) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        function renderManagedServersTab() {
+            const container = document.getElementById('servers-list-container');
+            container.innerHTML = '';
+
+            servers.forEach(srv => {
+                const card = document.createElement('div');
+                const isActive = srv.id === activeServerId;
+                card.style.cssText = `
+                    background: rgba(255,255,255,0.03);
+                    border: 1px solid ${isActive ? 'var(--primary)' : 'var(--border-color)'};
+                    padding: 1rem 1.25rem;
+                    border-radius: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                `;
+
+                card.innerHTML = `
+                    <div>
+                        <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">${srv.name} ${isActive ? '<span style="color:var(--safe); font-size:0.75rem; margin-left:0.5rem;">[ACTIVE]</span>' : ''}</div>
+                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+                            Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}:${srv.port}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${srv.secret.slice(-4)}</span>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        ${!isActive ? `<button onclick="switchActiveServer('${srv.id}')" style="background: rgba(0,212,255,0.15); border: 1px solid var(--primary); color: #fff; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Connect</button>` : ''}
+                        ${servers.length > 1 ? `<button onclick="deleteServer('${srv.id}')" style="background: rgba(255,51,102,0.15); border: 1px solid var(--danger); color: var(--danger); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Delete</button>` : ''}
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function switchActiveServer(serverId) {
+            activeServerId = serverId;
+            localStorage.setItem('pbx_active_server_id', activeServerId);
+            updateServerDropdown();
+            renderManagedServersTab();
+            connectToActiveServer();
+        }
+
+        function deleteServer(serverId) {
+            if (servers.length <= 1) return;
+            servers = servers.filter(s => s.id !== serverId);
+            saveServersToStorage();
+            if (activeServerId === serverId) {
+                activeServerId = servers[0].id;
+            }
+            initServerManagement();
+        }
+
+        function openConnectionModal() {
+            document.getElementById('conn-server-name').value = '';
+            document.getElementById('conn-backend-ip').value = '';
+            document.getElementById('conn-backend-port').value = '5000';
+            document.getElementById('conn-api-secret').value = '';
+
+            const modal = document.getElementById('connection-modal');
+            modal.style.display = 'flex';
+            setTimeout(() => modal.style.opacity = '1', 10);
+        }
+
+        function closeConnectionModal() {
             const modal = document.getElementById('connection-modal');
             modal.style.opacity = '0';
             setTimeout(() => modal.style.display = 'none', 300);
-
-            initSocketIOConnection();
         }
 
-        function initSocketIOConnection() {
-            const serverUrl = `http://${SERVER_HOST}:${SERVER_PORT}`;
-            document.getElementById('remote-server-label').textContent = `Server: ${SERVER_HOST}:${SERVER_PORT}`;
+        function handleBackendFormSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('conn-server-name').value.trim();
+            const host = document.getElementById('conn-backend-ip').value.trim();
+            const port = document.getElementById('conn-backend-port').value.trim() || '5000';
+            const secret = document.getElementById('conn-api-secret').value.trim();
+
+            if (!name || !host || !secret) return;
+
+            const newServer = {
+                id: 'server_' + Date.now(),
+                name: name,
+                host: host,
+                port: port,
+                secret: secret
+            };
+
+            servers.push(newServer);
+            saveServersToStorage();
+            activeServerId = newServer.id;
+            localStorage.setItem('pbx_active_server_id', activeServerId);
+
+            closeConnectionModal();
+            updateServerDropdown();
+            renderManagedServersTab();
+            connectToActiveServer();
+        }
+
+        function connectToActiveServer() {
+            const current = servers.find(s => s.id === activeServerId);
+            if (!current) return;
+
+            document.getElementById('header-server-display').textContent = `CONNECTED TO ${current.name.toUpperCase()} (${current.host}:${current.port})`;
+            document.getElementById('conn-status-indicator').textContent = '🟡 CONNECTING...';
 
             if (socket) socket.disconnect();
 
+            const serverUrl = `http://${current.host}:${current.port}`;
             console.log(`Connecting to PBX Backend SocketIO at ${serverUrl}...`);
+
             socket = io(serverUrl, {
-                extraHeaders: { 'X-API-Key': API_SECRET },
-                query: { api_key: API_SECRET }
+                extraHeaders: { 'X-API-Key': current.secret },
+                query: { api_key: current.secret }
             });
 
             socket.on('connect', () => {
                 console.log('✅ SocketIO Connected successfully');
-                document.getElementById('conn-status-pill').textContent = '🟢 Authenticated & Connected';
+                document.getElementById('conn-status-indicator').textContent = '🟢 ONLINE';
+                document.getElementById('conn-status-indicator').style.color = 'var(--safe)';
             });
 
             socket.on('disconnect', () => {
-                document.getElementById('conn-status-pill').textContent = '🔴 Disconnected (Check Credentials)';
+                document.getElementById('conn-status-indicator').textContent = '🔴 DISCONNECTED';
+                document.getElementById('conn-status-indicator').style.color = 'var(--danger)';
             });
 
             socket.on('new_window', function(data) {
@@ -612,10 +811,16 @@
             }
 
             if (data.events && data.events.length > 0) {
-                const tbody = document.getElementById('live-events-tbody');
-                if (tbody.children.length === 1 && tbody.children[0].children.length === 1) {
-                    tbody.innerHTML = '';
+                const liveTbody = document.getElementById('live-events-tbody');
+                const fullTbody = document.getElementById('full-events-tbody');
+
+                if (liveTbody.children.length === 1 && liveTbody.children[0].children.length === 1) {
+                    liveTbody.innerHTML = '';
                 }
+                if (fullTbody.children.length === 1 && fullTbody.children[0].children.length === 1) {
+                    fullTbody.innerHTML = '';
+                }
+
                 data.events.forEach(ev => {
                     const rowId = (ev.timestamp || '') + '_' + (ev.caller_id || '') + '_' + (ev.event || '');
                     if (renderedEventIds.has(rowId)) return;
@@ -631,7 +836,10 @@
                         <td>${ev.context || 'from-internal'}</td>
                         <td>${ev.response || '200'}</td>
                     `;
-                    tbody.insertBefore(tr, tbody.firstChild);
+                    liveTbody.insertBefore(tr, liveTbody.firstChild);
+
+                    const trFull = tr.cloneNode(true);
+                    fullTbody.insertBefore(trFull, fullTbody.firstChild);
                 });
             }
         }
@@ -643,16 +851,13 @@
             if (el) el.classList.add('active');
         }
 
-        // Initialize connection on load
-        if (!localStorage.getItem('pbx_server_host')) {
-            openConnectionModal();
-        } else {
-            initSocketIOConnection();
-        }
-
-        setInterval(() => {
-            document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString();
-        }, 1000);
+        // Initialize on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            initServerManagement();
+            setInterval(() => {
+                document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString();
+            }, 1000);
+        });
     </script>
 </body>
 </html>
