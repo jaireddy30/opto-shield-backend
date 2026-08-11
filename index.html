@@ -167,7 +167,7 @@
             color: var(--text-muted);
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: space-between;
         }
 
         /* Main Workspace */
@@ -288,12 +288,6 @@
             color: var(--safe);
         }
 
-        .alert-banner.danger {
-            background: rgba(255, 51, 102, 0.12);
-            border: 1px solid rgba(255, 51, 102, 0.4);
-            color: var(--danger);
-        }
-
         .panel {
             background: var(--panel-bg);
             border: 1px solid var(--border-color);
@@ -367,20 +361,19 @@
             font-size: 0.7rem;
             font-weight: 700;
         }
-        .alert-pill.danger { background: rgba(255, 51, 102, 0.2); color: var(--danger); }
         .alert-pill.info { background: rgba(0, 212, 255, 0.2); color: var(--primary); }
 
-        /* Modal Overlay */
-        .modal-overlay {
+        /* Modal & Auth Overlay */
+        .full-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(11, 15, 25, 0.96);
-            backdrop-filter: blur(20px);
-            z-index: 99999;
-            display: none;
+            background: rgba(10, 14, 26, 0.98);
+            backdrop-filter: blur(25px);
+            z-index: 999999;
+            display: flex;
             align-items: center;
             justify-content: center;
-            opacity: 0;
+            opacity: 1;
             transition: opacity 0.3s ease;
         }
 
@@ -388,22 +381,52 @@
             background: #111827;
             border: 1px solid rgba(255, 255, 255, 0.12);
             width: 100%;
-            max-width: 520px;
-            padding: 2rem;
+            max-width: 460px;
+            padding: 2.5rem 2rem;
             border-radius: 16px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
         }
     </style>
 </head>
 <body>
 
-    <!-- Connection Setup Modal Overlay -->
-    <div id="connection-modal" class="modal-overlay">
+    <!-- 1. Frontend Operator Authentication Screen -->
+    <div id="auth-overlay" class="full-overlay">
+        <div class="modal-box">
+            <div style="text-align: center; margin-bottom: 1.8rem;">
+                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 0.75rem;">🛡️</div>
+                <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">PBX SHIELD SOC CONSOLE</h2>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Authorized Operator Authentication Required</p>
+            </div>
+            
+            <form onsubmit="handleFrontendLogin(event)" style="display: flex; flex-direction: column; gap: 1.2rem;">
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Operator Username</label>
+                    <input type="text" id="auth-username" placeholder="admin" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.8rem; border-radius: 8px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div>
+                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Operator Password</label>
+                    <input type="password" id="auth-password" placeholder="••••••••••••" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.8rem; border-radius: 8px; font-size: 0.9rem; outline: none;">
+                </div>
+
+                <div id="auth-error-msg" style="display: none; color: var(--danger); font-size: 0.8rem; text-align: center; font-weight: 600; background: rgba(255,51,102,0.1); padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(255,51,102,0.3);"></div>
+
+                <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.85rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); margin-top: 0.4rem;">Log In to SOC Console</button>
+            </form>
+
+            <div style="font-size: 0.72rem; color: var(--text-subtle); text-align: center; margin-top: 1.5rem;">
+                Default Credentials defined in <code style="color:var(--primary)">.env</code>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Add New Backend Modal -->
+    <div id="connection-modal" class="full-overlay" style="display: none; opacity: 0;">
         <div class="modal-box">
             <div style="text-align: center; margin-bottom: 1.5rem;">
-                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 0 20px rgba(0, 212, 255, 0.4); margin-bottom: 0.5rem;">🛡️</div>
-                <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">ADD ASTERISK PBX BACKEND SERVER</h2>
-                <p style="font-size: 0.8rem; color: var(--text-muted);">Register a new PBX Shield backend host for real-time monitoring</p>
+                <h2 style="font-size: 1.3rem; font-weight: 800; color: #fff;">ADD ASTERISK PBX BACKEND</h2>
+                <p style="font-size: 0.78rem; color: var(--text-muted);">Register a new Asterisk PBX Shield backend host</p>
             </div>
             
             <form onsubmit="handleBackendFormSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
@@ -436,7 +459,7 @@
         </div>
     </div>
 
-    <!-- Sidebar Navigation -->
+    <!-- 3. Sidebar Navigation -->
     <aside>
         <div>
             <div class="brand">
@@ -475,13 +498,15 @@
             </div>
 
             <div class="sidebar-time">
-                <span>🕒</span>
-                <span id="sidebar-clock">--:--:--</span>
+                <div>
+                    <span>🕒 </span><span id="sidebar-clock">--:--:--</span>
+                </div>
+                <button onclick="handleFrontendLogout()" style="background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.75rem; cursor: pointer;">Log Out 🚪</button>
             </div>
         </div>
     </aside>
 
-    <!-- Main Content Area -->
+    <!-- 4. Main Content Area -->
     <main>
         <header>
             <div class="header-title">
@@ -610,13 +635,54 @@
         let socket = null;
         const renderedEventIds = new Set();
 
-        // 1. Fetch .env defaults from /config.json
+        // 1. Frontend Login Authentication Handler
+        async function handleFrontendLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const errDiv = document.getElementById('auth-error-msg');
+
+            errDiv.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+                if (res.ok && data.status === 'success') {
+                    localStorage.setItem('pbx_frontend_token', data.token);
+                    localStorage.setItem('pbx_frontend_user', data.user);
+                    
+                    const overlay = document.getElementById('auth-overlay');
+                    overlay.style.opacity = '0';
+                    setTimeout(() => overlay.style.display = 'none', 300);
+
+                    initServerManagement();
+                } else {
+                    errDiv.textContent = data.message || 'Invalid credentials';
+                    errDiv.style.display = 'block';
+                }
+            } catch (err) {
+                errDiv.textContent = 'Connection error reaching Frontend Server';
+                errDiv.style.display = 'block';
+            }
+        }
+
+        function handleFrontendLogout() {
+            localStorage.removeItem('pbx_frontend_token');
+            localStorage.removeItem('pbx_frontend_user');
+            if (socket) socket.disconnect();
+            location.reload();
+        }
+
+        // 2. Fetch .env defaults from /config.json
         async function loadRuntimeConfig() {
             try {
                 const res = await fetch('/config.json');
                 if (res.ok) {
-                    const cfg = await res.json();
-                    return cfg;
+                    return await res.json();
                 }
             } catch (e) {
                 console.log('Using default runtime fallback');
@@ -628,7 +694,7 @@
             };
         }
 
-        // 2. Initialize Servers List
+        // 3. Initialize Servers List
         async function initServerManagement() {
             const saved = localStorage.getItem('pbx_servers_list');
             if (saved) {
@@ -853,7 +919,16 @@
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
-            initServerManagement();
+            const token = localStorage.getItem('pbx_frontend_token');
+            const authOverlay = document.getElementById('auth-overlay');
+            if (!token) {
+                authOverlay.style.display = 'flex';
+                authOverlay.style.opacity = '1';
+            } else {
+                authOverlay.style.display = 'none';
+                initServerManagement();
+            }
+
             setInterval(() => {
                 document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString();
             }, 1000);
