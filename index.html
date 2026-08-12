@@ -691,12 +691,12 @@
         </header>
 
         <div class="content-area">
+            
             <!-- TAB 1: DASHBOARD (Matching Image 1) -->
             <div id="tab-dashboard" class="tab-view active">
                 
                 <!-- Top 4 Stats Cards -->
                 <div class="stats-grid">
-                    <!-- Card 1: TOTAL EVENTS -->
                     <div class="stat-card">
                         <div>
                             <h3>TOTAL EVENTS</h3>
@@ -705,7 +705,6 @@
                         </div>
                         <div class="stat-icon" style="background: rgba(0,212,255,0.1); color: var(--primary);">🗄️</div>
                     </div>
-                    <!-- Card 2: WINDOWS ANALYZED -->
                     <div class="stat-card">
                         <div>
                             <h3>WINDOWS ANALYZED</h3>
@@ -714,7 +713,6 @@
                         </div>
                         <div class="stat-icon" style="background: rgba(168,85,247,0.1); color: var(--purple);">🎛️</div>
                     </div>
-                    <!-- Card 3: ATTACKS DETECTED -->
                     <div class="stat-card">
                         <div>
                             <h3>ATTACKS DETECTED</h3>
@@ -723,7 +721,6 @@
                         </div>
                         <div class="stat-icon" style="background: rgba(255,51,102,0.1); color: var(--danger);">🎯</div>
                     </div>
-                    <!-- Card 4: THREAT LEVEL -->
                     <div class="stat-card">
                         <div>
                             <h3>THREAT LEVEL</h3>
@@ -736,7 +733,6 @@
 
                 <!-- Middle Grid Layout -->
                 <div class="middle-grid">
-                    <!-- Column 1: TRAFFIC TIMELINE -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">TRAFFIC TIMELINE</span>
@@ -751,7 +747,6 @@
                         </div>
                     </div>
 
-                    <!-- Column 2: ATTACK DISTRIBUTION -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">ATTACK DISTRIBUTION</span>
@@ -765,61 +760,27 @@
                                 </div>
                             </div>
                             <div class="legend-list" style="flex: 1;">
-                                <div class="legend-item">
-                                    <div class="legend-label"><div class="legend-dot" style="background:#ff3366;"></div>INVITE_FLOOD</div>
-                                    <span id="leg-invite">0%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-label"><div class="legend-dot" style="background:#ff8800;"></div>SIP_SCANNER</div>
-                                    <span id="leg-scanner">0%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-label"><div class="legend-dot" style="background:#a855f7;"></div>REGISTER_BRUTE_FORCE</div>
-                                    <span id="leg-brute">0%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-label"><div class="legend-dot" style="background:#2563eb;"></div>EXTENSION_ENUMERATION</div>
-                                    <span id="leg-enum">0%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-label"><div class="legend-dot" style="background:#00ff88;"></div>OPTIONS_FLOOD</div>
-                                    <span id="leg-options">0%</span>
-                                </div>
-                                <div class="legend-item">
-                                    <div class="legend-label"><div class="legend-dot" style="background:#00d4ff;"></div>TOLL_FRAUD</div>
-                                    <span id="leg-fraud">0%</span>
-                                </div>
+                                <div class="legend-item"><div class="legend-label"><div class="legend-dot" style="background:#ff3366;"></div>INVITE_FLOOD</div><span id="leg-invite">0%</span></div>
+                                <div class="legend-item"><div class="legend-label"><div class="legend-dot" style="background:#ff8800;"></div>SIP_SCANNER</div><span id="leg-scanner">0%</span></div>
+                                <div class="legend-item"><div class="legend-label"><div class="legend-dot" style="background:#a855f7;"></div>REGISTER_BRUTE_FORCE</div><span id="leg-brute">0%</span></div>
+                                <div class="legend-item"><div class="legend-label"><div class="legend-dot" style="background:#2563eb;"></div>EXTENSION_ENUMERATION</div><span id="leg-enum">0%</span></div>
+                                <div class="legend-item"><div class="legend-label"><div class="legend-dot" style="background:#00ff88;"></div>OPTIONS_FLOOD</div><span id="leg-options">0%</span></div>
+                                <div class="legend-item"><div class="legend-label"><div class="legend-dot" style="background:#00d4ff;"></div>TOLL_FRAUD</div><span id="leg-fraud">0%</span></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Column 3: SYSTEM STATUS & LAST DETECTION -->
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
                         <div class="panel">
                             <div class="panel-header">
                                 <span class="panel-title">SYSTEM STATUS</span>
                             </div>
                             <div class="status-list">
-                                <div class="status-item">
-                                    <div class="status-label">📞 SIP Service</div>
-                                    <span class="status-val">Normal</span>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-label">⚛️ Asterisk PBX</div>
-                                    <span class="status-val">Normal</span>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-label">🧠 ML Model</div>
-                                    <span class="status-val">Normal</span>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-label">🛢️ Log Pipeline</div>
-                                    <span class="status-val">Normal</span>
-                                </div>
-                                <div class="status-item">
-                                    <div class="status-label">🛡️ Firewall</div>
-                                    <span class="status-val">Normal</span>
-                                </div>
+                                <div class="status-item"><div class="status-label">📞 SIP Service</div><span class="status-val">Normal</span></div>
+                                <div class="status-item"><div class="status-label">⚛️ Asterisk PBX</div><span class="status-val">Normal</span></div>
+                                <div class="status-item"><div class="status-label">🧠 ML Model</div><span class="status-val">Normal</span></div>
+                                <div class="status-item"><div class="status-label">🛢️ Log Pipeline</div><span class="status-val">Normal</span></div>
+                                <div class="status-item"><div class="status-label">🛡️ Firewall</div><span class="status-val">Normal</span></div>
                             </div>
                         </div>
 
@@ -840,7 +801,6 @@
 
                 <!-- Bottom Grid Layout -->
                 <div class="bottom-grid">
-                    <!-- Column 1: TOP SOURCE IPS -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">TOP SOURCE IPS</span>
@@ -855,32 +815,15 @@
                                     </tr>
                                 </thead>
                                 <tbody id="top-ips-tbody">
-                                    <tr>
-                                        <td>🌐 127.0.0.1</td>
-                                        <td>38</td>
-                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:65%;"></div></div> 65.52%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>🌐 192.168.1.15</td>
-                                        <td>10</td>
-                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:17%;"></div></div> 17.24%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>🌐 192.168.1.10</td>
-                                        <td>6</td>
-                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:10%;"></div></div> 10.34%</td>
-                                    </tr>
-                                    <tr>
-                                        <td>🌐 192.168.1.20</td>
-                                        <td>4</td>
-                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:7%;"></div></div> 6.90%</td>
-                                    </tr>
+                                    <tr><td>🌐 127.0.0.1</td><td>38</td><td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:65%;"></div></div> 65.52%</td></tr>
+                                    <tr><td>🌐 192.168.1.15</td><td>10</td><td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:17%;"></div></div> 17.24%</td></tr>
+                                    <tr><td>🌐 192.168.1.10</td><td>6</td><td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:10%;"></div></div> 10.34%</td></tr>
+                                    <tr><td>🌐 192.168.1.20</td><td>4</td><td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:7%;"></div></div> 6.90%</td></tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- Column 2: RECENT ALERTS -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">RECENT ALERTS</span>
@@ -896,43 +839,17 @@
                                     </tr>
                                 </thead>
                                 <tbody id="recent-alerts-tbody">
-                                    <tr>
-                                        <td>15:44:30</td>
-                                        <td><span class="pill pill-info">INFO</span></td>
-                                        <td><span class="pill pill-low">LOW</span></td>
-                                        <td>System started</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15:45:12</td>
-                                        <td><span class="pill pill-info">INFO</span></td>
-                                        <td><span class="pill pill-low">LOW</span></td>
-                                        <td>Monitoring active</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15:46:33</td>
-                                        <td><span class="pill pill-info">INFO</span></td>
-                                        <td><span class="pill pill-low">LOW</span></td>
-                                        <td>All systems normal</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15:47:50</td>
-                                        <td><span class="pill pill-info">INFO</span></td>
-                                        <td><span class="pill pill-low">LOW</span></td>
-                                        <td>No threats detected</td>
-                                    </tr>
-                                    <tr>
-                                        <td>15:48:10</td>
-                                        <td><span class="pill pill-info">INFO</span></td>
-                                        <td><span class="pill pill-low">LOW</span></td>
-                                        <td>All systems normal</td>
-                                    </tr>
+                                    <tr><td>15:44:30</td><td><span class="pill pill-info">INFO</span></td><td><span class="pill pill-low">LOW</span></td><td>System started</td></tr>
+                                    <tr><td>15:45:12</td><td><span class="pill pill-info">INFO</span></td><td><span class="pill pill-low">LOW</span></td><td>Monitoring active</td></tr>
+                                    <tr><td>15:46:33</td><td><span class="pill pill-info">INFO</span></td><td><span class="pill pill-low">LOW</span></td><td>All systems normal</td></tr>
+                                    <tr><td>15:47:50</td><td><span class="pill pill-info">INFO</span></td><td><span class="pill pill-low">LOW</span></td><td>No threats detected</td></tr>
+                                    <tr><td>15:48:10</td><td><span class="pill pill-info">INFO</span></td><td><span class="pill pill-low">LOW</span></td><td>All systems normal</td></tr>
                                 </tbody>
                             </table>
                         </div>
-                        <div style="font-size: 0.72rem; color: var(--primary); text-align: right; margin-top: 0.5rem; font-weight: 600; cursor: pointer;">View all alerts →</div>
+                        <div onclick="switchTab('analysis')" style="font-size: 0.72rem; color: var(--primary); text-align: right; margin-top: 0.5rem; font-weight: 600; cursor: pointer;">View all alerts →</div>
                     </div>
 
-                    <!-- Column 3: ML MODEL STATUS -->
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">ML MODEL STATUS</span>
@@ -940,22 +857,10 @@
                         <div class="brain-box">
                             <div class="brain-circle">🧠</div>
                             <div class="ml-info-list">
-                                <div class="ml-info-row">
-                                    <span style="color:var(--text-muted);">Model</span>
-                                    <strong style="color:#fff;">LightGBM</strong>
-                                </div>
-                                <div class="ml-info-row">
-                                    <span style="color:var(--text-muted);">Version</span>
-                                    <strong style="color:#fff;">1.0.0</strong>
-                                </div>
-                                <div class="ml-info-row">
-                                    <span style="color:var(--text-muted);">Accuracy</span>
-                                    <strong style="color:var(--safe);">98.67%</strong>
-                                </div>
-                                <div class="ml-info-row">
-                                    <span style="color:var(--text-muted);">Last Trained</span>
-                                    <strong style="color:#fff;">04 Aug 2026 10:30 AM</strong>
-                                </div>
+                                <div class="ml-info-row"><span style="color:var(--text-muted);">Model</span><strong style="color:#fff;">LightGBM</strong></div>
+                                <div class="ml-info-row"><span style="color:var(--text-muted);">Version</span><strong style="color:#fff;">1.0.0</strong></div>
+                                <div class="ml-info-row"><span style="color:var(--text-muted);">Accuracy</span><strong style="color:var(--safe);">98.67%</strong></div>
+                                <div class="ml-info-row"><span style="color:var(--text-muted);">Last Trained</span><strong style="color:#fff;">04 Aug 2026 10:30 AM</strong></div>
                             </div>
                             <div class="btn-status">Model is up to date</div>
                         </div>
@@ -968,13 +873,13 @@
             <div id="tab-events" class="tab-view">
                 <div class="panel">
                     <div class="panel-header">
-                        <span class="panel-title">📜 Detailed SIP Traffic Event History</span>
+                        <span class="panel-title">📜 Real-Time Telemetry & Completed CDR Call Stream</span>
                     </div>
-                    <div class="table-container" style="max-height: 600px;">
+                    <div class="table-container" style="max-height: 620px;">
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th>Time</th>
+                                    <th>Timestamp</th>
                                     <th>Caller ID</th>
                                     <th>Ext</th>
                                     <th>Method</th>
@@ -983,14 +888,131 @@
                                 </tr>
                             </thead>
                             <tbody id="full-events-tbody">
-                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Awaiting telemetry...</td></tr>
+                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">Connecting to Optox Shield telemetry stream...</td></tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
-            <!-- TAB 7: SETTINGS / MANAGED SERVERS -->
+            <!-- TAB 3: ATTACK ANALYSIS -->
+            <div id="tab-analysis" class="tab-view">
+                <div class="middle-grid">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">🛡️ Active Threat Analysis & Vector Matrix</span>
+                        </div>
+                        <div class="table-container" style="max-height: 350px;">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Threat Class</th>
+                                        <th>Detection Rule</th>
+                                        <th>Trigger Threshold</th>
+                                        <th>Mitigation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td><strong style="color:var(--danger);">INVITE_FLOOD</strong></td><td>High-density burst of SIP INVITEs</td><td>> 30 / 60s</td><td>Automated iptables DROP</td></tr>
+                                    <tr><td><strong style="color:var(--warning);">SIP_SCANNER</strong></td><td>User-agent probing (SIPCli / Sipvicious)</td><td>Pattern Match</td><td>Automated iptables DROP</td></tr>
+                                    <tr><td><strong style="color:var(--purple);">REGISTER_BRUTE_FORCE</strong></td><td>Failed SIP extension auth attempts</td><td>> 5 failures</td><td>IP Ban (10 Mins)</td></tr>
+                                    <tr><td><strong style="color:var(--primary);">EXTENSION_ENUMERATION</strong></td><td>Sequential extension range probing</td><td>> 10 extensions</td><td>IP Ban (10 Mins)</td></tr>
+                                    <tr><td><strong style="color:var(--safe);">OPTIONS_FLOOD</strong></td><td>Continuous OPTIONS keep-alive flood</td><td>> 50 / 60s</td><td>Rate Throttling</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">🚫 Firewall Blocklist Manager</span>
+                        </div>
+                        <div class="table-container" style="max-height: 350px;">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Blocked IP</th>
+                                        <th>Reason</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="blocked-ips-tbody">
+                                    <tr><td>185.22.11.5</td><td>SIP_SCANNER</td><td><button style="background:rgba(0,255,136,0.15); color:var(--safe); border:none; padding:0.2rem 0.5rem; border-radius:4px; font-weight:700; cursor:pointer;">Unban</button></td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: ML DETECTION -->
+            <div id="tab-mldetection" class="tab-view">
+                <div class="middle-grid">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">🧠 LightGBM Feature Weights & Importance</span>
+                        </div>
+                        <div class="status-list">
+                            <div class="status-item"><span>invite_count_60s</span><div class="progress-bar-bg" style="width:120px;"><div class="progress-bar-fill" style="width:85%;"></div></div></div>
+                            <div class="status-item"><span>register_count_60s</span><div class="progress-bar-bg" style="width:120px;"><div class="progress-bar-fill" style="width:72%;"></div></div></div>
+                            <div class="status-item"><span>failed_count_60s</span><div class="progress-bar-bg" style="width:120px;"><div class="progress-bar-fill" style="width:90%;"></div></div></div>
+                            <div class="status-item"><span>unknown_caller_ratio</span><div class="progress-bar-bg" style="width:120px;"><div class="progress-bar-fill" style="width:64%;"></div></div></div>
+                            <div class="status-item"><span>request_rate</span><div class="progress-bar-bg" style="width:120px;"><div class="progress-bar-fill" style="width:78%;"></div></div></div>
+                            <div class="status-item"><span>short_call_ratio</span><div class="progress-bar-bg" style="width:120px;"><div class="progress-bar-fill" style="width:55%;"></div></div></div>
+                        </div>
+                    </div>
+
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">📊 Sliding Window Parameters (60s)</span>
+                        </div>
+                        <div class="status-list">
+                            <div class="status-item"><span>Sliding Window Size</span><strong style="color:#fff;">60 Seconds</strong></div>
+                            <div class="status-item"><span>Classification Interval</span><strong style="color:#fff;">Every 60 Seconds</strong></div>
+                            <div class="status-item"><span>Dashboard Refresh Rate</span><strong style="color:#fff;">2 Seconds</strong></div>
+                            <div class="status-item"><span>Confidence Threshold</span><strong style="color:var(--safe);">95.0%</strong></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: ANALYTICS -->
+            <div id="tab-analytics" class="tab-view">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">📊 Long-Term Call Volume & Threat Distribution Analytics</span>
+                    </div>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Historical metrics aggregated over 24-hour monitoring periods</p>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
+                        <div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:10px;">
+                            <strong style="font-size:0.85rem; color:#fff;">Peak Hourly SIP Volume</strong>
+                            <div style="font-size:1.8rem; font-weight:800; color:var(--primary); margin-top:0.3rem;">142 Requests / hr</div>
+                        </div>
+                        <div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:10px;">
+                            <strong style="font-size:0.85rem; color:#fff;">Average Call Duration</strong>
+                            <div style="font-size:1.8rem; font-weight:800; color:var(--safe); margin-top:0.3rem;">245.5 Seconds</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: REPORTS -->
+            <div id="tab-reports" class="tab-view">
+                <div class="panel">
+                    <div class="panel-header">
+                        <span class="panel-title">📑 Security Compliance & Audit Reports</span>
+                    </div>
+                    <div style="display:flex; flex-direction:column; gap:1rem; max-width:600px;">
+                        <p style="font-size:0.8rem; color:var(--text-muted);">Generate and download official security audit reports for compliance review:</p>
+                        <div style="display:flex; gap:1rem;">
+                            <button onclick="downloadReport('json')" style="background:rgba(0,212,255,0.15); border:1px solid var(--primary); color:#fff; padding:0.75rem 1.25rem; border-radius:8px; font-weight:700; cursor:pointer;">Export JSON Audit Report</button>
+                            <button onclick="downloadReport('csv')" style="background:rgba(0,255,136,0.15); border:1px solid var(--safe); color:#fff; padding:0.75rem 1.25rem; border-radius:8px; font-weight:700; cursor:pointer;">Export CSV Call Report</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: SETTINGS & MANAGED SERVERS -->
             <div id="tab-settings" class="tab-view">
                 <div class="panel">
                     <div class="panel-header">
@@ -1014,7 +1036,6 @@
 
         // Initialize Charts
         function initCharts() {
-            // 1. Traffic Timeline Line Chart
             const ctxTimeline = document.getElementById('trafficTimelineChart').getContext('2d');
             const gradient = ctxTimeline.createLinearGradient(0, 0, 0, 180);
             gradient.addColorStop(0, 'rgba(0, 212, 255, 0.35)');
@@ -1049,7 +1070,6 @@
                 }
             });
 
-            // 2. Attack Distribution Doughnut Chart
             const ctxDoughnut = document.getElementById('attackDoughnutChart').getContext('2d');
             doughnutChart = new Chart(ctxDoughnut, {
                 type: 'doughnut',
@@ -1068,6 +1088,44 @@
                     plugins: { legend: { display: false } }
                 }
             });
+        }
+
+        // Tab Switching Logic (Fixes all 7 tabs opening cleanly)
+        function switchTab(tabId, el) {
+            document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            const targetTab = document.getElementById('tab-' + tabId);
+            if (targetTab) {
+                targetTab.classList.add('active');
+            }
+            
+            if (el) {
+                el.classList.add('active');
+            } else {
+                // Find nav item by tabId if called programmatically
+                const navItems = document.querySelectorAll('.nav-item');
+                navItems.forEach(item => {
+                    if (item.getAttribute('onclick')?.includes(`'${tabId}'`)) {
+                        item.classList.add('active');
+                    }
+                });
+            }
+
+            const titles = {
+                'dashboard': ['Dashboard', 'Real-time overview of your PBX security'],
+                'events': ['Live Events', 'Real-time SIP traffic and completed CDR call records stream'],
+                'analysis': ['Attack Analysis', 'Deep-dive security threat breakdown and IP blocklist management'],
+                'mldetection': ['ML Detection', 'LightGBM model metrics, feature weights, and detection engine'],
+                'analytics': ['Analytics', 'Historical traffic trends, peak usage, and response distribution'],
+                'reports': ['Security Reports', 'Generate, view, and export compliance audit reports'],
+                'settings': ['Settings & Servers', 'Configure managed Asterisk PBX backends and security options']
+            };
+
+            if (titles[tabId]) {
+                document.getElementById('page-title').textContent = titles[tabId][0];
+                document.getElementById('page-subtitle').textContent = titles[tabId][1];
+            }
         }
 
         // Frontend Authentication Handler
@@ -1392,11 +1450,11 @@
             }
         }
 
-        function switchTab(tabId, el) {
-            document.querySelectorAll('.tab-view').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById('tab-' + tabId)?.classList.add('active');
-            if (el) el.classList.add('active');
+        function downloadReport(formatType) {
+            const current = servers.find(s => s.id === activeServerId);
+            if (!current) return;
+            const url = `http://${current.host}:${current.port}/api/reports/generate?format=${formatType}&api_key=${current.secret}`;
+            window.open(url, '_blank');
         }
 
         // Live Clock
