@@ -55,7 +55,7 @@ class PBXFrontendHandler(http.server.SimpleHTTPRequestHandler):
                     self.end_headers()
                     resp = {
                         "status": "success",
-                        "message": "Frontend authentication successful",
+                        "message": "Optox Shield frontend authentication successful",
                         "token": token,
                         "user": user
                     }
@@ -66,7 +66,7 @@ class PBXFrontendHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_header("Content-Type", "application/json")
                     self.send_header("Access-Control-Allow-Origin", "*")
                     self.end_headers()
-                    resp = {"status": "error", "message": "Invalid frontend operator credentials"}
+                    resp = {"status": "error", "message": "Invalid Optox Shield operator credentials"}
                     self.wfile.write(json.dumps(resp).encode("utf-8"))
                     return
             except Exception as e:
@@ -101,7 +101,7 @@ if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
     with socketserver.TCPServer((HOST, PORT), PBXFrontendHandler) as httpd:
         print("=======================================================")
-        print("  PBX SHIELD — FRONTEND SOC CONSOLE ACTIVE")
+        print("  OPTOX SHIELD — FRONTEND SOC CONSOLE ACTIVE")
         print("=======================================================")
         print(f"  [+] Listening on: http://{HOST}:{PORT} (0.0.0.0/0)")
         print(f"  [+] Frontend Admin: {FRONTEND_ADMIN_USER}")

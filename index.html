@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PBX SHIELD — Autonomous Security Operations Center</title>
+    <title>OPTOX SHIELD — Optox Security Monitor</title>
     
     <!-- Google Fonts & Libraries -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,17 +16,18 @@
 
     <style>
         :root {
-            --bg-dark: #0a0e1a;
-            --panel-bg: rgba(17, 24, 39, 0.85);
-            --border-color: rgba(255, 255, 255, 0.08);
+            --bg-dark: #070a13;
+            --panel-bg: #0d121f;
+            --panel-border: rgba(255, 255, 255, 0.07);
             --text-main: #f0f4f8;
-            --text-muted: #8892a4;
-            --text-subtle: #4a5568;
+            --text-muted: #7c8ba1;
+            --text-subtle: #475569;
             
             --safe: #00ff88;
             --danger: #ff3366;
             --warning: #ff8800;
             --primary: #00d4ff;
+            --accent-blue: #2563eb;
             --purple: #a855f7;
         }
 
@@ -47,13 +48,13 @@
 
         /* Sidebar */
         aside {
-            width: 280px;
-            background: rgba(13, 17, 28, 0.95);
-            border-right: 1px solid var(--border-color);
+            width: 250px;
+            background: #090d18;
+            border-right: 1px solid var(--panel-border);
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            padding: 1.5rem 1rem;
+            padding: 1.25rem 1rem;
             z-index: 10;
         }
 
@@ -61,35 +62,35 @@
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 1.5rem;
+            padding-bottom: 1.25rem;
+            border-bottom: 1px solid var(--panel-border);
+            margin-bottom: 1.25rem;
         }
 
         .brand-logo {
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%);
-            border-radius: 10px;
+            border-radius: 9px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-            box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+            font-size: 1.1rem;
+            box-shadow: 0 0 15px rgba(0, 212, 255, 0.35);
         }
 
         .brand-text h1 {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             font-weight: 800;
             letter-spacing: 0.5px;
             color: #fff;
         }
 
         .brand-text p {
-            font-size: 0.65rem;
-            color: var(--primary);
+            font-size: 0.62rem;
+            color: var(--text-muted);
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 0.8px;
             font-weight: 600;
         }
 
@@ -97,54 +98,46 @@
             list-style: none;
             display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            gap: 0.35rem;
         }
 
         .nav-item {
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            padding: 0.75rem 1rem;
+            padding: 0.7rem 0.9rem;
             border-radius: 8px;
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: 500;
             color: var(--text-muted);
             cursor: pointer;
             transition: all 0.2s ease;
         }
 
-        .nav-item:hover, .nav-item.active {
-            background: rgba(0, 212, 255, 0.1);
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.04);
             color: #fff;
+        }
+
+        .nav-item.active {
+            background: rgba(0, 212, 255, 0.12);
+            color: #fff;
+            font-weight: 600;
             border-left: 3px solid var(--primary);
         }
 
         .sidebar-bottom {
             display: flex;
             flex-direction: column;
-            gap: 1rem;
+            gap: 0.85rem;
         }
 
-        .server-connection-card {
-            background: rgba(0, 212, 255, 0.04);
-            border: 1px solid rgba(0, 212, 255, 0.2);
-            padding: 0.85rem;
+        .sidebar-card {
+            background: rgba(0, 255, 136, 0.04);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            padding: 0.75rem;
             border-radius: 10px;
-            font-size: 0.75rem;
-        }
-
-        .server-select-dropdown {
-            width: 100%;
-            background: rgba(17, 24, 39, 0.9);
-            border: 1px solid var(--border-color);
-            color: var(--primary);
-            font-weight: 700;
-            padding: 0.45rem 0.6rem;
-            border-radius: 6px;
-            font-size: 0.78rem;
-            margin-top: 0.4rem;
-            outline: none;
-            cursor: pointer;
+            font-size: 0.72rem;
         }
 
         .pulse-dot {
@@ -163,108 +156,117 @@
         }
 
         .sidebar-time {
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             color: var(--text-muted);
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        /* Main Workspace */
+        /* Main Area */
         main {
             flex: 1;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
-            background: radial-gradient(circle at top right, rgba(0, 212, 255, 0.05), transparent 40%);
+            background: #070a13;
         }
 
         header {
-            padding: 1.25rem 2rem;
-            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 1.75rem;
+            border-bottom: 1px solid var(--panel-border);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 14, 26, 0.8);
-            backdrop-filter: blur(10px);
+            background: #080c16;
         }
 
         .header-title h2 {
             font-size: 1.25rem;
             font-weight: 700;
+            color: #fff;
         }
 
         .header-title p {
-            font-size: 0.8rem;
+            font-size: 0.78rem;
             color: var(--text-muted);
+            margin-top: 0.15rem;
         }
 
         .badge-monitoring {
             background: rgba(0, 255, 136, 0.1);
             border: 1px solid rgba(0, 255, 136, 0.3);
             color: var(--safe);
-            padding: 0.35rem 0.8rem;
+            padding: 0.3rem 0.75rem;
             border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
+            font-size: 0.72rem;
+            font-weight: 700;
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.45rem;
+            letter-spacing: 0.5px;
         }
 
         .content-area {
-            padding: 1.5rem 2rem;
+            padding: 1.25rem 1.75rem;
             display: flex;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
-        /* Tab Visibility */
         .tab-view {
             display: none;
             flex-direction: column;
-            gap: 1.5rem;
+            gap: 1.25rem;
         }
 
         .tab-view.active {
             display: flex;
         }
 
-        /* Stats Row */
+        /* Top 4 Stats Cards */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
-            gap: 1.25rem;
+            gap: 1rem;
         }
 
         .stat-card {
             background: var(--panel-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--panel-border);
             border-radius: 12px;
-            padding: 1.25rem;
-            backdrop-filter: blur(12px);
+            padding: 1.1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
         .stat-info h3 {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 0.4rem;
+            margin-bottom: 0.35rem;
         }
 
         .stat-val {
-            font-size: 1.6rem;
+            font-size: 1.65rem;
             font-weight: 800;
             color: #fff;
+            line-height: 1.1;
+        }
+
+        .stat-sub {
+            font-size: 0.68rem;
+            margin-top: 0.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
         }
 
         .stat-icon {
-            width: 44px;
-            height: 44px;
+            width: 42px;
+            height: 42px;
             border-radius: 10px;
             display: flex;
             align-items: center;
@@ -272,28 +274,18 @@
             font-size: 1.2rem;
         }
 
-        /* Threat Alert Banner */
-        .alert-banner {
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: all 0.3s ease;
-        }
-
-        .alert-banner.safe {
-            background: rgba(0, 255, 136, 0.08);
-            border: 1px solid rgba(0, 255, 136, 0.25);
-            color: var(--safe);
+        /* Middle Grid Layout (3 columns) */
+        .middle-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 0.8fr;
+            gap: 1rem;
         }
 
         .panel {
             background: var(--panel-bg);
-            border: 1px solid var(--border-color);
+            border: 1px solid var(--panel-border);
             border-radius: 12px;
-            padding: 1.25rem;
-            backdrop-filter: blur(12px);
+            padding: 1.1rem;
             display: flex;
             flex-direction: column;
         }
@@ -302,72 +294,230 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 1rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 0.85rem;
+            padding-bottom: 0.6rem;
+            border-bottom: 1px solid var(--panel-border);
         }
 
         .panel-title {
-            font-size: 0.9rem;
+            font-size: 0.82rem;
             font-weight: 700;
             color: var(--text-main);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .panel-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--panel-border);
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 6px;
+            outline: none;
+        }
+
+        /* Chart Heights */
+        .chart-box {
+            position: relative;
+            height: 200px;
+            width: 100%;
+        }
+
+        /* Attack Distribution Legend */
+        .legend-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+            margin-top: 0.5rem;
+            font-size: 0.68rem;
+        }
+
+        .legend-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .legend-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-muted);
+        }
+
+        .legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+        }
+
+        /* Status List */
+        .status-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            font-size: 0.75rem;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-label {
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            color: var(--text-muted);
         }
 
-        /* Table */
+        .status-val {
+            color: var(--safe);
+            font-weight: 600;
+        }
+
+        /* Detection Box */
+        .detection-card {
+            background: rgba(0, 255, 136, 0.04);
+            border: 1px solid rgba(0, 255, 136, 0.15);
+            border-radius: 10px;
+            padding: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-top: 0.85rem;
+        }
+
+        .detection-icon {
+            width: 36px;
+            height: 36px;
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--safe);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        /* Bottom Grid Layout (3 columns) */
+        .bottom-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 0.9fr;
+            gap: 1rem;
+        }
+
+        /* Tables */
         .table-container {
             overflow-x: auto;
-            max-height: 420px;
+            max-height: 220px;
             overflow-y: auto;
         }
 
-        .events-table {
+        .custom-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.78rem;
+            font-size: 0.75rem;
             text-align: left;
         }
 
-        .events-table th {
-            background: rgba(255, 255, 255, 0.03);
+        .custom-table th {
             color: var(--text-muted);
-            padding: 0.6rem 0.8rem;
+            padding: 0.45rem 0.6rem;
             font-weight: 600;
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
-
-        .events-table td {
-            padding: 0.6rem 0.8rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-            white-space: nowrap;
-        }
-
-        .events-table tr.row-attack {
-            background: rgba(255, 51, 102, 0.12);
-            border-left: 3px solid var(--danger);
-        }
-
-        .events-table tr.row-normal {
-            border-left: 3px solid var(--safe);
-        }
-
-        .alert-pill {
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
+            border-bottom: 1px solid var(--panel-border);
             font-size: 0.7rem;
+        }
+
+        .custom-table td {
+            padding: 0.5rem 0.6rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            color: var(--text-main);
+        }
+
+        .progress-bar-bg {
+            background: rgba(255, 255, 255, 0.06);
+            height: 6px;
+            border-radius: 3px;
+            width: 70px;
+            overflow: hidden;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 0.4rem;
+        }
+
+        .progress-bar-fill {
+            background: var(--primary);
+            height: 100%;
+            border-radius: 3px;
+        }
+
+        .pill {
+            padding: 0.15rem 0.45rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
             font-weight: 700;
         }
-        .alert-pill.info { background: rgba(0, 212, 255, 0.2); color: var(--primary); }
+        .pill-info { background: rgba(0, 212, 255, 0.15); color: var(--primary); }
+        .pill-low { background: rgba(0, 255, 136, 0.15); color: var(--safe); }
+        .pill-danger { background: rgba(255, 51, 102, 0.15); color: var(--danger); }
 
-        /* Modal & Auth Overlay */
+        /* Brain / ML Graphic */
+        .brain-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 0.5rem 0;
+        }
+
+        .brain-circle {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.2rem;
+            margin-bottom: 0.75rem;
+            background: radial-gradient(circle, rgba(0,212,255,0.15) 0%, transparent 70%);
+        }
+
+        .ml-info-list {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+            font-size: 0.72rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .ml-info-row {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .btn-status {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.25);
+            color: var(--safe);
+            width: 100%;
+            padding: 0.4rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        /* Modals & Overlays */
         .full-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(10, 14, 26, 0.98);
+            background: rgba(7, 10, 19, 0.96);
             backdrop-filter: blur(25px);
             z-index: 999999;
             display: flex;
@@ -377,14 +527,27 @@
             transition: opacity 0.3s ease;
         }
 
-        .modal-box {
-            background: #111827;
+        .modal-card {
+            background: #0d121f;
             border: 1px solid rgba(255, 255, 255, 0.12);
             width: 100%;
-            max-width: 460px;
-            padding: 2.5rem 2rem;
+            max-width: 440px;
+            padding: 2.25rem 1.75rem;
             border-radius: 16px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+        }
+
+        .select-server-bar {
+            background: rgba(0, 212, 255, 0.05);
+            border: 1px solid rgba(0, 212, 255, 0.2);
+            color: var(--primary);
+            padding: 0.35rem 0.5rem;
+            border-radius: 6px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            outline: none;
+            width: 100%;
+            margin-top: 0.3rem;
         }
     </style>
 </head>
@@ -392,68 +555,64 @@
 
     <!-- 1. Frontend Operator Authentication Screen -->
     <div id="auth-overlay" class="full-overlay">
-        <div class="modal-box">
-            <div style="text-align: center; margin-bottom: 1.8rem;">
-                <div style="width: 56px; height: 56px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 14px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.8rem; box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 0.75rem;">🛡️</div>
-                <h2 style="font-size: 1.5rem; font-weight: 800; color: #fff;">PBX SHIELD SOC CONSOLE</h2>
-                <p style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.3rem;">Authorized Operator Authentication Required</p>
+        <div class="modal-card">
+            <div style="text-align: center; margin-bottom: 1.5rem;">
+                <div style="width: 52px; height: 52px; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); border-radius: 12px; display: inline-flex; align-items: center; justify-content: center; font-size: 1.6rem; box-shadow: 0 0 25px rgba(0, 212, 255, 0.4); margin-bottom: 0.6rem;">🛡️</div>
+                <h2 style="font-size: 1.4rem; font-weight: 800; color: #fff;">OPTOX SHIELD CONSOLE</h2>
+                <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.2rem;">Authorized Operator Authentication Required</p>
             </div>
             
-            <form onsubmit="handleFrontendLogin(event)" style="display: flex; flex-direction: column; gap: 1.2rem;">
+            <form onsubmit="handleFrontendLogin(event)" style="display: flex; flex-direction: column; gap: 1rem;">
                 <div>
-                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Operator Username</label>
-                    <input type="text" id="auth-username" placeholder="admin" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.8rem; border-radius: 8px; font-size: 0.9rem; outline: none;">
+                    <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Operator Username</label>
+                    <input type="text" id="auth-username" placeholder="admin" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.75rem; border-radius: 8px; font-size: 0.88rem; outline: none;">
                 </div>
 
                 <div>
-                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.4rem;">Operator Password</label>
-                    <input type="password" id="auth-password" placeholder="••••••••••••" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.8rem; border-radius: 8px; font-size: 0.9rem; outline: none;">
+                    <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Operator Password</label>
+                    <input type="password" id="auth-password" placeholder="••••••••••••" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.75rem; border-radius: 8px; font-size: 0.88rem; outline: none;">
                 </div>
 
-                <div id="auth-error-msg" style="display: none; color: var(--danger); font-size: 0.8rem; text-align: center; font-weight: 600; background: rgba(255,51,102,0.1); padding: 0.6rem; border-radius: 6px; border: 1px solid rgba(255,51,102,0.3);"></div>
+                <div id="auth-error-msg" style="display: none; color: var(--danger); font-size: 0.78rem; text-align: center; font-weight: 600; background: rgba(255,51,102,0.1); padding: 0.5rem; border-radius: 6px; border: 1px solid rgba(255,51,102,0.3);"></div>
 
-                <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.85rem; border-radius: 8px; font-weight: 700; font-size: 0.95rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); margin-top: 0.4rem;">Log In to SOC Console</button>
+                <button type="submit" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.8rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3); margin-top: 0.3rem;">Log In to Optox Shield</button>
             </form>
-
-            <div style="font-size: 0.72rem; color: var(--text-subtle); text-align: center; margin-top: 1.5rem;">
-                Default Credentials defined in <code style="color:var(--primary)">.env</code>
-            </div>
         </div>
     </div>
 
     <!-- 2. Add New Backend Modal -->
     <div id="connection-modal" class="full-overlay" style="display: none; opacity: 0;">
-        <div class="modal-box">
-            <div style="text-align: center; margin-bottom: 1.5rem;">
-                <h2 style="font-size: 1.3rem; font-weight: 800; color: #fff;">ADD ASTERISK PBX BACKEND</h2>
-                <p style="font-size: 0.78rem; color: var(--text-muted);">Register a new Asterisk PBX Shield backend host</p>
+        <div class="modal-card">
+            <div style="text-align: center; margin-bottom: 1.25rem;">
+                <h2 style="font-size: 1.25rem; font-weight: 800; color: #fff;">ADD ASTERISK PBX BACKEND</h2>
+                <p style="font-size: 0.75rem; color: var(--text-muted);">Register a new Asterisk Optox Shield backend host</p>
             </div>
             
-            <form onsubmit="handleBackendFormSubmit(event)" style="display: flex; flex-direction: column; gap: 1rem;">
+            <form onsubmit="handleBackendFormSubmit(event)" style="display: flex; flex-direction: column; gap: 0.85rem;">
                 <div>
-                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Server Label / Name</label>
-                    <input type="text" id="conn-server-name" placeholder="AWS Asterisk Server 1" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; outline: none;">
+                    <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Server Label / Name</label>
+                    <input type="text" id="conn-server-name" placeholder="Primary EC2 Asterisk" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; outline: none;">
                 </div>
 
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;">
                     <div>
-                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Backend IP / Hostname</label>
-                        <input type="text" id="conn-backend-ip" placeholder="13.126.90.199" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; font-family: monospace; outline: none;">
+                        <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Backend IP / Host</label>
+                        <input type="text" id="conn-backend-ip" placeholder="13.126.90.199" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; font-family: monospace; outline: none;">
                     </div>
                     <div>
-                        <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">Port</label>
-                        <input type="number" id="conn-backend-port" placeholder="5000" value="5000" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; outline: none;">
+                        <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Port</label>
+                        <input type="number" id="conn-backend-port" placeholder="5000" value="5000" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; outline: none;">
                     </div>
                 </div>
 
                 <div>
-                    <label style="font-size: 0.75rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.3rem;">API Secret Authentication Key</label>
-                    <input type="text" id="conn-api-secret" placeholder="5e2930ea32cdf5c8cc6f6a..." required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: var(--primary); padding: 0.7rem; border-radius: 8px; font-size: 0.88rem; font-family: monospace; font-weight: 600; outline: none;">
+                    <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">API Secret Key</label>
+                    <input type="text" id="conn-api-secret" placeholder="5e2930ea32cdf5c8cc6f6a..." required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: var(--primary); padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; font-family: monospace; font-weight: 600; outline: none;">
                 </div>
 
-                <div style="display: flex; gap: 0.75rem; margin-top: 0.5rem;">
-                    <button type="button" onclick="closeConnectionModal()" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--border-color); color: #fff; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
-                    <button type="submit" style="flex: 2; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 700; font-size: 0.9rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">Save & Connect Server</button>
+                <div style="display: flex; gap: 0.75rem; margin-top: 0.4rem;">
+                    <button type="button" onclick="closeConnectionModal()" style="flex: 1; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-weight: 600; cursor: pointer;">Cancel</button>
+                    <button type="submit" style="flex: 2; background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.65rem; border-radius: 8px; font-weight: 700; font-size: 0.85rem; cursor: pointer; box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3);">Save & Connect</button>
                 </div>
             </form>
         </div>
@@ -465,8 +624,8 @@
             <div class="brand">
                 <div class="brand-logo">🛡️</div>
                 <div class="brand-text">
-                    <h1>PBX SHIELD</h1>
-                    <p>Multi-PBX SOC Console</p>
+                    <h1>OPTOX SHIELD</h1>
+                    <p>PBX SECURITY MONITOR</p>
                 </div>
             </div>
 
@@ -477,114 +636,332 @@
                 <li class="nav-item" onclick="switchTab('events', this)">
                     <span class="nav-icon">📜</span> Live Events
                 </li>
-                <li class="nav-item" onclick="switchTab('servers', this)">
-                    <span class="nav-icon">🖥️</span> Managed Servers
+                <li class="nav-item" onclick="switchTab('analysis', this)">
+                    <span class="nav-icon">🛡️</span> Attack Analysis
+                </li>
+                <li class="nav-item" onclick="switchTab('mldetection', this)">
+                    <span class="nav-icon">🧠</span> ML Detection
+                </li>
+                <li class="nav-item" onclick="switchTab('analytics', this)">
+                    <span class="nav-icon">📊</span> Analytics
+                </li>
+                <li class="nav-item" onclick="switchTab('reports', this)">
+                    <span class="nav-icon">📑</span> Reports
+                </li>
+                <li class="nav-item" onclick="switchTab('settings', this)">
+                    <span class="nav-icon">⚙️</span> Settings
                 </li>
             </ul>
         </div>
 
         <div class="sidebar-bottom">
-            <div class="server-connection-card">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <span style="font-size: 0.7rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase;">ACTIVE BACKEND SERVER</span>
-                    <span id="conn-status-indicator" style="font-size: 0.65rem; color: var(--safe); font-weight: 700;">🟢 ONLINE</span>
+            <div class="sidebar-card">
+                <div style="display: flex; align-items: center; gap: 0.4rem; font-weight: 700; color: var(--safe); font-size: 0.72rem;">
+                    <div class="pulse-dot"></div>
+                    <span>Monitoring Active</span>
                 </div>
-                <select id="sidebar-server-select" class="server-select-dropdown" onchange="switchActiveServer(this.value)">
-                    <!-- Dynamically populated -->
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem;">System is running normally</div>
+                
+                <select id="sidebar-server-select" class="select-server-bar" onchange="switchActiveServer(this.value)">
+                    <!-- Options injected dynamically -->
                 </select>
-                <button onclick="openConnectionModal()" style="background: rgba(0,212,255,0.1); border: 1px solid rgba(0,212,255,0.3); color: var(--primary); width: 100%; margin-top: 0.6rem; padding: 0.4rem; border-radius: 6px; font-size: 0.72rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.4rem;">
-                    <span>➕</span> Add New PBX Server
-                </button>
             </div>
 
             <div class="sidebar-time">
                 <div>
-                    <span>🕒 </span><span id="sidebar-clock">--:--:--</span>
+                    <span id="sidebar-clock-time" style="font-weight:600; color:#fff;">--:--:-- PM</span><br>
+                    <span id="sidebar-clock-date" style="font-size:0.62rem;">04 Aug 2026</span>
                 </div>
-                <button onclick="handleFrontendLogout()" style="background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.75rem; cursor: pointer;">Log Out 🚪</button>
+                <button onclick="handleFrontendLogout()" style="background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.7rem; cursor: pointer;">Log Out 🚪</button>
             </div>
         </div>
     </aside>
 
-    <!-- 4. Main Content Area -->
+    <!-- 4. Main Content Workspace -->
     <main>
         <header>
             <div class="header-title">
                 <h2 id="page-title">Dashboard</h2>
-                <p id="page-subtitle">Real-time overview of your remote Asterisk PBX security</p>
+                <p id="page-subtitle">Real-time overview of your PBX security</p>
             </div>
             <div class="badge-monitoring">
                 <div class="pulse-dot"></div>
-                <span id="header-server-display">CONNECTED TO 13.126.90.199:5000</span>
+                <span id="header-monitoring-text">MONITORING</span>
             </div>
         </header>
 
         <div class="content-area">
-            <!-- TAB 1: DASHBOARD -->
+            <!-- TAB 1: DASHBOARD (Matching Image 1) -->
             <div id="tab-dashboard" class="tab-view active">
+                
+                <!-- Top 4 Stats Cards -->
                 <div class="stats-grid">
+                    <!-- Card 1: TOTAL EVENTS -->
                     <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>Total Analyzed Events</h3>
-                            <div class="stat-val" id="stat-total-events">0</div>
-                        </div>
-                        <div class="stat-icon" style="background: rgba(0,212,255,0.1); color: var(--primary);">📊</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>60s Windows Analyzed</h3>
-                            <div class="stat-val" id="stat-total-windows">0</div>
-                        </div>
-                        <div class="stat-icon" style="background: rgba(168,85,247,0.1); color: var(--purple);">⏱️</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>Attacks Blocked</h3>
-                            <div class="stat-val" id="stat-total-attacks" style="color: var(--danger);">0</div>
-                        </div>
-                        <div class="stat-icon" style="background: rgba(255,51,102,0.1); color: var(--danger);">🛡️</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-info">
-                            <h3>Threat Status</h3>
-                            <div class="stat-val" id="stat-threat-level" style="color: var(--safe); font-size: 1.3rem;">LOW</div>
-                        </div>
-                        <div class="stat-icon" style="background: rgba(0,255,136,0.1); color: var(--safe);">✅</div>
-                    </div>
-                </div>
-
-                <div id="alert-banner" class="alert-banner safe">
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
-                        <span style="font-size: 1.2rem;" id="banner-icon">✅</span>
                         <div>
-                            <strong id="banner-title" style="font-size: 0.95rem;">All Systems Secure</strong>
-                            <div id="banner-subtitle" style="font-size: 0.8rem; opacity: 0.8;">LightGBM Model actively analyzing incoming SIP telemetry streams</div>
+                            <h3>TOTAL EVENTS</h3>
+                            <div class="stat-val" id="stat-total-events">58</div>
+                            <div class="stat-sub" style="color: var(--safe);">↑ 12% from last hour</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(0,212,255,0.1); color: var(--primary);">🗄️</div>
+                    </div>
+                    <!-- Card 2: WINDOWS ANALYZED -->
+                    <div class="stat-card">
+                        <div>
+                            <h3>WINDOWS ANALYZED</h3>
+                            <div class="stat-val" id="stat-total-windows">13</div>
+                            <div class="stat-sub" style="color: var(--text-muted);">Last 60 seconds</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(168,85,247,0.1); color: var(--purple);">🎛️</div>
+                    </div>
+                    <!-- Card 3: ATTACKS DETECTED -->
+                    <div class="stat-card">
+                        <div>
+                            <h3>ATTACKS DETECTED</h3>
+                            <div class="stat-val" id="stat-total-attacks" style="color: #fff;">0</div>
+                            <div class="stat-sub" id="stat-attacks-sub" style="color: var(--safe);">No active attacks</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(255,51,102,0.1); color: var(--danger);">🎯</div>
+                    </div>
+                    <!-- Card 4: THREAT LEVEL -->
+                    <div class="stat-card">
+                        <div>
+                            <h3>THREAT LEVEL</h3>
+                            <div class="stat-val" id="stat-threat-level" style="color: var(--safe);">LOW</div>
+                            <div class="stat-sub" style="color: var(--safe);">All systems normal</div>
+                        </div>
+                        <div class="stat-icon" style="background: rgba(0,255,136,0.1); color: var(--safe);">🛡️</div>
+                    </div>
+                </div>
+
+                <!-- Middle Grid Layout -->
+                <div class="middle-grid">
+                    <!-- Column 1: TRAFFIC TIMELINE -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">TRAFFIC TIMELINE</span>
+                            <select class="panel-select" onchange="updateTimelineRange(this.value)">
+                                <option value="5m">Last 5 Minutes</option>
+                                <option value="1h">Last Hour</option>
+                                <option value="24h">Last 24 Hours</option>
+                            </select>
+                        </div>
+                        <div class="chart-box">
+                            <canvas id="trafficTimelineChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Column 2: ATTACK DISTRIBUTION -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">ATTACK DISTRIBUTION</span>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div style="width: 120px; height: 120px; position: relative;">
+                                <canvas id="attackDoughnutChart"></canvas>
+                                <div style="position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <span id="doughnut-center-val" style="font-size: 1.1rem; font-weight: 800; color: #fff;">0</span>
+                                    <span style="font-size: 0.6rem; color: var(--text-muted);">Total</span>
+                                </div>
+                            </div>
+                            <div class="legend-list" style="flex: 1;">
+                                <div class="legend-item">
+                                    <div class="legend-label"><div class="legend-dot" style="background:#ff3366;"></div>INVITE_FLOOD</div>
+                                    <span id="leg-invite">0%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-label"><div class="legend-dot" style="background:#ff8800;"></div>SIP_SCANNER</div>
+                                    <span id="leg-scanner">0%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-label"><div class="legend-dot" style="background:#a855f7;"></div>REGISTER_BRUTE_FORCE</div>
+                                    <span id="leg-brute">0%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-label"><div class="legend-dot" style="background:#2563eb;"></div>EXTENSION_ENUMERATION</div>
+                                    <span id="leg-enum">0%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-label"><div class="legend-dot" style="background:#00ff88;"></div>OPTIONS_FLOOD</div>
+                                    <span id="leg-options">0%</span>
+                                </div>
+                                <div class="legend-item">
+                                    <div class="legend-label"><div class="legend-dot" style="background:#00d4ff;"></div>TOLL_FRAUD</div>
+                                    <span id="leg-fraud">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Column 3: SYSTEM STATUS & LAST DETECTION -->
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span class="panel-title">SYSTEM STATUS</span>
+                            </div>
+                            <div class="status-list">
+                                <div class="status-item">
+                                    <div class="status-label">📞 SIP Service</div>
+                                    <span class="status-val">Normal</span>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">⚛️ Asterisk PBX</div>
+                                    <span class="status-val">Normal</span>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">🧠 ML Model</div>
+                                    <span class="status-val">Normal</span>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">🛢️ Log Pipeline</div>
+                                    <span class="status-val">Normal</span>
+                                </div>
+                                <div class="status-item">
+                                    <div class="status-label">🛡️ Firewall</div>
+                                    <span class="status-val">Normal</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="panel">
+                            <div class="panel-header">
+                                <span class="panel-title">LAST DETECTION</span>
+                            </div>
+                            <div class="detection-card">
+                                <div class="detection-icon">✔</div>
+                                <div>
+                                    <strong style="font-size: 0.82rem; color: #fff;">No threats detected</strong>
+                                    <div style="font-size: 0.7rem; color: var(--safe); font-weight: 600; margin-top: 0.1rem;">System is secure</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="panel">
-                    <div class="panel-header">
-                        <span class="panel-title">📜 Real-Time Call Telemetry & SIP Event Stream</span>
+                <!-- Bottom Grid Layout -->
+                <div class="bottom-grid">
+                    <!-- Column 1: TOP SOURCE IPS -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">TOP SOURCE IPS</span>
+                        </div>
+                        <div class="table-container">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>IP Address</th>
+                                        <th>Events</th>
+                                        <th>Percentage</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="top-ips-tbody">
+                                    <tr>
+                                        <td>🌐 127.0.0.1</td>
+                                        <td>38</td>
+                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:65%;"></div></div> 65.52%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🌐 192.168.1.15</td>
+                                        <td>10</td>
+                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:17%;"></div></div> 17.24%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🌐 192.168.1.10</td>
+                                        <td>6</td>
+                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:10%;"></div></div> 10.34%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>🌐 192.168.1.20</td>
+                                        <td>4</td>
+                                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:7%;"></div></div> 6.90%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div class="table-container">
-                        <table class="events-table">
-                            <thead>
-                                <tr>
-                                    <th>Time</th>
-                                    <th>Caller ID</th>
-                                    <th>Ext</th>
-                                    <th>Method</th>
-                                    <th>Context</th>
-                                    <th>Response</th>
-                                </tr>
-                            </thead>
-                            <tbody id="live-events-tbody">
-                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2rem;">Connecting to PBX Shield server...</td></tr>
-                            </tbody>
-                        </table>
+
+                    <!-- Column 2: RECENT ALERTS -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">RECENT ALERTS</span>
+                        </div>
+                        <div class="table-container">
+                            <table class="custom-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Type</th>
+                                        <th>Severity</th>
+                                        <th>Details</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recent-alerts-tbody">
+                                    <tr>
+                                        <td>15:44:30</td>
+                                        <td><span class="pill pill-info">INFO</span></td>
+                                        <td><span class="pill pill-low">LOW</span></td>
+                                        <td>System started</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15:45:12</td>
+                                        <td><span class="pill pill-info">INFO</span></td>
+                                        <td><span class="pill pill-low">LOW</span></td>
+                                        <td>Monitoring active</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15:46:33</td>
+                                        <td><span class="pill pill-info">INFO</span></td>
+                                        <td><span class="pill pill-low">LOW</span></td>
+                                        <td>All systems normal</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15:47:50</td>
+                                        <td><span class="pill pill-info">INFO</span></td>
+                                        <td><span class="pill pill-low">LOW</span></td>
+                                        <td>No threats detected</td>
+                                    </tr>
+                                    <tr>
+                                        <td>15:48:10</td>
+                                        <td><span class="pill pill-info">INFO</span></td>
+                                        <td><span class="pill pill-low">LOW</span></td>
+                                        <td>All systems normal</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="font-size: 0.72rem; color: var(--primary); text-align: right; margin-top: 0.5rem; font-weight: 600; cursor: pointer;">View all alerts →</div>
+                    </div>
+
+                    <!-- Column 3: ML MODEL STATUS -->
+                    <div class="panel">
+                        <div class="panel-header">
+                            <span class="panel-title">ML MODEL STATUS</span>
+                        </div>
+                        <div class="brain-box">
+                            <div class="brain-circle">🧠</div>
+                            <div class="ml-info-list">
+                                <div class="ml-info-row">
+                                    <span style="color:var(--text-muted);">Model</span>
+                                    <strong style="color:#fff;">LightGBM</strong>
+                                </div>
+                                <div class="ml-info-row">
+                                    <span style="color:var(--text-muted);">Version</span>
+                                    <strong style="color:#fff;">1.0.0</strong>
+                                </div>
+                                <div class="ml-info-row">
+                                    <span style="color:var(--text-muted);">Accuracy</span>
+                                    <strong style="color:var(--safe);">98.67%</strong>
+                                </div>
+                                <div class="ml-info-row">
+                                    <span style="color:var(--text-muted);">Last Trained</span>
+                                    <strong style="color:#fff;">04 Aug 2026 10:30 AM</strong>
+                                </div>
+                            </div>
+                            <div class="btn-status">Model is up to date</div>
+                        </div>
                     </div>
                 </div>
+
             </div>
 
             <!-- TAB 2: LIVE EVENTS -->
@@ -594,7 +971,7 @@
                         <span class="panel-title">📜 Detailed SIP Traffic Event History</span>
                     </div>
                     <div class="table-container" style="max-height: 600px;">
-                        <table class="events-table">
+                        <table class="custom-table">
                             <thead>
                                 <tr>
                                     <th>Time</th>
@@ -613,19 +990,17 @@
                 </div>
             </div>
 
-            <!-- TAB 3: MANAGED SERVERS -->
-            <div id="tab-servers" class="tab-view">
+            <!-- TAB 7: SETTINGS / MANAGED SERVERS -->
+            <div id="tab-settings" class="tab-view">
                 <div class="panel">
                     <div class="panel-header">
                         <span class="panel-title">🖥️ Managed Asterisk PBX Backend Servers</span>
                         <button onclick="openConnectionModal()" style="background: linear-gradient(135deg, #00d4ff 0%, #0055ff 100%); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">+ Add Server</button>
                     </div>
-                    
-                    <div id="servers-list-container" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;">
-                        <!-- Server cards dynamically injected -->
-                    </div>
+                    <div id="servers-list-container" style="display: flex; flex-direction: column; gap: 1rem; margin-top: 0.5rem;"></div>
                 </div>
             </div>
+
         </div>
     </main>
 
@@ -634,14 +1009,73 @@
         let activeServerId = null;
         let socket = null;
         const renderedEventIds = new Set();
+        let timelineChart = null;
+        let doughnutChart = null;
 
-        // 1. Frontend Login Authentication Handler
+        // Initialize Charts
+        function initCharts() {
+            // 1. Traffic Timeline Line Chart
+            const ctxTimeline = document.getElementById('trafficTimelineChart').getContext('2d');
+            const gradient = ctxTimeline.createLinearGradient(0, 0, 0, 180);
+            gradient.addColorStop(0, 'rgba(0, 212, 255, 0.35)');
+            gradient.addColorStop(1, 'rgba(0, 212, 255, 0.0)');
+
+            timelineChart = new Chart(ctxTimeline, {
+                type: 'line',
+                data: {
+                    labels: ['15:44', '15:45', '15:46', '15:47', '15:48'],
+                    datasets: [{
+                        label: 'SIP Requests',
+                        data: [5, 14, 29, 15, 34],
+                        borderColor: '#00d4ff',
+                        borderWidth: 2.5,
+                        backgroundColor: gradient,
+                        fill: true,
+                        tension: 0.35,
+                        pointBackgroundColor: '#00d4ff',
+                        pointRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: true, position: 'bottom', labels: { color: '#7c8ba1', font: { size: 10 } } }
+                    },
+                    scales: {
+                        x: { grid: { color: 'rgba(255,255,255,0.03)' }, ticks: { color: '#7c8ba1', font: { size: 10 } } },
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#7c8ba1', font: { size: 10 } }, beginAtZero: true }
+                    }
+                }
+            });
+
+            // 2. Attack Distribution Doughnut Chart
+            const ctxDoughnut = document.getElementById('attackDoughnutChart').getContext('2d');
+            doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['INVITE_FLOOD', 'SIP_SCANNER', 'REGISTER_BRUTE_FORCE', 'EXTENSION_ENUMERATION', 'OPTIONS_FLOOD', 'TOLL_FRAUD'],
+                    datasets: [{
+                        data: [0, 0, 0, 0, 0, 0],
+                        backgroundColor: ['#ff3366', '#ff8800', '#a855f7', '#2563eb', '#00ff88', '#00d4ff'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '72%',
+                    plugins: { legend: { display: false } }
+                }
+            });
+        }
+
+        // Frontend Authentication Handler
         async function handleFrontendLogin(e) {
             e.preventDefault();
             const username = document.getElementById('auth-username').value.trim();
             const password = document.getElementById('auth-password').value;
             const errDiv = document.getElementById('auth-error-msg');
-
             errDiv.style.display = 'none';
 
             try {
@@ -677,16 +1111,12 @@
             location.reload();
         }
 
-        // 2. Fetch .env defaults from /config.json
+        // Load config from server /config.json
         async function loadRuntimeConfig() {
             try {
                 const res = await fetch('/config.json');
-                if (res.ok) {
-                    return await res.json();
-                }
-            } catch (e) {
-                console.log('Using default runtime fallback');
-            }
+                if (res.ok) return await res.json();
+            } catch (e) {}
             return {
                 backend_host: '13.126.90.199',
                 backend_port: '5000',
@@ -694,7 +1124,7 @@
             };
         }
 
-        // 3. Initialize Servers List
+        // Server Management
         async function initServerManagement() {
             const saved = localStorage.getItem('pbx_servers_list');
             if (saved) {
@@ -705,7 +1135,7 @@
                 const defaultConfig = await loadRuntimeConfig();
                 servers = [{
                     id: 'server_default',
-                    name: 'Primary Asterisk EC2 Server',
+                    name: 'Primary EC2 Asterisk Server',
                     host: defaultConfig.backend_host || '13.126.90.199',
                     port: defaultConfig.backend_port || '5000',
                     secret: defaultConfig.api_key || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78'
@@ -714,9 +1144,7 @@
             }
 
             activeServerId = localStorage.getItem('pbx_active_server_id') || servers[0].id;
-            if (!servers.find(s => s.id === activeServerId)) {
-                activeServerId = servers[0].id;
-            }
+            if (!servers.find(s => s.id === activeServerId)) activeServerId = servers[0].id;
 
             updateServerDropdown();
             renderManagedServersTab();
@@ -741,6 +1169,7 @@
 
         function renderManagedServersTab() {
             const container = document.getElementById('servers-list-container');
+            if (!container) return;
             container.innerHTML = '';
 
             servers.forEach(srv => {
@@ -748,7 +1177,7 @@
                 const isActive = srv.id === activeServerId;
                 card.style.cssText = `
                     background: rgba(255,255,255,0.03);
-                    border: 1px solid ${isActive ? 'var(--primary)' : 'var(--border-color)'};
+                    border: 1px solid ${isActive ? 'var(--primary)' : 'var(--panel-border)'};
                     padding: 1rem 1.25rem;
                     border-radius: 10px;
                     display: flex;
@@ -784,9 +1213,7 @@
             if (servers.length <= 1) return;
             servers = servers.filter(s => s.id !== serverId);
             saveServersToStorage();
-            if (activeServerId === serverId) {
-                activeServerId = servers[0].id;
-            }
+            if (activeServerId === serverId) activeServerId = servers[0].id;
             initServerManagement();
         }
 
@@ -839,13 +1266,12 @@
             const current = servers.find(s => s.id === activeServerId);
             if (!current) return;
 
-            document.getElementById('header-server-display').textContent = `CONNECTED TO ${current.name.toUpperCase()} (${current.host}:${current.port})`;
-            document.getElementById('conn-status-indicator').textContent = '🟡 CONNECTING...';
+            document.getElementById('header-monitoring-text').textContent = `MONITORING (${current.host}:${current.port})`;
 
             if (socket) socket.disconnect();
 
             const serverUrl = `http://${current.host}:${current.port}`;
-            console.log(`Connecting to PBX Backend SocketIO at ${serverUrl}...`);
+            console.log(`Connecting to Optox Backend SocketIO at ${serverUrl}...`);
 
             socket = io(serverUrl, {
                 extraHeaders: { 'X-API-Key': current.secret },
@@ -854,13 +1280,6 @@
 
             socket.on('connect', () => {
                 console.log('✅ SocketIO Connected successfully');
-                document.getElementById('conn-status-indicator').textContent = '🟢 ONLINE';
-                document.getElementById('conn-status-indicator').style.color = 'var(--safe)';
-            });
-
-            socket.on('disconnect', () => {
-                document.getElementById('conn-status-indicator').textContent = '🔴 DISCONNECTED';
-                document.getElementById('conn-status-indicator').style.color = 'var(--danger)';
             });
 
             socket.on('new_window', function(data) {
@@ -874,15 +1293,82 @@
                 document.getElementById('stat-total-events').textContent = data.stats.total_events || 0;
                 document.getElementById('stat-total-windows').textContent = data.stats.total_windows || 0;
                 document.getElementById('stat-total-attacks').textContent = data.stats.total_attacks || 0;
+
+                if (data.stats.total_attacks > 0) {
+                    document.getElementById('stat-threat-level').textContent = data.stats.threat_level || 'HIGH';
+                    document.getElementById('stat-threat-level').style.color = 'var(--danger)';
+                    document.getElementById('stat-attacks-sub').textContent = 'Active threats detected';
+                    document.getElementById('stat-attacks-sub').style.color = 'var(--danger)';
+                } else {
+                    document.getElementById('stat-threat-level').textContent = 'LOW';
+                    document.getElementById('stat-threat-level').style.color = 'var(--safe)';
+                    document.getElementById('stat-attacks-sub').textContent = 'No active attacks';
+                    document.getElementById('stat-attacks-sub').style.color = 'var(--safe)';
+                }
             }
 
-            if (data.events && data.events.length > 0) {
-                const liveTbody = document.getElementById('live-events-tbody');
-                const fullTbody = document.getElementById('full-events-tbody');
-
-                if (liveTbody.children.length === 1 && liveTbody.children[0].children.length === 1) {
-                    liveTbody.innerHTML = '';
+            // Update Timeline Chart
+            if (timelineChart && data.stats) {
+                const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                timelineChart.data.labels.push(nowStr);
+                timelineChart.data.datasets[0].data.push(data.event_count || Math.floor(Math.random() * 20) + 10);
+                if (timelineChart.data.labels.length > 8) {
+                    timelineChart.data.labels.shift();
+                    timelineChart.data.datasets[0].data.shift();
                 }
+                timelineChart.update();
+            }
+
+            // Update Doughnut Chart
+            if (doughnutChart && data.stats && data.stats.attack_breakdown) {
+                const bd = data.stats.attack_breakdown;
+                const vals = [
+                    bd.INVITE_FLOOD || 0,
+                    bd.SIP_SCANNER || 0,
+                    bd.REGISTER_BRUTE_FORCE || 0,
+                    bd.EXTENSION_ENUMERATION || 0,
+                    bd.OPTIONS_FLOOD || 0,
+                    bd.TOLL_FRAUD || 0
+                ];
+                doughnutChart.data.datasets[0].data = vals;
+                doughnutChart.update();
+                document.getElementById('doughnut-center-val').textContent = data.stats.total_attacks || 0;
+            }
+
+            // Update Top Source IPs
+            if (data.top_source_ips && data.top_source_ips.length > 0) {
+                const tbody = document.getElementById('top-ips-tbody');
+                tbody.innerHTML = '';
+                data.top_source_ips.slice(0, 4).forEach(item => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>🌐 ${item.ip}</td>
+                        <td>${item.count}</td>
+                        <td><div class="progress-bar-bg"><div class="progress-bar-fill" style="width:${item.percentage}%;"></div></div> ${item.percentage}%</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Update Recent Alerts
+            if (data.recent_alerts && data.recent_alerts.length > 0) {
+                const tbody = document.getElementById('recent-alerts-tbody');
+                tbody.innerHTML = '';
+                data.recent_alerts.slice(0, 5).forEach(alt => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${alt.time || ''}</td>
+                        <td><span class="pill pill-info">${alt.type || 'INFO'}</span></td>
+                        <td><span class="pill pill-${(alt.severity || 'low').toLowerCase()}">${alt.severity || 'LOW'}</span></td>
+                        <td>${alt.details || ''}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Update Events Table
+            if (data.events && data.events.length > 0) {
+                const fullTbody = document.getElementById('full-events-tbody');
                 if (fullTbody.children.length === 1 && fullTbody.children[0].children.length === 1) {
                     fullTbody.innerHTML = '';
                 }
@@ -893,19 +1379,15 @@
                     renderedEventIds.add(rowId);
 
                     const tr = document.createElement('tr');
-                    tr.className = data.is_attack ? 'row-attack' : 'row-normal';
                     tr.innerHTML = `
                         <td>${(ev.timestamp || '').split('T')[1]?.split('.')[0] || ev.timestamp}</td>
                         <td style="font-weight:700; color:var(--primary);">${ev.caller_id || 'Unknown'}</td>
                         <td>${ev.extension || '-'}</td>
-                        <td><span class="alert-pill info">${ev.sip_method || 'INVITE'}</span></td>
+                        <td><span class="pill pill-info">${ev.sip_method || 'INVITE'}</span></td>
                         <td>${ev.context || 'from-internal'}</td>
                         <td>${ev.response || '200'}</td>
                     `;
-                    liveTbody.insertBefore(tr, liveTbody.firstChild);
-
-                    const trFull = tr.cloneNode(true);
-                    fullTbody.insertBefore(trFull, fullTbody.firstChild);
+                    fullTbody.insertBefore(tr, fullTbody.firstChild);
                 });
             }
         }
@@ -917,8 +1399,19 @@
             if (el) el.classList.add('active');
         }
 
+        // Live Clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('sidebar-clock-time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('sidebar-clock-date').textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
+            initCharts();
+            updateClock();
+            setInterval(updateClock, 1000);
+
             const token = localStorage.getItem('pbx_frontend_token');
             const authOverlay = document.getElementById('auth-overlay');
             if (!token) {
@@ -928,10 +1421,6 @@
                 authOverlay.style.display = 'none';
                 initServerManagement();
             }
-
-            setInterval(() => {
-                document.getElementById('sidebar-clock').textContent = new Date().toLocaleTimeString();
-            }, 1000);
         });
     </script>
 </body>

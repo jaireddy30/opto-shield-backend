@@ -69,7 +69,7 @@ const server = http.createServer((req, res) => {
           res.writeHead(200, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({
             status: 'success',
-            message: 'Frontend authentication successful',
+            message: 'Optox Shield frontend authentication successful',
             token: token,
             user: user
           }));
@@ -77,7 +77,7 @@ const server = http.createServer((req, res) => {
           res.writeHead(401, { 'Content-Type': 'application/json' });
           return res.end(JSON.stringify({
             status: 'error',
-            message: 'Invalid frontend operator credentials'
+            message: 'Invalid Optox Shield operator credentials'
           }));
         }
       } catch (e) {
@@ -122,7 +122,7 @@ const server = http.createServer((req, res) => {
 
 server.listen(PORT, HOST, () => {
   console.log(`=======================================================`);
-  console.log(`  PBX SHIELD — FRONTEND SOC CONSOLE ACTIVE`);
+  console.log(`  OPTOX SHIELD — FRONTEND SOC CONSOLE ACTIVE`);
   console.log(`=======================================================`);
   console.log(`  [+] Listening on: http://${HOST}:${PORT} (0.0.0.0/0)`);
   console.log(`  [+] Frontend Admin: ${FRONTEND_ADMIN_USER}`);
