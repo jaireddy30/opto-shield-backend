@@ -26,8 +26,8 @@ const HOST = process.env.HOST || '0.0.0.0';
 const PORT = parseInt(process.env.PORT || '9000', 10);
 const FRONTEND_ADMIN_USER = process.env.FRONTEND_ADMIN_USER || 'admin';
 const FRONTEND_ADMIN_PASS = process.env.FRONTEND_ADMIN_PASS || 'admin123';
-const DEFAULT_BACKEND_HOST = process.env.DEFAULT_BACKEND_HOST || '13.126.90.199';
-const DEFAULT_BACKEND_PORT = process.env.DEFAULT_BACKEND_PORT || '5000';
+const DEFAULT_BACKEND_HOST = process.env.DEFAULT_BACKEND_HOST || 'app.optoxcrm.com';
+const DEFAULT_BACKEND_PORT = process.env.DEFAULT_BACKEND_PORT || '443';
 const DEFAULT_API_KEY = process.env.DEFAULT_API_KEY || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78';
 
 const MIME_TYPES = {
