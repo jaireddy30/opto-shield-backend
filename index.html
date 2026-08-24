@@ -464,6 +464,7 @@
         .pill-low { background: rgba(0, 255, 136, 0.15); color: var(--safe); }
         .pill-warning { background: rgba(255, 136, 0, 0.15); color: var(--warning); }
         .pill-danger { background: rgba(255, 51, 102, 0.15); color: var(--danger); }
+        .pill-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
 
         /* Modals & Overlays */
         .full-overlay {
@@ -620,9 +621,9 @@
             <div class="sidebar-card">
                 <div style="display: flex; align-items: center; gap: 0.4rem; font-weight: 700; color: var(--safe); font-size: 0.72rem;">
                     <div class="pulse-dot"></div>
-                    <span>Monitoring Active</span>
+                    <span>SQLite DB Persistence</span>
                 </div>
-                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem;">System is running normally</div>
+                <div style="font-size: 0.65rem; color: var(--text-muted); margin-top: 0.2rem;">Yesterday & Today Logs Saved</div>
                 
                 <select id="sidebar-server-select" class="select-server-bar" onchange="switchActiveServer(this.value)">
                     <!-- Options injected dynamically -->
@@ -632,7 +633,7 @@
             <div class="sidebar-time">
                 <div>
                     <span id="sidebar-clock-time" style="font-weight:600; color:#fff;">--:--:-- PM</span><br>
-                    <span id="sidebar-clock-date" style="font-size:0.62rem;">04 Aug 2026</span>
+                    <span id="sidebar-clock-date" style="font-size:0.62rem;">24 Aug 2026</span>
                 </div>
                 <button onclick="handleFrontendLogout()" style="background: none; border: none; color: var(--danger); font-weight: 700; font-size: 0.7rem; cursor: pointer;">Log Out 🚪</button>
             </div>
@@ -663,7 +664,7 @@
                         <div>
                             <h3>TOTAL EVENTS</h3>
                             <div class="stat-val" id="stat-total-events">0</div>
-                            <div class="stat-sub" style="color: var(--safe);">↑ Real-time Live Stream</div>
+                            <div class="stat-sub" style="color: var(--safe);">↑ SQLite DB Saved (48h)</div>
                         </div>
                         <div class="stat-icon" style="background: rgba(0,212,255,0.1); color: var(--primary);">🗄️</div>
                     </div>
@@ -741,7 +742,7 @@
                                 <div class="status-item"><div class="status-label">📞 SIP Service</div><span class="status-val">Normal</span></div>
                                 <div class="status-item"><div class="status-label">⚛️ Asterisk PBX</div><span class="status-val">Normal</span></div>
                                 <div class="status-item"><div class="status-label">🧠 ML Model</div><span class="status-val">Normal</span></div>
-                                <div class="status-item"><div class="status-label">🛢️ Log Pipeline</div><span class="status-val">Normal</span></div>
+                                <div class="status-item"><div class="status-label">🛢️ SQLite DB Storage</div><span class="status-val">Active</span></div>
                                 <div class="status-item"><div class="status-label">🛡️ Firewall</div><span class="status-val">Normal</span></div>
                             </div>
                         </div>
@@ -824,26 +825,27 @@
 
             </div>
 
-            <!-- TAB 2: LIVE EVENTS -->
+            <!-- TAB 2: LIVE EVENTS (Yesterday & Today Calls from SQLite DB) -->
             <div id="tab-events" class="tab-view">
                 <div class="panel">
                     <div class="panel-header">
-                        <span class="panel-title">📜 Real-Time Telemetry & Call Status Stream (Instant &lt;10ms)</span>
+                        <span class="panel-title">📜 Call Logs & Telemetry Stream (Yesterday & Today from SQLite DB)</span>
                     </div>
                     <div class="table-container" style="max-height: 620px;">
                         <table class="custom-table">
                             <thead>
                                 <tr>
-                                    <th>Timestamp</th>
+                                    <th>Date & Time</th>
                                     <th>Caller ID</th>
                                     <th>Extension</th>
                                     <th>Method</th>
+                                    <th>Context & Source IP</th>
                                     <th>Call Status / Hangup State</th>
-                                    <th>Response Code</th>
+                                    <th>Response</th>
                                 </tr>
                             </thead>
                             <tbody id="full-events-tbody">
-                                <tr><td colspan="6" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">Connecting to Optox Shield telemetry stream...</td></tr>
+                                <tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2.5rem;">Loading historical call logs from SQLite Database...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -923,7 +925,7 @@
                         </div>
                         <div class="status-list">
                             <div class="status-item"><span>Sliding Window Size</span><strong style="color:#fff;">60 Seconds</strong></div>
-                            <div class="status-item"><span>Classification Interval</span><strong style="color:#fff;">Every 60 Seconds</strong></div>
+                            <div class="status-item"><span>Database System Storage</span><strong style="color:var(--primary);">SQLite DB (optox_events.db)</strong></div>
                             <div class="status-item"><span>Dashboard Refresh Rate</span><strong style="color:#fff;">Instant WebSocket Broadcast (&lt;10ms)</strong></div>
                             <div class="status-item"><span>Confidence Threshold</span><strong style="color:var(--safe);">95.0%</strong></div>
                         </div>
@@ -937,7 +939,7 @@
                     <div class="panel-header">
                         <span class="panel-title">📊 Long-Term Call Volume & Threat Distribution Analytics</span>
                     </div>
-                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Historical metrics aggregated over 24-hour monitoring periods</p>
+                    <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Historical metrics aggregated over 48-hour monitoring periods</p>
                     <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem;">
                         <div style="background:rgba(255,255,255,0.02); padding:1rem; border-radius:10px;">
                             <strong style="font-size:0.85rem; color:#fff;">Peak Hourly SIP Volume</strong>
@@ -1001,10 +1003,10 @@
             timelineChart = new Chart(ctxTimeline, {
                 type: 'line',
                 data: {
-                    labels: ['15:44', '15:45', '15:46', '15:47', '15:48'],
+                    labels: ['11:34 AM', '11:35 AM', '11:36 AM', '11:37 AM', '11:38 AM'],
                     datasets: [{
                         label: 'SIP Requests',
-                        data: [5, 14, 29, 15, 34],
+                        data: [10, 27, 19, 25, 16],
                         borderColor: '#00d4ff',
                         borderWidth: 2.5,
                         backgroundColor: gradient,
@@ -1070,7 +1072,7 @@
 
             const titles = {
                 'dashboard': ['Dashboard', 'Real-time overview of your PBX security'],
-                'events': ['Live Events', 'Real-time SIP traffic and completed CDR call records stream'],
+                'events': ['Live Events', 'Yesterday & Today call logs stored in SQLite Database System'],
                 'analysis': ['Attack Analysis', 'Deep-dive security threat breakdown and IP blocklist management'],
                 'mldetection': ['ML Detection', 'LightGBM model metrics, feature weights, and detection engine'],
                 'analytics': ['Analytics', 'Historical traffic trends, peak usage, and response distribution'],
@@ -1274,6 +1276,24 @@
             connectToActiveServer();
         }
 
+        // Fetch Historical Call Logs from Yesterday & Today from SQLite DB
+        async function fetchHistoricalCallLogs() {
+            const current = servers.find(s => s.id === activeServerId);
+            if (!current) return;
+            try {
+                const res = await fetch(`http://${current.host}:${current.port}/api/events/history?api_key=${current.secret}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.status === 'success' && data.events && data.events.length > 0) {
+                        console.log(`Loaded ${data.events.length} historical calls (Yesterday & Today) from SQLite DB`);
+                        data.events.forEach(ev => renderSingleLiveEvent(ev, true));
+                    }
+                }
+            } catch (e) {
+                console.log('Could not fetch historical call logs:', e);
+            }
+        }
+
         function connectToActiveServer() {
             const current = servers.find(s => s.id === activeServerId);
             if (!current) return;
@@ -1292,11 +1312,12 @@
 
             socket.on('connect', () => {
                 console.log('✅ SocketIO Connected successfully');
+                fetchHistoricalCallLogs();
             });
 
             // Instant Live Event Handler (<10ms delay for call start & hangup!)
             socket.on('live_event', function(event) {
-                renderSingleLiveEvent(event);
+                renderSingleLiveEvent(event, false);
             });
 
             // Periodical Window Stats Handler
@@ -1306,17 +1327,15 @@
         }
 
         // Render Instant Single Live Event
-        function renderSingleLiveEvent(ev) {
+        function renderSingleLiveEvent(ev, isHistory = false) {
             if (!ev) return;
             const rowId = (ev.id || '') + '_' + (ev.timestamp || '') + '_' + (ev.sip_method || '');
             if (renderedEventIds.has(rowId)) return;
             renderedEventIds.add(rowId);
 
-            // Increment live counter
             liveEventCounter++;
             document.getElementById('stat-total-events').textContent = liveEventCounter;
 
-            // Determine status pill and text
             let statusPillHtml = '';
             const method = (ev.sip_method || '').toUpperCase();
             const resp = str(ev.response || '200');
@@ -1340,19 +1359,40 @@
                 fullTbody.innerHTML = '';
             }
 
-            const timeStr = (ev.timestamp || '').split('T')[1]?.split('.')[0] || new Date().toLocaleTimeString();
+            // Format full date & time (e.g. 2026-08-24 11:29:40)
+            let dateStr = ev.timestamp || '';
+            if (dateStr.includes('T')) {
+                const parts = dateStr.split('T');
+                const d = parts[0];
+                const t = parts[1].split('.')[0];
+                dateStr = `${d} ${t}`;
+            }
+
+            // Format Context & Source IP
+            const srcIp = ev.source_ip || 'Unknown IP';
+            const ctxStr = ev.context || 'from-external';
+            const isInternal = ctxStr.includes('internal') || srcIp.startsWith('192.168.') || srcIp.startsWith('10.');
+            const ctxPillHtml = isInternal 
+                ? `<span class="pill pill-low">🏠 from-internal (${srcIp})</span>`
+                : `<span class="pill pill-purple">🌐 from-external (${srcIp})</span>`;
 
             const tr = document.createElement('tr');
-            tr.className = 'new-row-flash';
+            if (!isHistory) tr.className = 'new-row-flash';
             tr.innerHTML = `
-                <td>${timeStr}</td>
+                <td>${dateStr}</td>
                 <td style="font-weight:700; color:var(--primary);">${ev.caller_id || 'Unknown'}</td>
                 <td>${ev.extension || '-'}</td>
                 <td><span class="pill pill-info">${method}</span></td>
+                <td>${ctxPillHtml}</td>
                 <td>${statusPillHtml}</td>
                 <td style="font-weight:600; color:${resp === '200' ? 'var(--safe)' : 'var(--warning)'};">${resp}</td>
             `;
-            fullTbody.insertBefore(tr, fullTbody.firstChild);
+            
+            if (isHistory) {
+                fullTbody.appendChild(tr);
+            } else {
+                fullTbody.insertBefore(tr, fullTbody.firstChild);
+            }
 
             // Also add to Recent Alerts if it's a Call Cut / Hangup or Start
             const alertsTbody = document.getElementById('recent-alerts-tbody');
@@ -1361,19 +1401,23 @@
             }
 
             const alertTr = document.createElement('tr');
-            alertTr.className = 'new-row-flash';
+            if (!isHistory) alertTr.className = 'new-row-flash';
             const alertType = method === 'BYE' ? 'HANGUP' : (resp === '200' ? 'CALL' : 'EVENT');
-            const alertSev = method === 'BYE' ? 'LOW' : 'INFO';
             const details = ev.cause_txt || `${method} from ${ev.caller_id || 'Ext'}`;
 
             alertTr.innerHTML = `
-                <td>${timeStr}</td>
+                <td>${dateStr.split(' ')[1] || dateStr}</td>
                 <td><span class="pill ${method === 'BYE' ? 'pill-danger' : 'pill-info'}">${alertType}</span></td>
                 <td>${statusPillHtml}</td>
-                <td>${details}</td>
+                <td>${details} (${srcIp})</td>
             `;
-            alertsTbody.insertBefore(alertTr, alertsTbody.firstChild);
-            if (alertsTbody.children.length > 5) alertsTbody.removeChild(alertsTbody.lastChild);
+
+            if (isHistory) {
+                if (alertsTbody.children.length < 6) alertsTbody.appendChild(alertTr);
+            } else {
+                alertsTbody.insertBefore(alertTr, alertsTbody.firstChild);
+                if (alertsTbody.children.length > 6) alertsTbody.removeChild(alertsTbody.lastChild);
+            }
         }
 
         function str(val) { return String(val || ''); }
@@ -1446,7 +1490,7 @@
 
             // Update Events Table from historical batch if any missed
             if (data.events && data.events.length > 0) {
-                data.events.forEach(ev => renderSingleLiveEvent(ev));
+                data.events.forEach(ev => renderSingleLiveEvent(ev, true));
             }
         }
 
