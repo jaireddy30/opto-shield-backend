@@ -1443,16 +1443,28 @@
                 dirPill = '<span class="pill pill-low">🏠 INTERNAL</span>';
             }
 
-            const ctxPillHtml = isInternal 
-                ? `<span class="pill pill-low">🏠 from-internal (${srcIp})</span>`
-                : `<span class="pill pill-purple">🌐 from-external (${srcIp})</span>`;
+            // Highlight DID 8031339333 numbers
+            let callerDisplay = ev.caller_id || 'Unknown';
+            let extDisplay = ev.extension || '-';
+
+            if (String(callerDisplay).includes('8031339333') || String(callerDisplay).endsWith('333')) {
+                callerDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${callerDisplay}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.15); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.3);">PROD DID</span>`;
+            } else {
+                callerDisplay = `<span style="font-weight:700; color:var(--primary);">${callerDisplay}</span>`;
+            }
+
+            if (String(extDisplay).includes('8031339333') || String(extDisplay).endsWith('333')) {
+                extDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${extDisplay}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.15); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.3);">PROD DID</span>`;
+            } else {
+                extDisplay = `<span style="font-weight:600; color:#fff;">${extDisplay}</span>`;
+            }
 
             const tr = document.createElement('tr');
             if (!isHistory) tr.className = 'new-row-flash';
             tr.innerHTML = `
                 <td>${dateStr}</td>
-                <td style="font-weight:700; color:var(--primary);">${ev.caller_id || 'Unknown'}</td>
-                <td>${ev.extension || '-'}</td>
+                <td>${callerDisplay}</td>
+                <td>${extDisplay}</td>
                 <td>${dirPill}</td>
                 <td>${ctxPillHtml}</td>
                 <td>${statusPillHtml}</td>
