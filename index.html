@@ -1391,15 +1391,34 @@
         // Render Instant Single Live Event
         function renderSingleLiveEvent(ev, isHistory = false) {
             if (!ev) return;
-            const rowId = (ev.id || '') + '_' + (ev.timestamp || '') + '_' + (ev.sip_method || '');
+            
+            const method = (ev.sip_method || '').toUpperCase();
+            
+            // 1. FILTER OUT softphone logins (REGISTER) and keepalives (OPTIONS) from Call Logs table
+            if (method === 'REGISTER' || method === 'OPTIONS') {
+                return;
+            }
+
+            const rowId = (ev.id || '') + '_' + (ev.timestamp || '') + '_' + method;
             if (renderedEventIds.has(rowId)) return;
             renderedEventIds.add(rowId);
 
-            liveEventCounter++;
-            document.getElementById('stat-total-events').textContent = liveEventCounter;
+            let dateStr = ev.timestamp || '';
+            if (dateStr.includes('T')) {
+                const parts = dateStr.split('T');
+                const d = parts[0];
+                const t = parts[1].split('.')[0];
+                dateStr = `${d} ${t}`;
+            }
+
+            const rawCaller = ev.caller_id || 'Unknown';
+            const rawExt = ev.extension || '-';
+            const dateMinute = dateStr.substring(0, 16); // e.g. "2026-08-25 16:14"
+
+            // Construct deduplication group key for call updates (100 -> 180 -> 200 -> BYE -> Cdr)
+            const callGroupKey = (rawCaller + '_' + rawExt + '_' + dateMinute).replace(/[^a-zA-Z0-9]/g, '');
 
             let statusPillHtml = '';
-            const method = (ev.sip_method || '').toUpperCase();
             const resp = str(ev.response || '200');
 
             if (method === 'BYE' || ev.event === 'CallHangup' || ev.cause_txt?.includes('Terminated') || ev.cause_txt?.includes('BYE')) {
@@ -1417,18 +1436,25 @@
             }
 
             const fullTbody = document.getElementById('full-events-tbody');
-            if (fullTbody.children.length === 1 && fullTbody.children[0].children.length === 1) {
+            if (fullTbody && fullTbody.children.length === 1 && fullTbody.children[0].children.length === 1) {
                 fullTbody.innerHTML = '';
             }
 
-            // Format full date & time (e.g. 2026-08-24 11:29:40)
-            let dateStr = ev.timestamp || '';
-            if (dateStr.includes('T')) {
-                const parts = dateStr.split('T');
-                const d = parts[0];
-                const t = parts[1].split('.')[0];
-                dateStr = `${d} ${t}`;
+            // Check if this call row already exists in table — if so, update status & response instead of inserting duplicate!
+            const existingRow = document.getElementById(`row_${callGroupKey}`);
+            if (existingRow) {
+                const statusTd = existingRow.children[5];
+                const respTd = existingRow.children[6];
+                if (statusTd) statusTd.innerHTML = statusPillHtml;
+                if (respTd) {
+                    respTd.innerHTML = resp;
+                    respTd.style.color = resp === '200' ? 'var(--safe)' : 'var(--warning)';
+                }
+                return;
             }
+
+            liveEventCounter++;
+            document.getElementById('stat-total-events').textContent = liveEventCounter;
 
             // Format Context & Source IP and Direction
             const srcIp = ev.source_ip || '192.168.1.15';
@@ -1444,8 +1470,8 @@
             }
 
             // Highlight DID 8031339333 numbers
-            let callerDisplay = ev.caller_id || 'Unknown';
-            let extDisplay = ev.extension || '-';
+            let callerDisplay = rawCaller;
+            let extDisplay = rawExt;
 
             if (String(callerDisplay).includes('8031339333') || String(callerDisplay).endsWith('333')) {
                 callerDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${callerDisplay}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.15); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.3);">PROD DID</span>`;
@@ -1460,13 +1486,14 @@
             }
 
             const tr = document.createElement('tr');
+            tr.id = `row_${callGroupKey}`;
             if (!isHistory) tr.className = 'new-row-flash';
             tr.innerHTML = `
                 <td>${dateStr}</td>
                 <td>${callerDisplay}</td>
                 <td>${extDisplay}</td>
                 <td>${dirPill}</td>
-                <td>${ctxPillHtml}</td>
+                <td><span class="pill ${isInternal ? 'pill-low' : 'pill-purple'}">${ctxStr} (${srcIp})</span></td>
                 <td>${statusPillHtml}</td>
                 <td style="font-weight:600; color:${resp === '200' ? 'var(--safe)' : 'var(--warning)'};">${resp}</td>
             `;
@@ -1477,29 +1504,31 @@
                 fullTbody.insertBefore(tr, fullTbody.firstChild);
             }
 
-            // Also add to Recent Alerts if it's a Call Cut / Hangup or Start
+            // Also update Recent Alerts for Call Hangups & Connections
             const alertsTbody = document.getElementById('recent-alerts-tbody');
-            if (alertsTbody.children.length === 1 && alertsTbody.children[0].children.length === 1) {
+            if (alertsTbody && alertsTbody.children.length === 1 && alertsTbody.children[0].children.length === 1) {
                 alertsTbody.innerHTML = '';
             }
 
-            const alertTr = document.createElement('tr');
-            if (!isHistory) alertTr.className = 'new-row-flash';
-            const alertType = method === 'BYE' ? 'HANGUP' : (resp === '200' ? 'CALL' : 'EVENT');
-            const details = ev.cause_txt || `${method} from ${ev.caller_id || 'Ext'}`;
+            if (alertsTbody) {
+                const alertTr = document.createElement('tr');
+                if (!isHistory) alertTr.className = 'new-row-flash';
+                const alertType = method === 'BYE' ? 'HANGUP' : (resp === '200' ? 'CALL' : 'EVENT');
+                const details = ev.cause_txt || `${method} from ${rawCaller}`;
 
-            alertTr.innerHTML = `
-                <td>${dateStr.split(' ')[1] || dateStr}</td>
-                <td><span class="pill ${method === 'BYE' ? 'pill-danger' : 'pill-info'}">${alertType}</span></td>
-                <td>${statusPillHtml}</td>
-                <td>${details} (${srcIp})</td>
-            `;
+                alertTr.innerHTML = `
+                    <td>${dateStr.split(' ')[1] || dateStr}</td>
+                    <td><span class="pill ${method === 'BYE' ? 'pill-danger' : 'pill-info'}">${alertType}</span></td>
+                    <td>${statusPillHtml}</td>
+                    <td>${details} (${srcIp})</td>
+                `;
 
-            if (isHistory) {
-                if (alertsTbody.children.length < 6) alertsTbody.appendChild(alertTr);
-            } else {
-                alertsTbody.insertBefore(alertTr, alertsTbody.firstChild);
-                if (alertsTbody.children.length > 6) alertsTbody.removeChild(alertsTbody.lastChild);
+                if (isHistory) {
+                    if (alertsTbody.children.length < 6) alertsTbody.appendChild(alertTr);
+                } else {
+                    alertsTbody.insertBefore(alertTr, alertsTbody.firstChild);
+                    if (alertsTbody.children.length > 6) alertsTbody.removeChild(alertsTbody.lastChild);
+                }
             }
         }
 

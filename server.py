@@ -97,14 +97,21 @@ class PBXFrontendHandler(http.server.SimpleHTTPRequestHandler):
             return
         return super().do_GET()
 
+class ReusableThreadingServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
+    allow_reuse_address = True
+    daemon_threads = True
+
 if __name__ == "__main__":
     os.chdir(os.path.dirname(__file__))
-    with socketserver.TCPServer((HOST, PORT), PBXFrontendHandler) as httpd:
+    with ReusableThreadingServer((HOST, PORT), PBXFrontendHandler) as httpd:
         print("=======================================================")
         print("  OPTOX SHIELD — FRONTEND SOC CONSOLE ACTIVE")
         print("=======================================================")
-        print(f"  [+] Listening on: http://{HOST}:{PORT} (0.0.0.0/0)")
+        print(f"  [+] Listening on: http://{HOST}:{PORT}")
         print(f"  [+] Frontend Admin: {FRONTEND_ADMIN_USER}")
         print(f"  [+] Default Backend Target: http://{DEFAULT_BACKEND_HOST}:{DEFAULT_BACKEND_PORT}")
         print("=======================================================")
-        httpd.serve_forever()
+        try:
+            httpd.serve_forever()
+        except KeyboardInterrupt:
+            print("\n  [!] Frontend server stopped by user.")
