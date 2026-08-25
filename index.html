@@ -1181,25 +1181,34 @@
         }
 
         async function initServerManagement() {
+            const defaultConfig = await loadRuntimeConfig();
             const saved = localStorage.getItem('pbx_servers_list');
             if (saved) {
                 try { servers = JSON.parse(saved); } catch (e) { servers = []; }
             }
 
-            if (servers.length === 0) {
-                const defaultConfig = await loadRuntimeConfig();
+            const targetHost = defaultConfig.backend_host || '13.126.90.199';
+            const targetPort = defaultConfig.backend_port || '5000';
+            const targetKey = defaultConfig.api_key || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78';
+
+            if (servers.length === 0 || servers[0].host === '127.0.0.1' || servers[0].host === 'localhost') {
                 servers = [{
                     id: 'server_default',
                     name: 'Optox Production Asterisk Backend',
-                    host: defaultConfig.backend_host || 'app.optoxcrm.com',
-                    port: defaultConfig.backend_port || '443',
-                    secret: defaultConfig.api_key || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78'
+                    host: targetHost,
+                    port: targetPort,
+                    secret: targetKey
                 }];
+                saveServersToStorage();
+            } else if (servers[0]) {
+                servers[0].host = targetHost;
+                servers[0].port = targetPort;
+                servers[0].secret = targetKey;
                 saveServersToStorage();
             }
 
-            activeServerId = localStorage.getItem('pbx_active_server_id') || servers[0].id;
-            if (!servers.find(s => s.id === activeServerId)) activeServerId = servers[0].id;
+            activeServerId = servers[0].id;
+            localStorage.setItem('pbx_active_server_id', activeServerId);
 
             updateServerDropdown();
             renderManagedServersTab();
