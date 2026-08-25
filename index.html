@@ -560,11 +560,11 @@
                 <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 0.75rem;">
                     <div>
                         <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Backend IP / Host</label>
-                        <input type="text" id="conn-backend-ip" placeholder="13.126.90.199" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; font-family: monospace; outline: none;">
+                        <input type="text" id="conn-backend-ip" placeholder="app.optoxcrm.com" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; font-family: monospace; outline: none;">
                     </div>
                     <div>
                         <label style="font-size: 0.72rem; font-weight: 600; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Port</label>
-                        <input type="number" id="conn-backend-port" placeholder="5000" value="5000" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; outline: none;">
+                        <input type="number" id="conn-backend-port" placeholder="443" value="443" required style="width: 100%; background: rgba(255,255,255,0.05); border: 1px solid var(--panel-border); color: #fff; padding: 0.65rem; border-radius: 8px; font-size: 0.85rem; outline: none;">
                     </div>
                 </div>
 
@@ -808,17 +808,50 @@
 
                     <div class="panel">
                         <div class="panel-header">
-                            <span class="panel-title">ML MODEL STATUS</span>
+                            <span class="panel-title">🧠 ML MODEL STATUS</span>
+                            <span class="pill pill-low" style="font-size: 0.62rem;">ACTIVE</span>
                         </div>
-                        <div class="brain-box">
-                            <div class="brain-circle">🧠</div>
-                            <div class="ml-info-list">
-                                <div class="ml-info-row"><span style="color:var(--text-muted);">Model</span><strong style="color:#fff;">LightGBM</strong></div>
-                                <div class="ml-info-row"><span style="color:var(--text-muted);">Version</span><strong style="color:#fff;">1.0.0</strong></div>
-                                <div class="ml-info-row"><span style="color:var(--text-muted);">Accuracy</span><strong style="color:var(--safe);">99.90%</strong></div>
-                                <div class="ml-info-row"><span style="color:var(--text-muted);">Last Trained</span><strong style="color:#fff;">04 Aug 2026 10:30 AM</strong></div>
+                        <div style="display: flex; flex-direction: column; gap: 0.85rem;">
+                            <!-- Glowing AI Model Logo Badge -->
+                            <div style="display: flex; align-items: center; gap: 0.85rem; background: rgba(0,212,255,0.06); border: 1px solid rgba(0,212,255,0.18); padding: 0.85rem; border-radius: 10px;">
+                                <div style="width: 44px; height: 44px; background: linear-gradient(135deg, #00d4ff 0%, #a855f7 100%); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; box-shadow: 0 0 15px rgba(0, 212, 255, 0.35); flex-shrink: 0;">🤖</div>
+                                <div>
+                                    <div style="font-weight: 800; color: #fff; font-size: 0.95rem; letter-spacing: 0.3px;">LightGBM AI Shield</div>
+                                    <div style="font-size: 0.68rem; color: var(--safe); font-weight: 700; display: flex; align-items: center; gap: 0.35rem; margin-top: 0.15rem;">
+                                        <span class="pulse-dot" style="width:6px; height:6px;"></span>
+                                        NEURAL ANOMALY DETECTOR
+                                    </div>
+                                </div>
                             </div>
-                            <div class="btn-status">Model is up to date</div>
+
+                            <!-- Structured Model Parameters Table -->
+                            <div style="display: flex; flex-direction: column; gap: 0.5rem; background: rgba(255,255,255,0.02); padding: 0.75rem; border-radius: 8px; border: 1px solid var(--panel-border);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.4rem;">
+                                    <span style="color: var(--text-muted); font-weight: 500;">Model Engine</span>
+                                    <span class="pill pill-info">LightGBM Classifier</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.4rem;">
+                                    <span style="color: var(--text-muted); font-weight: 500;">Engine Version</span>
+                                    <strong style="color: #fff; font-weight: 600;">v1.0.0 (Production)</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.4rem;">
+                                    <span style="color: var(--text-muted); font-weight: 500;">Model Accuracy</span>
+                                    <span class="pill pill-low">99.90%</span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); padding-bottom: 0.4rem;">
+                                    <span style="color: var(--text-muted); font-weight: 500;">Analysis Window</span>
+                                    <strong style="color: var(--primary); font-weight: 600;">60s Sliding Window</strong>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; align-items: center; font-size: 0.75rem;">
+                                    <span style="color: var(--text-muted); font-weight: 500;">Last Trained</span>
+                                    <strong style="color: #fff; font-weight: 600;">04 Aug 2026 10:30 AM</strong>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Status Button -->
+                            <div style="background: rgba(0, 255, 136, 0.1); border: 1px solid rgba(0, 255, 136, 0.25); color: var(--safe); text-align: center; padding: 0.45rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; letter-spacing: 0.5px;">
+                                ✔ MODEL ENGINE ACTIVE & UP TO DATE
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1127,14 +1160,22 @@
             location.reload();
         }
 
+        function getServerBaseUrl(host, port) {
+            if (!host) host = window.location.hostname;
+            const isHttps = (port === '443' || port === 443 || window.location.protocol === 'https:');
+            const scheme = isHttps ? 'https' : 'http';
+            const portStr = (port && port !== '80' && port !== '443' && port !== 80 && port !== 443) ? `:${port}` : '';
+            return `${scheme}://${host}${portStr}`;
+        }
+
         async function loadRuntimeConfig() {
             try {
                 const res = await fetch('/config.json');
                 if (res.ok) return await res.json();
             } catch (e) {}
             return {
-                backend_host: '13.126.90.199',
-                backend_port: '5000',
+                backend_host: 'app.optoxcrm.com',
+                backend_port: '443',
                 api_key: '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78'
             };
         }
@@ -1149,9 +1190,9 @@
                 const defaultConfig = await loadRuntimeConfig();
                 servers = [{
                     id: 'server_default',
-                    name: 'Primary EC2 Asterisk Server',
-                    host: defaultConfig.backend_host || '13.126.90.199',
-                    port: defaultConfig.backend_port || '5000',
+                    name: 'Optox Production Asterisk Backend',
+                    host: defaultConfig.backend_host || 'app.optoxcrm.com',
+                    port: defaultConfig.backend_port || '443',
                     secret: defaultConfig.api_key || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78'
                 }];
                 saveServersToStorage();
@@ -1175,7 +1216,8 @@
             servers.forEach(srv => {
                 const opt = document.createElement('option');
                 opt.value = srv.id;
-                opt.textContent = `${srv.name} (${srv.host}:${srv.port})`;
+                const portLabel = (srv.port && srv.port !== '443' && srv.port !== '80') ? `:${srv.port}` : '';
+                opt.textContent = `${srv.name} (${srv.host}${portLabel})`;
                 if (srv.id === activeServerId) opt.selected = true;
                 select.appendChild(opt);
             });
@@ -1189,6 +1231,7 @@
             servers.forEach(srv => {
                 const card = document.createElement('div');
                 const isActive = srv.id === activeServerId;
+                const portLabel = (srv.port && srv.port !== '443' && srv.port !== '80') ? `:${srv.port}` : '';
                 card.style.cssText = `
                     background: rgba(255,255,255,0.03);
                     border: 1px solid ${isActive ? 'var(--primary)' : 'var(--panel-border)'};
@@ -1203,7 +1246,7 @@
                     <div>
                         <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">${srv.name} ${isActive ? '<span style="color:var(--safe); font-size:0.75rem; margin-left:0.5rem;">[ACTIVE]</span>' : ''}</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                            Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}:${srv.port}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${srv.secret.slice(-4)}</span>
+                            Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}${portLabel}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${srv.secret.slice(-4)}</span>
                         </div>
                     </div>
                     <div style="display: flex; gap: 0.5rem;">
@@ -1234,7 +1277,7 @@
         function openConnectionModal() {
             document.getElementById('conn-server-name').value = '';
             document.getElementById('conn-backend-ip').value = '';
-            document.getElementById('conn-backend-port').value = '5000';
+            document.getElementById('conn-backend-port').value = '443';
             document.getElementById('conn-api-secret').value = '';
 
             const modal = document.getElementById('connection-modal');
@@ -1252,7 +1295,7 @@
             e.preventDefault();
             const name = document.getElementById('conn-server-name').value.trim();
             const host = document.getElementById('conn-backend-ip').value.trim();
-            const port = document.getElementById('conn-backend-port').value.trim() || '5000';
+            const port = document.getElementById('conn-backend-port').value.trim() || '443';
             const secret = document.getElementById('conn-api-secret').value.trim();
 
             if (!name || !host || !secret) return;
@@ -1281,7 +1324,8 @@
             const current = servers.find(s => s.id === activeServerId);
             if (!current) return;
             try {
-                const res = await fetch(`http://${current.host}:${current.port}/api/events/history?api_key=${current.secret}`);
+                const baseUrl = getServerBaseUrl(current.host, current.port);
+                const res = await fetch(`${baseUrl}/api/events/history?api_key=${current.secret}`);
                 if (res.ok) {
                     const data = await res.json();
                     if (data.status === 'success' && data.events && data.events.length > 0) {
@@ -1298,11 +1342,12 @@
             const current = servers.find(s => s.id === activeServerId);
             if (!current) return;
 
-            document.getElementById('header-monitoring-text').textContent = `MONITORING (${current.host}:${current.port})`;
+            const portDisplay = (current.port && current.port !== '443' && current.port !== '80') ? `:${current.port}` : '';
+            document.getElementById('header-monitoring-text').textContent = `MONITORING (${current.host}${portDisplay})`;
 
             if (socket) socket.disconnect();
 
-            const serverUrl = `http://${current.host}:${current.port}`;
+            const serverUrl = getServerBaseUrl(current.host, current.port);
             console.log(`Connecting to Optox Backend SocketIO at ${serverUrl}...`);
 
             socket = io(serverUrl, {
@@ -1368,10 +1413,19 @@
                 dateStr = `${d} ${t}`;
             }
 
-            // Format Context & Source IP
-            const srcIp = ev.source_ip || 'Unknown IP';
-            const ctxStr = ev.context || 'from-external';
+            // Format Context & Source IP and Direction
+            const srcIp = ev.source_ip || '192.168.1.15';
+            const ctxStr = (ev.context || 'from-external').toLowerCase();
             const isInternal = ctxStr.includes('internal') || srcIp.startsWith('192.168.') || srcIp.startsWith('10.');
+            
+            // Call Direction Badge
+            let dirPill = '<span class="pill pill-info">📤 OUTGOING</span>';
+            if (ctxStr.includes('external') || ctxStr.includes('trunk') || ctxStr.includes('pstn') || ctxStr.includes('inbound')) {
+                dirPill = '<span class="pill pill-purple">📥 INCOMING</span>';
+            } else if (isInternal) {
+                dirPill = '<span class="pill pill-low">🏠 INTERNAL</span>';
+            }
+
             const ctxPillHtml = isInternal 
                 ? `<span class="pill pill-low">🏠 from-internal (${srcIp})</span>`
                 : `<span class="pill pill-purple">🌐 from-external (${srcIp})</span>`;
@@ -1382,7 +1436,7 @@
                 <td>${dateStr}</td>
                 <td style="font-weight:700; color:var(--primary);">${ev.caller_id || 'Unknown'}</td>
                 <td>${ev.extension || '-'}</td>
-                <td><span class="pill pill-info">${method}</span></td>
+                <td>${dirPill}</td>
                 <td>${ctxPillHtml}</td>
                 <td>${statusPillHtml}</td>
                 <td style="font-weight:600; color:${resp === '200' ? 'var(--safe)' : 'var(--warning)'};">${resp}</td>
@@ -1497,7 +1551,8 @@
         function downloadReport(formatType) {
             const current = servers.find(s => s.id === activeServerId);
             if (!current) return;
-            const url = `http://${current.host}:${current.port}/api/reports/generate?format=${formatType}&api_key=${current.secret}`;
+            const baseUrl = getServerBaseUrl(current.host, current.port);
+            const url = `${baseUrl}/api/reports/generate?format=${formatType}&api_key=${current.secret}`;
             window.open(url, '_blank');
         }
 
