@@ -1323,6 +1323,7 @@
         async function fetchHistoricalCallLogs() {
             const current = servers.find(s => s.id === activeServerId);
             if (!current) return;
+            const fullTbody = document.getElementById('full-events-tbody');
             try {
                 const baseUrl = getServerBaseUrl(current.host, current.port);
                 const res = await fetch(`${baseUrl}/api/events/history?api_key=${current.secret}`);
@@ -1331,10 +1332,17 @@
                     if (data.status === 'success' && data.events && data.events.length > 0) {
                         console.log(`Loaded ${data.events.length} historical calls (Yesterday & Today) from SQLite DB`);
                         data.events.forEach(ev => renderSingleLiveEvent(ev, true));
+                    } else if (fullTbody && fullTbody.children.length <= 1) {
+                        fullTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2.5rem;"><div style="margin-bottom: 0.5rem; font-size: 1.5rem;">📡</div><strong>No calls recorded yet in SQLite DB.</strong><br><span style="font-size: 0.75rem; color: #00ff88; margin-top: 0.25rem; display: inline-block;">● System is actively listening for live PBX calls...</span></td></tr>`;
                     }
+                } else if (fullTbody && fullTbody.children.length <= 1) {
+                    fullTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--danger); padding: 2.5rem;">Could not connect to backend at ${baseUrl}. Ensure backend is running.</td></tr>`;
                 }
             } catch (e) {
                 console.log('Could not fetch historical call logs:', e);
+                if (fullTbody && fullTbody.children.length <= 1) {
+                    fullTbody.innerHTML = `<tr><td colspan="7" style="text-align: center; color: var(--text-muted); padding: 2.5rem;"><div style="margin-bottom: 0.5rem; font-size: 1.5rem;">📡</div><strong>No calls recorded yet.</strong><br><span style="font-size: 0.75rem; color: #00ff88;">● Waiting for live call events from Asterisk PBX...</span></td></tr>`;
+                }
             }
         }
 
