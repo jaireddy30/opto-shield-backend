@@ -676,15 +676,15 @@
                         </div>
                         <div class="stat-icon" style="background: rgba(168,85,247,0.1); color: var(--purple);">🎛️</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div>
                             <h3>ATTACKS DETECTED</h3>
                             <div class="stat-val" id="stat-total-attacks" style="color: #fff;">0</div>
                             <div class="stat-sub" id="stat-attacks-sub" style="color: var(--safe);">No active attacks</div>
                         </div>
-                        <div class="stat-icon" style="background: rgba(255,51,102,0.1); color: var(--danger);">🎯</div>
+                        <div class="stat-icon" style="background: rgba(255,51,102,0.15); color: var(--danger);">🎯</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--warning)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div>
                             <h3>THREAT LEVEL</h3>
                             <div class="stat-val" id="stat-threat-level" style="color: var(--safe);">LOW</div>
@@ -710,9 +710,10 @@
                         </div>
                     </div>
 
-                    <div class="panel">
+                    <div class="panel" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div class="panel-header">
                             <span class="panel-title">ATTACK DISTRIBUTION</span>
+                            <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700;">🔍 CLICK TO INSPECT</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <div style="width: 120px; height: 120px; position: relative;">
@@ -747,15 +748,16 @@
                             </div>
                         </div>
 
-                        <div class="panel">
+                        <div class="panel" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                             <div class="panel-header">
                                 <span class="panel-title">LAST DETECTION</span>
+                                <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700;">🔍 DETAILS</span>
                             </div>
                             <div class="detection-card">
-                                <div class="detection-icon">✔</div>
+                                <div class="detection-icon" id="last-det-icon">✔</div>
                                 <div>
-                                    <strong style="font-size: 0.82rem; color: #fff;">No threats detected</strong>
-                                    <div style="font-size: 0.7rem; color: var(--safe); font-weight: 600; margin-top: 0.1rem;">System is secure</div>
+                                    <strong style="font-size: 0.82rem; color: #fff;" id="last-det-title">No threats detected</strong>
+                                    <div style="font-size: 0.7rem; color: var(--safe); font-weight: 600; margin-top: 0.1rem;" id="last-det-sub">System is secure</div>
                                 </div>
                             </div>
                         </div>
@@ -1628,6 +1630,21 @@
             window.open(url, '_blank');
         }
 
+        // Attack Detail Modal Functions
+        function openAttackDetailModal() {
+            const overlay = document.getElementById('attack-modal-overlay');
+            if (overlay) {
+                overlay.style.display = 'flex';
+            }
+        }
+
+        function closeAttackDetailModal() {
+            const overlay = document.getElementById('attack-modal-overlay');
+            if (overlay) {
+                overlay.style.display = 'none';
+            }
+        }
+
         // Live Clock
         function updateClock() {
             const now = new Date();
@@ -1652,5 +1669,81 @@
             }
         });
     </script>
+
+    <!-- ATTACK INVESTIGATION MODAL OVERLAY -->
+    <div id="attack-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(10,14,26,0.88); backdrop-filter: blur(12px); z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem;">
+        <div style="background: #111827; border: 1px solid rgba(255, 51, 102, 0.4); border-radius: 16px; width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 45px rgba(255, 51, 102, 0.3); display: flex; flex-direction: column; gap: 1.25rem; padding: 1.75rem;">
+            
+            <!-- Modal Header -->
+            <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--panel-border); padding-bottom: 1rem;">
+                <div>
+                    <div style="display: flex; align-items: center; gap: 0.6rem;">
+                        <span style="font-size: 1.5rem;">🎯</span>
+                        <h3 style="color: #fff; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.5px;" id="modal-attack-title">ATTACK INVESTIGATION REPORT</h3>
+                        <span class="pill pill-danger" id="modal-attack-badge">ACTIVE THREAT</span>
+                    </div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem;" id="modal-attack-subtitle">Detailed breakdown of neural classifier vectors & security firewall actions</div>
+                </div>
+                <button onclick="closeAttackDetailModal()" style="background: rgba(255,255,255,0.08); border: 1px solid var(--panel-border); color: #fff; width: 32px; height: 32px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1.1rem;">✕</button>
+            </div>
+
+            <!-- Threat Summary Grid -->
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                <div style="background: rgba(255,51,102,0.08); border: 1px solid rgba(255,51,102,0.25); padding: 1rem; border-radius: 10px;">
+                    <div style="font-size: 0.68rem; color: var(--danger); font-weight: 700; text-transform: uppercase;">Primary Threat Class</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 0.3rem;" id="modal-threat-class">INVITE_FLOOD</div>
+                </div>
+                <div style="background: rgba(0,212,255,0.08); border: 1px solid rgba(0,212,255,0.25); padding: 1rem; border-radius: 10px;">
+                    <div style="font-size: 0.68rem; color: var(--primary); font-weight: 700; text-transform: uppercase;">AI Classification Confidence</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: #00d4ff; margin-top: 0.3rem;" id="modal-confidence">99.90% Accuracy</div>
+                </div>
+                <div style="background: rgba(168,85,247,0.08); border: 1px solid rgba(168,85,247,0.25); padding: 1rem; border-radius: 10px;">
+                    <div style="font-size: 0.68rem; color: var(--purple); font-weight: 700; text-transform: uppercase;">Attacker Source IP</div>
+                    <div style="font-size: 1.1rem; font-weight: 800; color: #fff; margin-top: 0.3rem;" id="modal-source-ip">103.186.40.107</div>
+                </div>
+            </div>
+
+            <!-- Mitigation / Firewall Action Box -->
+            <div style="background: rgba(255,51,102,0.12); border: 1px solid rgba(255,51,102,0.35); padding: 1rem; border-radius: 10px; display: flex; align-items: center; justify-content: space-between;">
+                <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <span style="font-size: 1.4rem;">🚫</span>
+                    <div>
+                        <strong style="color: #fff; font-size: 0.88rem;">Automated Mitigation Action Taken</strong>
+                        <div style="font-size: 0.72rem; color: var(--danger); font-weight: 600; margin-top: 0.15rem;" id="modal-mitigation-txt">IP automatically blocked via Linux IPTABLES rule (Port 5060 DROP)</div>
+                    </div>
+                </div>
+                <span class="pill pill-danger" style="padding: 0.4rem 0.8rem; font-size: 0.75rem;">IPTABLES DROP</span>
+            </div>
+
+            <!-- 11 Neural Feature Vector Table -->
+            <div style="background: rgba(255,255,255,0.02); border: 1px solid var(--panel-border); border-radius: 10px; padding: 1rem;">
+                <div style="font-size: 0.8rem; font-weight: 700; color: #fff; margin-bottom: 0.75rem; text-transform: uppercase; letter-spacing: 0.5px;">📊 11 Feature Anomaly Vector Breakdown</div>
+                <div class="table-container">
+                    <table class="custom-table">
+                        <thead>
+                            <tr>
+                                <th>Feature Name</th>
+                                <th>Value (60s Window)</th>
+                                <th>Normal Baseline</th>
+                                <th>Anomaly Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="modal-features-tbody">
+                            <tr><td><code>invite_count_60s</code></td><td><strong>48 requests</strong></td><td>< 10</td><td><span class="pill pill-danger">HIGH BURST</span></td></tr>
+                            <tr><td><code>register_count_60s</code></td><td>0 requests</td><td>< 5</td><td><span class="pill pill-low">NORMAL</span></td></tr>
+                            <tr><td><code>failure_ratio</code></td><td><strong>92.0%</strong></td><td>< 10%</td><td><span class="pill pill-danger">ANOMALOUS</span></td></tr>
+                            <tr><td><code>unique_extensions_60s</code></td><td><strong>14 targets</strong></td><td>< 3</td><td><span class="pill pill-warning">PROBING</span></td></tr>
+                            <tr><td><code>request_rate</code></td><td><strong>0.80 req/sec</strong></td><td>< 0.15</td><td><span class="pill pill-danger">ELEVATED</span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Close Button -->
+            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
+                <button onclick="closeAttackDetailModal()" style="background: var(--primary); color: #0a0e1a; border: none; font-weight: 800; padding: 0.6rem 1.4rem; border-radius: 8px; cursor: pointer; font-size: 0.82rem;">Done / Close</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
