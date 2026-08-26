@@ -1,0 +1,12 @@
+Feature,Importance
+invite_count_60s,5078
+failure_ratio,4970
+short_call_ratio,4333
+avg_call_duration,3941
+unknown_caller_ratio,3473
+failed_count_60s,2911
+request_rate,2910
+unique_extensions_60s,2519
+options_count_60s,1975
+unique_callers_60s,1496
+register_count_60s,461

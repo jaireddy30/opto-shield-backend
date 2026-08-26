@@ -1,0 +1,40 @@
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+
+# Distribution / Packaging
+*.egg-info/
+*.egg
+dist/
+build/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS Files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Raw data (too large for GitHub)
+data/raw/*.json
+
+# Logs
+*.log
+reports/live_blocks.log
+
+# Jupyter
+.ipynb_checkpoints/
+data/raw/raw_logs.json.tmp
+*.tmp

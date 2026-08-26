@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  optox-backend:
+    build:
+      context: ./PBX_ml_backend
+      dockerfile: Dockerfile
+    container_name: optox-shield-backend
+    restart: always
+    network_mode: "host"
+    environment:
+      - PORT=5000
+      - HOST=0.0.0.0
+      - PBX_API_SECRET=5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78
+    volumes:
+      - ./PBX_ml_backend/data:/app/data
+      - /var/log/asterisk:/var/log/asterisk:ro
+
+  optox-frontend:
+    build:
+      context: ./PBX_ml_frontend
+      dockerfile: Dockerfile
+    container_name: optox-shield-frontend
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      - PORT=9000
+      - HOST=0.0.0.0
+      - FRONTEND_ADMIN_USER=admin
+      - FRONTEND_ADMIN_PASS=admin123
+      - DEFAULT_BACKEND_HOST=app.optoxcrm.com
+      - DEFAULT_BACKEND_PORT=443

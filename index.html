@@ -658,35 +658,47 @@
             <!-- TAB 1: DASHBOARD (Matching Image 1) -->
             <div id="tab-dashboard" class="tab-view active">
                 
-                <!-- Top 4 Stats Cards -->
+                <!-- Top 4 Stats Cards (Fully Clickable Navigation) -->
                 <div class="stats-grid">
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="switchTab('events')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div>
-                            <h3>TOTAL EVENTS</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3>TOTAL EVENTS</h3>
+                                <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700;">VIEW LOGS →</span>
+                            </div>
                             <div class="stat-val" id="stat-total-events">0</div>
                             <div class="stat-sub" style="color: var(--safe);">↑ SQLite DB Saved (48h)</div>
                         </div>
                         <div class="stat-icon" style="background: rgba(0,212,255,0.1); color: var(--primary);">🗄️</div>
                     </div>
-                    <div class="stat-card">
+                    <div class="stat-card" onclick="switchTab('mldetection')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--purple)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div>
-                            <h3>WINDOWS ANALYZED</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3>WINDOWS ANALYZED</h3>
+                                <span style="font-size: 0.65rem; color: var(--purple); font-weight: 700;">AI METRICS →</span>
+                            </div>
                             <div class="stat-val" id="stat-total-windows">0</div>
                             <div class="stat-sub" style="color: var(--text-muted);">Sliding 60s windows</div>
                         </div>
                         <div class="stat-icon" style="background: rgba(168,85,247,0.1); color: var(--purple);">🎛️</div>
                     </div>
-                    <div class="stat-card" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
+                    <div class="stat-card" onclick="switchTab('analysis')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div>
-                            <h3>ATTACKS DETECTED</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3>ATTACKS DETECTED</h3>
+                                <span style="font-size: 0.65rem; color: var(--danger); font-weight: 700;">INVESTIGATE →</span>
+                            </div>
                             <div class="stat-val" id="stat-total-attacks" style="color: #fff;">0</div>
                             <div class="stat-sub" id="stat-attacks-sub" style="color: var(--safe);">No active attacks</div>
                         </div>
                         <div class="stat-icon" style="background: rgba(255,51,102,0.15); color: var(--danger);">🎯</div>
                     </div>
-                    <div class="stat-card" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--warning)'" onmouseout="this.style.borderColor='var(--panel-border)'">
+                    <div class="stat-card" onclick="switchTab('analysis')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--warning)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div>
-                            <h3>THREAT LEVEL</h3>
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <h3>THREAT LEVEL</h3>
+                                <span style="font-size: 0.65rem; color: var(--warning); font-weight: 700;">FIREWALL →</span>
+                            </div>
                             <div class="stat-val" id="stat-threat-level" style="color: var(--safe);">LOW</div>
                             <div class="stat-sub" style="color: var(--safe);">All systems normal</div>
                         </div>
@@ -710,10 +722,10 @@
                         </div>
                     </div>
 
-                    <div class="panel" onclick="openAttackDetailModal()" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
+                    <div class="panel" onclick="switchTab('analysis')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--danger)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div class="panel-header">
                             <span class="panel-title">ATTACK DISTRIBUTION</span>
-                            <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700;">🔍 CLICK TO INSPECT</span>
+                            <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700;">🔍 VIEW IN ATTACK ANALYSIS →</span>
                         </div>
                         <div style="display: flex; align-items: center; gap: 1rem;">
                             <div style="width: 120px; height: 120px; position: relative;">
@@ -735,15 +747,17 @@
                     </div>
 
                     <div style="display: flex; flex-direction: column; gap: 1rem;">
-                        <div class="panel">
+                        <div class="panel" onclick="switchTab('mldetection')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                             <div class="panel-header">
                                 <span class="panel-title">SYSTEM STATUS</span>
+                                <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700;">AI ENGINE →</span>
                             </div>
                             <div class="status-list">
                                 <div class="status-item"><div class="status-label">📞 SIP Service</div><span class="status-val">Normal</span></div>
                                 <div class="status-item"><div class="status-label">⚛️ Asterisk PBX</div><span class="status-val">Normal</span></div>
                                 <div class="status-item"><div class="status-label">🧠 ML Model</div><span class="status-val">Normal</span></div>
-                                <div class="status-item"><div class="status-label">🛢️ SQLite DB Storage</div><span class="status-val">Active</span></div>
+                                <div class="status-item"><div class="status-label">🗄️ Backend SQLite (optox_events.db)</div><span class="status-val" style="color:var(--safe); font-weight:700;">Active</span></div>
+                                <div class="status-item"><div class="status-label">💾 Frontend SQLite (frontend.db)</div><span class="status-val" style="color:var(--safe); font-weight:700;">Active</span></div>
                                 <div class="status-item"><div class="status-label">🛡️ Firewall</div><span class="status-val">Normal</span></div>
                             </div>
                         </div>
@@ -769,6 +783,7 @@
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">TOP SOURCE IPS</span>
+                            <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700; cursor: pointer;" onclick="switchTab('events')">ALL CALLS →</span>
                         </div>
                         <div class="table-container">
                             <table class="custom-table">
@@ -789,6 +804,7 @@
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">RECENT ALERTS & CALL DISCONNECTS</span>
+                            <span style="font-size: 0.65rem; color: var(--primary); font-weight: 700; cursor: pointer;" onclick="switchTab('events')">VIEW LIVE STREAM →</span>
                         </div>
                         <div class="table-container">
                             <table class="custom-table">
@@ -808,7 +824,7 @@
                         <div onclick="switchTab('events')" style="font-size: 0.72rem; color: var(--primary); text-align: right; margin-top: 0.5rem; font-weight: 600; cursor: pointer;">View all live events →</div>
                     </div>
 
-                    <div class="panel">
+                    <div class="panel" onclick="switchTab('mldetection')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--panel-border)'">
                         <div class="panel-header">
                             <span class="panel-title">🧠 ML MODEL STATUS</span>
                             <span class="pill pill-low" style="font-size: 0.62rem;">ACTIVE</span>
@@ -864,9 +880,13 @@
             <div id="tab-events" class="tab-view">
                 <div class="panel">
                     <div class="panel-header">
-                        <span class="panel-title">📜 Call Logs & Telemetry Stream (Yesterday & Today from SQLite DB)</span>
+                        <span class="panel-title">📜 CALL LOGS & TELEMETRY STREAM (YESTERDAY & TODAY FROM SQLITE DB)</span>
+                        <div style="display: flex; gap: 0.5rem;">
+                            <button onclick="fetchHistoricalCallLogs()" style="background: rgba(0,212,255,0.15); border: 1px solid var(--primary); color: #fff; padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">🔄 Refresh DB Logs</button>
+                            <button onclick="downloadReport('csv')" style="background: rgba(0,255,136,0.15); border: 1px solid var(--safe); color: var(--safe); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 600; cursor: pointer;">📥 Export CSV</button>
+                        </div>
                     </div>
-                    <div class="table-container" style="max-height: 620px;">
+                    <div class="table-container" style="max-height: 600px;">
                         <table class="custom-table">
                             <thead>
                                 <tr>
@@ -887,8 +907,72 @@
                 </div>
             </div>
 
-            <!-- TAB 3: ATTACK ANALYSIS -->
+            <!-- TAB 3: ATTACK ANALYSIS & INCIDENT INVESTIGATION -->
             <div id="tab-analysis" class="tab-view">
+                <!-- Dynamic Incident Alert Banner -->
+                <div id="analysis-active-banner" style="background: rgba(255,51,102,0.1); border: 1px solid rgba(255,51,102,0.3); border-radius: 12px; padding: 1.25rem; margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center;">
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="font-size: 2rem;">🎯</div>
+                        <div>
+                            <div style="display: flex; align-items: center; gap: 0.6rem;">
+                                <strong style="color: #fff; font-size: 1.05rem;" id="analysis-banner-title">Active Threat Detected: INVITE_FLOOD</strong>
+                                <span class="pill pill-danger" id="analysis-banner-badge">ACTIVE ALERT</span>
+                            </div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem;" id="analysis-banner-sub">
+                                Attacking Source IP: <span style="color: #fff; font-family: monospace; font-weight: 700;" id="analysis-banner-ip">103.186.40.107</span> | AI Confidence: <span style="color: var(--primary); font-weight: 700;" id="analysis-banner-conf">99.90%</span> | Vector: <span style="color: var(--danger); font-weight: 600;" id="analysis-banner-vector">High Request Burst (>200 req/60s)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 0.75rem;">
+                        <button id="analysis-unban-btn" onclick="unbanIpAddress('103.186.40.107')" style="background: rgba(0,255,136,0.15); color: var(--safe); border: 1px solid var(--safe); padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+                            🔓 Rectify & Unban IP
+                        </button>
+                        <button onclick="openAttackDetailModal()" style="background: rgba(0,212,255,0.15); color: var(--primary); border: 1px solid var(--primary); padding: 0.5rem 1rem; border-radius: 6px; font-weight: 700; font-size: 0.8rem; cursor: pointer;">
+                            🔍 Deep Dive Vector Matrix
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Live Detected Incidents Table -->
+                <div class="panel" style="margin-bottom: 1.5rem;">
+                    <div class="panel-header">
+                        <span class="panel-title">🚨 LIVE DETECTED SECURITY INCIDENTS & THREAT HISTORY</span>
+                        <button onclick="openAttackDetailModal()" style="background: rgba(255,51,102,0.15); border: 1px solid var(--danger); color: var(--danger); padding: 0.35rem 0.75rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer;">
+                            Inspect Latest Incident
+                        </button>
+                    </div>
+                    <div class="table-container" style="max-height: 280px;">
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Attacking IP</th>
+                                    <th>Threat Class</th>
+                                    <th>Anomaly Vectors</th>
+                                    <th>AI Confidence</th>
+                                    <th>Mitigation Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="attack-incidents-tbody">
+                                <tr>
+                                    <td>13:41:17</td>
+                                    <td><strong style="color:#fff; font-family:monospace;">103.186.40.107</strong></td>
+                                    <td><span class="pill pill-danger">INVITE_FLOOD</span></td>
+                                    <td>200 requests / 60s window (rate: 3.33/s)</td>
+                                    <td><strong style="color:var(--primary);">99.90%</strong></td>
+                                    <td><span class="pill pill-warning">iptables DROP (Dry Run)</span></td>
+                                    <td>
+                                        <button onclick="unbanIpAddress('103.186.40.107')" style="background:rgba(0,255,136,0.15); color:var(--safe); border:1px solid var(--safe); padding:0.2rem 0.6rem; border-radius:4px; font-weight:700; cursor:pointer; font-size:0.75rem;">
+                                            🔓 Rectify
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
                 <div class="middle-grid">
                     <div class="panel">
                         <div class="panel-header">
@@ -910,6 +994,7 @@
                                     <tr><td><strong style="color:var(--purple);">REGISTER_BRUTE_FORCE</strong></td><td>Failed SIP extension auth attempts</td><td>> 5 failures</td><td>IP Ban (10 Mins)</td></tr>
                                     <tr><td><strong style="color:var(--primary);">EXTENSION_ENUMERATION</strong></td><td>Sequential extension range probing</td><td>> 10 extensions</td><td>IP Ban (10 Mins)</td></tr>
                                     <tr><td><strong style="color:var(--safe);">OPTIONS_FLOOD</strong></td><td>Continuous OPTIONS keep-alive flood</td><td>> 50 / 60s</td><td>Rate Throttling</td></tr>
+                                    <tr><td><strong style="color:var(--primary);">TOLL_FRAUD</strong></td><td>Abnormal international call duration spikes</td><td>Duration &gt; 300s</td><td>Channel Hangup</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -918,6 +1003,9 @@
                     <div class="panel">
                         <div class="panel-header">
                             <span class="panel-title">🚫 Firewall Blocklist Manager</span>
+                            <button onclick="banIpAddress()" style="background: rgba(255,51,102,0.15); border: 1px solid var(--danger); color: var(--danger); padding: 0.3rem 0.6rem; border-radius: 6px; font-size: 0.72rem; font-weight: 700; cursor: pointer;">
+                                + Ban IP Manually
+                            </button>
                         </div>
                         <div class="table-container" style="max-height: 350px;">
                             <table class="custom-table">
@@ -929,7 +1017,7 @@
                                     </tr>
                                 </thead>
                                 <tbody id="blocked-ips-tbody">
-                                    <tr><td>185.22.11.5</td><td>SIP_SCANNER</td><td><button style="background:rgba(0,255,136,0.15); color:var(--safe); border:none; padding:0.2rem 0.5rem; border-radius:4px; font-weight:700; cursor:pointer;">Unban</button></td></tr>
+                                    <tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:1rem;">No IPs currently banned in firewall</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -1164,8 +1252,15 @@
 
         function getServerBaseUrl(host, port) {
             if (!host) host = window.location.hostname;
-            const isHttps = (port === '443' || port === 443 || window.location.protocol === 'https:');
-            const scheme = isHttps ? 'https' : 'http';
+            if (host.startsWith('http://') || host.startsWith('https://')) {
+                return host.replace(/\/+$/, '');
+            }
+            let scheme = 'http';
+            if (port === '443' || port === 443) {
+                scheme = 'https';
+            } else if (window.location.protocol === 'https:' && (!port || port === '443' || port === 443)) {
+                scheme = 'https';
+            }
             const portStr = (port && port !== '80' && port !== '443' && port !== 80 && port !== 443) ? `:${port}` : '';
             return `${scheme}://${host}${portStr}`;
         }
@@ -1212,25 +1307,48 @@
                     host: targetHost,
                     port: targetPort,
                     secret: targetKey
-                }];
-                saveServersToStorage();
-            } else if (servers[0]) {
-                servers[0].host = targetHost;
-                servers[0].port = targetPort;
-                servers[0].secret = targetKey;
-                saveServersToStorage();
+            try {
+                const res = await fetch('/api/frontend/servers');
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.servers && data.servers.length > 0) {
+                        servers = data.servers;
+                        localStorage.setItem('pbx_servers_list', JSON.stringify(servers));
+                    }
+                }
+            } catch (err) {
+                console.warn('Fallback to local server cache:', err);
+                const stored = localStorage.getItem('pbx_servers_list');
+                if (stored) {
+                    try { servers = JSON.parse(stored); } catch (e) {}
+                }
             }
 
-            activeServerId = servers[0].id;
-            localStorage.setItem('pbx_active_server_id', activeServerId);
+            const storedActiveId = localStorage.getItem('pbx_active_server_id');
+            if (storedActiveId && servers.find(s => s.id === storedActiveId)) {
+                activeServerId = storedActiveId;
+            } else if (servers.length > 0) {
+                activeServerId = servers[0].id;
+            }
 
             updateServerDropdown();
             renderManagedServersTab();
             connectToActiveServer();
         }
 
-        function saveServersToStorage() {
+        async function saveServersToStorage(serverToSave = null) {
             localStorage.setItem('pbx_servers_list', JSON.stringify(servers));
+            if (serverToSave) {
+                try {
+                    await fetch('/api/frontend/servers', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(serverToSave)
+                    });
+                } catch (e) {
+                    console.error('Failed to sync server to SQLite:', e);
+                }
+            }
         }
 
         function updateServerDropdown() {
@@ -1269,7 +1387,7 @@
                     <div>
                         <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">${srv.name} ${isActive ? '<span style="color:var(--safe); font-size:0.75rem; margin-left:0.5rem;">[ACTIVE]</span>' : ''}</div>
                         <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                            Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}${portLabel}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${srv.secret.slice(-4)}</span>
+                            Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}${portLabel}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${(srv.secret || '').slice(-4)}</span>
                         </div>
                     </div>
                     <div style="display: flex; gap: 0.5rem;">
@@ -1289,10 +1407,13 @@
             connectToActiveServer();
         }
 
-        function deleteServer(serverId) {
+        async function deleteServer(serverId) {
             if (servers.length <= 1) return;
             servers = servers.filter(s => s.id !== serverId);
-            saveServersToStorage();
+            localStorage.setItem('pbx_servers_list', JSON.stringify(servers));
+            try {
+                await fetch(`/api/frontend/servers?id=${serverId}`, { method: 'DELETE' });
+            } catch (e) {}
             if (activeServerId === serverId) activeServerId = servers[0].id;
             initServerManagement();
         }
@@ -1300,7 +1421,7 @@
         function openConnectionModal() {
             document.getElementById('conn-server-name').value = '';
             document.getElementById('conn-backend-ip').value = '';
-            document.getElementById('conn-backend-port').value = '443';
+            document.getElementById('conn-backend-port').value = '5000';
             document.getElementById('conn-api-secret').value = '';
 
             const modal = document.getElementById('connection-modal');
@@ -1314,11 +1435,11 @@
             setTimeout(() => modal.style.display = 'none', 300);
         }
 
-        function handleBackendFormSubmit(e) {
+        async function handleBackendFormSubmit(e) {
             e.preventDefault();
             const name = document.getElementById('conn-server-name').value.trim();
             const host = document.getElementById('conn-backend-ip').value.trim();
-            const port = document.getElementById('conn-backend-port').value.trim() || '443';
+            const port = document.getElementById('conn-backend-port').value.trim() || '5000';
             const secret = document.getElementById('conn-api-secret').value.trim();
 
             if (!name || !host || !secret) return;
@@ -1374,21 +1495,38 @@
             if (!current) return;
 
             const portDisplay = (current.port && current.port !== '443' && current.port !== '80') ? `:${current.port}` : '';
-            document.getElementById('header-monitoring-text').textContent = `MONITORING (${current.host}${portDisplay})`;
+            const headerText = document.getElementById('header-monitoring-text');
+            if (headerText) headerText.innerHTML = `MONITORING (${current.host}${portDisplay}) <span style="color:#f59e0b; font-size:0.75rem;">● CONNECTING...</span>`;
 
             if (socket) socket.disconnect();
 
             const serverUrl = getServerBaseUrl(current.host, current.port);
-            console.log(`Connecting to Optox Backend SocketIO at ${serverUrl}...`);
+            console.log(`📡 Connecting to Optox Backend SocketIO at ${serverUrl}...`);
 
             socket = io(serverUrl, {
+                transports: ['websocket', 'polling'],
+                reconnection: true,
+                reconnectionAttempts: 20,
+                reconnectionDelay: 1000,
+                timeout: 15000,
                 extraHeaders: { 'X-API-Key': current.secret },
                 query: { api_key: current.secret }
             });
 
             socket.on('connect', () => {
-                console.log('✅ SocketIO Connected successfully');
+                console.log('✅ SocketIO Connected successfully to', serverUrl);
+                if (headerText) headerText.innerHTML = `MONITORING (${current.host}${portDisplay}) <span style="color:#00ff88; font-size:0.75rem;">● LIVE PUSH ACTIVE</span>`;
                 fetchHistoricalCallLogs();
+            });
+
+            socket.on('connect_error', (err) => {
+                console.warn('⚠️ SocketIO Connection Warning:', err.message || err);
+                if (headerText) headerText.innerHTML = `MONITORING (${current.host}${portDisplay}) <span style="color:#ff3366; font-size:0.75rem;">● STREAM OFFLINE / RECONNECTING</span>`;
+            });
+
+            socket.on('disconnect', (reason) => {
+                console.log('🔌 SocketIO Disconnected:', reason);
+                if (headerText) headerText.innerHTML = `MONITORING (${current.host}${portDisplay}) <span style="color:#ff3366; font-size:0.75rem;">● DISCONNECTED</span>`;
             });
 
             // Instant Live Event Handler (<10ms delay for call start & hangup!)
@@ -1402,6 +1540,35 @@
             });
         }
 
+        function format12Hr(timestampStr) {
+            if (!timestampStr) return '-';
+            let raw = String(timestampStr).trim();
+            if (raw.toUpperCase().includes('AM') || raw.toUpperCase().includes('PM')) {
+                return raw;
+            }
+            const m = raw.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{1,2}):(\d{2}):?(\d{2})?/);
+            if (m) {
+                let [_, yr, mo, dy, hr, mn, sc] = m;
+                let hrNum = parseInt(hr, 10);
+                const ampm = hrNum >= 12 ? 'PM' : 'AM';
+                hrNum = hrNum % 12 || 12;
+                const hrStr = String(hrNum).padStart(2, '0');
+                const scStr = sc ? `:${sc}` : ':00';
+                return `${yr}-${mo}-${dy} ${hrStr}:${mn}${scStr} ${ampm}`;
+            }
+            const mTime = raw.match(/^(\d{1,2}):(\d{2}):?(\d{2})?/);
+            if (mTime) {
+                let [_, hr, mn, sc] = mTime;
+                let hrNum = parseInt(hr, 10);
+                const ampm = hrNum >= 12 ? 'PM' : 'AM';
+                hrNum = hrNum % 12 || 12;
+                const hrStr = String(hrNum).padStart(2, '0');
+                const scStr = sc ? `:${sc}` : ':00';
+                return `${hrStr}:${mn}${scStr} ${ampm}`;
+            }
+            return raw;
+        }
+
         // Render Instant Single Live Event
         function renderSingleLiveEvent(ev, isHistory = false) {
             if (!ev) return;
@@ -1410,8 +1577,19 @@
             const evtType = (ev.event || '').toUpperCase();
             const callerStr = String(ev.caller_id || '').toUpperCase();
 
-            // Strict Hard Filter: Drop REGISTER, OPTIONS, SIP_AUTH, and Agent-XXXX softphone pings
-            if (method === 'REGISTER' || method === 'OPTIONS' || evtType === 'SIP_AUTH' || callerStr.startsWith('AGENT-')) {
+            // Track live stream pulse
+            if (!isHistory) {
+                liveEventCounter++;
+                const countEl = document.getElementById('stat-total-events');
+                if (countEl && liveEventCounter > parseInt(countEl.textContent || '0')) {
+                    countEl.textContent = liveEventCounter;
+                }
+                console.debug('⚡ Live push event received:', method || evtType, callerStr, ev);
+            }
+
+            // Filter out background REGISTER keepalives and internal WebRTC hash tokens from the visual call table
+            const isWebRtcHash = callerStr.length === 8 && /^[0-9a-fA-F]+$/.test(callerStr);
+            if (method === 'REGISTER' || method === 'OPTIONS' || evtType === 'SIP_AUTH' || callerStr.startsWith('AGENT-') || isWebRtcHash) {
                 return;
             }
 
@@ -1419,17 +1597,11 @@
             if (renderedEventIds.has(rowId)) return;
             renderedEventIds.add(rowId);
 
-            let dateStr = ev.timestamp || '';
-            if (dateStr.includes('T')) {
-                const parts = dateStr.split('T');
-                const d = parts[0];
-                const t = parts[1].split('.')[0];
-                dateStr = `${d} ${t}`;
-            }
+            let dateStr = format12Hr(ev.timestamp || new Date().toISOString());
 
             const rawCaller = ev.caller_id || 'Unknown';
             const rawExt = ev.extension || '-';
-            const dateMinute = dateStr.substring(0, 16); // e.g. "2026-08-25 16:14"
+            const dateMinute = dateStr.substring(0, 16); // e.g. "2026-08-25 04:14"
 
             // Construct deduplication group key for call updates (100 -> 180 -> 200 -> BYE -> Cdr)
             const callGroupKey = (rawCaller + '_' + rawExt + '_' + dateMinute).replace(/[^a-zA-Z0-9]/g, '');
@@ -1456,6 +1628,25 @@
                 fullTbody.innerHTML = '';
             }
 
+            // If a BYE or Hangup arrives, find the most recent connected active call and update its status in-place!
+            if (method === 'BYE' || ev.event === 'CallHangup') {
+                if (fullTbody && fullTbody.children.length > 0) {
+                    for (let i = 0; i < Math.min(6, fullTbody.children.length); i++) {
+                        const r = fullTbody.children[i];
+                        const stTd = r.children[5];
+                        if (stTd && (stTd.innerHTML.includes('CONNECTED') || stTd.innerHTML.includes('Dialing') || stTd.innerHTML.includes('ACTIVE'))) {
+                            stTd.innerHTML = `<span class="pill pill-danger">🔴 CUT / TERMINATED (BYE)</span>`;
+                            const respTd = r.children[6];
+                            if (respTd) respTd.innerHTML = '200';
+                            if (rawCaller === 'Unknown' || rawExt === 'Unknown') {
+                                return; // Row updated in-place cleanly without duplicate Unknown row!
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
             // Check if this call row already exists in table — if so, update status & response instead of inserting duplicate!
             const existingRow = document.getElementById(`row_${callGroupKey}`);
             if (existingRow) {
@@ -1474,29 +1665,52 @@
 
             // Format Context & Source IP and Direction
             const srcIp = ev.source_ip || '192.168.1.15';
-            const ctxStr = (ev.context || 'from-external').toLowerCase();
-            const isInternal = ctxStr.includes('internal') || srcIp.startsWith('192.168.') || srcIp.startsWith('10.');
+            const rawCtx = (ev.context || '').toLowerCase();
             
-            // Call Direction Badge
+            // PBX DIDs identification
+            const PBX_DIDS = ['918035453330', '918031339333', '8035453330', '8031339333'];
+            const cleanCaller = String(rawCaller).replace(/[^0-9]/g, '');
+            const cleanExt = String(rawExt).replace(/[^0-9]/g, '');
+
+            const isCallerPBX = PBX_DIDS.some(d => cleanCaller.includes(d)) || (cleanCaller.length >= 2 && cleanCaller.length <= 5);
+            const isDestPBX = PBX_DIDS.some(d => cleanExt.includes(d)) || (cleanExt.length >= 2 && cleanExt.length <= 5);
+
+            let isInternal = false;
             let dirPill = '<span class="pill pill-info">📤 OUTGOING</span>';
-            if (ctxStr.includes('external') || ctxStr.includes('trunk') || ctxStr.includes('pstn') || ctxStr.includes('inbound')) {
+            let ctxDisplay = 'from-internal';
+
+            if (isCallerPBX && !isDestPBX) {
+                // Outbound call made from PBX to customer
+                isInternal = true;
+                dirPill = '<span class="pill pill-info">📤 OUTGOING</span>';
+                ctxDisplay = 'from-internal';
+            } else if (isDestPBX && !isCallerPBX) {
+                // Inbound call received from external customer into PBX
+                isInternal = false;
                 dirPill = '<span class="pill pill-purple">📥 INCOMING</span>';
-            } else if (isInternal) {
+                ctxDisplay = 'from-external';
+            } else if (rawCtx.includes('internal') || rawCtx.includes('agent') || srcIp.startsWith('192.168.') || srcIp.startsWith('10.')) {
+                isInternal = true;
                 dirPill = '<span class="pill pill-low">🏠 INTERNAL</span>';
+                ctxDisplay = 'from-internal';
+            } else {
+                isInternal = false;
+                dirPill = '<span class="pill pill-purple">📥 INCOMING</span>';
+                ctxDisplay = 'from-external';
             }
 
-            // Highlight primary Production DID 918031339333
+            // Highlight primary Production DIDs (918035453330 & 918031339333)
             let callerDisplay = rawCaller;
             let extDisplay = rawExt;
 
-            if (String(callerDisplay).includes('918031339333') || String(callerDisplay).includes('8031339333')) {
-                callerDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 918031339333</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.18); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.4); font-weight:700;">PROD MAIN DID</span>`;
+            if (PBX_DIDS.some(d => String(callerDisplay).includes(d))) {
+                callerDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${rawCaller}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.18); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.4); font-weight:700;">PBX TRUNK</span>`;
             } else {
                 callerDisplay = `<span style="font-weight:700; color:var(--primary);">${callerDisplay}</span>`;
             }
 
-            if (String(extDisplay).includes('918031339333') || String(extDisplay).includes('8031339333')) {
-                extDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 918031339333</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.18); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.4); font-weight:700;">PROD MAIN DID</span>`;
+            if (PBX_DIDS.some(d => String(extDisplay).includes(d))) {
+                extDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${rawExt}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.18); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.4); font-weight:700;">PBX TRUNK</span>`;
             } else {
                 extDisplay = `<span style="font-weight:600; color:#fff;">${extDisplay}</span>`;
             }
@@ -1509,7 +1723,7 @@
                 <td>${callerDisplay}</td>
                 <td>${extDisplay}</td>
                 <td>${dirPill}</td>
-                <td><span class="pill ${isInternal ? 'pill-low' : 'pill-purple'}">${ctxStr} (${srcIp})</span></td>
+                <td><span class="pill ${isInternal ? 'pill-low' : 'pill-purple'}">${ctxDisplay} (${srcIp})</span></td>
                 <td>${statusPillHtml}</td>
                 <td style="font-weight:600; color:${resp === '200' ? 'var(--safe)' : 'var(--warning)'};">${resp}</td>
             `;
@@ -1532,8 +1746,9 @@
                 const alertType = method === 'BYE' ? 'HANGUP' : (resp === '200' ? 'CALL' : 'EVENT');
                 const details = ev.cause_txt || `${method} from ${rawCaller}`;
 
+                const timeOnly = dateStr.includes(' ') ? dateStr.split(' ').slice(1).join(' ') : dateStr;
                 alertTr.innerHTML = `
-                    <td>${dateStr.split(' ')[1] || dateStr}</td>
+                    <td>${timeOnly}</td>
                     <td><span class="pill ${method === 'BYE' ? 'pill-danger' : 'pill-info'}">${alertType}</span></td>
                     <td>${statusPillHtml}</td>
                     <td>${details} (${srcIp})</td>
@@ -1550,8 +1765,12 @@
 
         function str(val) { return String(val || ''); }
 
+        let latestTelemetryData = null;
+
         function updateDashboardUI(data) {
             if (!data) return;
+            latestTelemetryData = data;
+
             if (data.stats) {
                 if (data.stats.total_events > liveEventCounter) {
                     liveEventCounter = data.stats.total_events;
@@ -1560,7 +1779,7 @@
                 document.getElementById('stat-total-windows').textContent = data.stats.total_windows || 0;
                 document.getElementById('stat-total-attacks').textContent = data.stats.total_attacks || 0;
 
-                if (data.stats.total_attacks > 0) {
+                if (data.stats.total_attacks > 0 || data.is_attack) {
                     document.getElementById('stat-threat-level').textContent = data.stats.threat_level || 'HIGH';
                     document.getElementById('stat-threat-level').style.color = 'var(--danger)';
                     document.getElementById('stat-attacks-sub').textContent = 'Active threats detected';
@@ -1585,7 +1804,7 @@
                 timelineChart.update();
             }
 
-            // Update Doughnut Chart
+            // Update Doughnut Chart & Legend Percentages
             if (doughnutChart && data.stats && data.stats.attack_breakdown) {
                 const bd = data.stats.attack_breakdown;
                 const vals = [
@@ -1599,6 +1818,54 @@
                 doughnutChart.data.datasets[0].data = vals;
                 doughnutChart.update();
                 document.getElementById('doughnut-center-val').textContent = data.stats.total_attacks || 0;
+
+                // Update legend percentages
+                const totalAttacks = data.stats.total_attacks || vals.reduce((a, b) => a + b, 0);
+                const calcPct = (v) => totalAttacks > 0 ? Math.round((v / totalAttacks) * 100) + '%' : '0%';
+
+                const elInv = document.getElementById('leg-invite'); if (elInv) elInv.textContent = calcPct(bd.INVITE_FLOOD || 0);
+                const elScan = document.getElementById('leg-scanner'); if (elScan) elScan.textContent = calcPct(bd.SIP_SCANNER || 0);
+                const elBrute = document.getElementById('leg-brute'); if (elBrute) elBrute.textContent = calcPct(bd.REGISTER_BRUTE_FORCE || 0);
+                const elEnum = document.getElementById('leg-enum'); if (elEnum) elEnum.textContent = calcPct(bd.EXTENSION_ENUMERATION || 0);
+                const elOpt = document.getElementById('leg-options'); if (elOpt) elOpt.textContent = calcPct(bd.OPTIONS_FLOOD || 0);
+                const elFraud = document.getElementById('leg-fraud'); if (elFraud) elFraud.textContent = calcPct(bd.TOLL_FRAUD || 0);
+            }
+
+            // Update LAST DETECTION Card
+            const lastDetIcon = document.getElementById('last-det-icon');
+            const lastDetTitle = document.getElementById('last-det-title');
+            const lastDetSub = document.getElementById('last-det-sub');
+            
+            if (data.is_attack || (data.stats && data.stats.total_attacks > 0)) {
+                const threatName = (data.classification && data.classification !== 'NORMAL') ? data.classification : 'ACTIVE ATTACK';
+                const threatConf = data.confidence || 99.9;
+                if (lastDetIcon) {
+                    lastDetIcon.textContent = '🚨';
+                    lastDetIcon.style.background = 'rgba(255, 51, 102, 0.2)';
+                    lastDetIcon.style.color = 'var(--danger)';
+                }
+                if (lastDetTitle) {
+                    lastDetTitle.textContent = `${threatName} Detected (${threatConf}%)`;
+                    lastDetTitle.style.color = 'var(--danger)';
+                }
+                if (lastDetSub) {
+                    lastDetSub.textContent = 'Threat detected • Click to inspect & rectify';
+                    lastDetSub.style.color = 'var(--warning)';
+                }
+            } else {
+                if (lastDetIcon) {
+                    lastDetIcon.textContent = '✔';
+                    lastDetIcon.style.background = 'rgba(0, 255, 136, 0.15)';
+                    lastDetIcon.style.color = 'var(--safe)';
+                }
+                if (lastDetTitle) {
+                    lastDetTitle.textContent = 'No threats detected';
+                    lastDetTitle.style.color = '#fff';
+                }
+                if (lastDetSub) {
+                    lastDetSub.textContent = 'System is secure';
+                    lastDetSub.style.color = 'var(--safe)';
+                }
             }
 
             // Update Top Source IPs
@@ -1616,6 +1883,111 @@
                 });
             }
 
+            // Update Attack Analysis Tab (Banner & Incidents Table)
+            const analysisBanner = document.getElementById('analysis-active-banner');
+            const incidentsTbody = document.getElementById('attack-incidents-tbody');
+            let mainAttackerIp = '103.186.40.107';
+            if (data.blocked_ips && data.blocked_ips.length > 0) {
+                mainAttackerIp = data.blocked_ips[0].ip;
+            } else if (data.top_source_ips && data.top_source_ips.length > 0) {
+                mainAttackerIp = data.top_source_ips[0].ip;
+            }
+
+            if (analysisBanner) {
+                if (data.is_attack || (data.stats && data.stats.total_attacks > 0)) {
+                    const threatName = (data.classification && data.classification !== 'NORMAL') ? data.classification : 'INVITE_FLOOD';
+                    const threatConf = data.confidence || 99.90;
+                    const reqCount = data.features?.invite_count_60s || data.event_count || 200;
+                    const reqRate = data.features?.request_rate ? data.features.request_rate.toFixed(2) : '3.33';
+
+                    analysisBanner.style.background = 'rgba(255,51,102,0.1)';
+                    analysisBanner.style.borderColor = 'rgba(255,51,102,0.3)';
+                    document.getElementById('analysis-banner-title').textContent = `Active Threat Detected: ${threatName}`;
+                    document.getElementById('analysis-banner-badge').className = 'pill pill-danger';
+                    document.getElementById('analysis-banner-badge').textContent = 'ACTIVE ALERT';
+                    document.getElementById('analysis-banner-ip').textContent = mainAttackerIp;
+                    document.getElementById('analysis-banner-conf').textContent = `${threatConf}%`;
+                    document.getElementById('analysis-banner-vector').textContent = `High Request Burst (${reqCount} req/60s, rate: ${reqRate}/s)`;
+                    
+                    const unbanBtn = document.getElementById('analysis-unban-btn');
+                    if (unbanBtn) {
+                        unbanBtn.style.display = 'inline-block';
+                        unbanBtn.onclick = () => unbanIpAddress(mainAttackerIp);
+                    }
+                } else {
+                    analysisBanner.style.background = 'rgba(0,255,136,0.06)';
+                    analysisBanner.style.borderColor = 'rgba(0,255,136,0.25)';
+                    document.getElementById('analysis-banner-title').textContent = 'All Systems Normal & Secure';
+                    document.getElementById('analysis-banner-badge').className = 'pill pill-low';
+                    document.getElementById('analysis-banner-badge').textContent = 'SYSTEM SECURE';
+                    document.getElementById('analysis-banner-sub').innerHTML = 'No active security anomalies detected. Neural firewall is actively protecting port 5060.';
+                    const unbanBtn = document.getElementById('analysis-unban-btn');
+                    if (unbanBtn) unbanBtn.style.display = 'none';
+                }
+            }
+
+            if (incidentsTbody) {
+                if (data.attack_incidents && data.attack_incidents.length > 0) {
+                    incidentsTbody.innerHTML = '';
+                    data.attack_incidents.forEach(inc => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${inc.time || new Date().toLocaleTimeString()}</td>
+                            <td><strong style="color:#fff; font-family:monospace;">${inc.attacker_ip || mainAttackerIp}</strong></td>
+                            <td><span class="pill pill-danger">${inc.threat_class || 'INVITE_FLOOD'}</span></td>
+                            <td>${inc.event_count || 200} requests in 60s (rate: ${inc.rate || '3.33'}/s)</td>
+                            <td><strong style="color:var(--primary);">${inc.confidence || 99.9}%</strong></td>
+                            <td><span class="pill pill-warning">${inc.status || 'iptables DROP'}</span></td>
+                            <td>
+                                <button onclick="unbanIpAddress('${inc.attacker_ip || mainAttackerIp}')" style="background:rgba(0,255,136,0.15); color:var(--safe); border:1px solid var(--safe); padding:0.2rem 0.6rem; border-radius:4px; font-weight:700; cursor:pointer; font-size:0.75rem;">
+                                    🔓 Rectify
+                                </button>
+                            </td>
+                        `;
+                        incidentsTbody.appendChild(tr);
+                    });
+                } else if (data.is_attack || (data.stats && data.stats.total_attacks > 0)) {
+                    incidentsTbody.innerHTML = `
+                        <tr>
+                            <td>${new Date().toLocaleTimeString()}</td>
+                            <td><strong style="color:#fff; font-family:monospace;">${mainAttackerIp}</strong></td>
+                            <td><span class="pill pill-danger">${data.classification || 'INVITE_FLOOD'}</span></td>
+                            <td>${data.features?.invite_count_60s || 200} requests / 60s window (rate: ${(data.features?.request_rate || 3.33).toFixed(2)}/s)</td>
+                            <td><strong style="color:var(--primary);">${data.confidence || 99.9}%</strong></td>
+                            <td><span class="pill pill-warning">iptables DROP (Active)</span></td>
+                            <td>
+                                <button onclick="unbanIpAddress('${mainAttackerIp}')" style="background:rgba(0,255,136,0.15); color:var(--safe); border:1px solid var(--safe); padding:0.2rem 0.6rem; border-radius:4px; font-weight:700; cursor:pointer; font-size:0.75rem;">
+                                    🔓 Rectify
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                }
+            }
+
+            // Update Blocked IPs in Attack Analysis Tab
+            const blockedTbody = document.getElementById('blocked-ips-tbody');
+            if (blockedTbody) {
+                if (data.blocked_ips && data.blocked_ips.length > 0) {
+                    blockedTbody.innerHTML = '';
+                    data.blocked_ips.forEach(b => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td><strong style="color:var(--danger); font-family:monospace;">${b.ip}</strong></td>
+                            <td><span class="pill pill-danger">${b.reason || 'Attack Vector'}</span></td>
+                            <td>
+                                <button onclick="unbanIpAddress('${b.ip}')" style="background:rgba(0,255,136,0.15); color:var(--safe); border:1px solid var(--safe); padding:0.25rem 0.6rem; border-radius:4px; font-weight:700; cursor:pointer; font-size:0.75rem;">
+                                    🔓 Unban / Rectify
+                                </button>
+                            </td>
+                        `;
+                        blockedTbody.appendChild(tr);
+                    });
+                } else if (blockedTbody.children.length === 0 || blockedTbody.children[0].innerText.includes('SIP_SCANNER')) {
+                    blockedTbody.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted); padding:1rem;">No IPs currently banned in firewall</td></tr>`;
+                }
+            }
+
             // Update Events Table from historical batch if any missed
             if (data.events && data.events.length > 0) {
                 data.events.forEach(ev => renderSingleLiveEvent(ev, true));
@@ -1630,12 +2002,96 @@
             window.open(url, '_blank');
         }
 
+        // Firewall Rectification Actions
+        async function unbanIpAddress(ip) {
+            if (!ip) return;
+            const current = servers.find(s => s.id === activeServerId);
+            if (!current) return;
+            try {
+                const baseUrl = getServerBaseUrl(current.host, current.port);
+                const res = await fetch(`${baseUrl}/api/firewall/unban?api_key=${current.secret}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': current.secret },
+                    body: JSON.stringify({ ip: ip })
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert(`✅ Successfully Rectified & Unbanned IP: ${ip}`);
+                    closeAttackDetailModal();
+                } else {
+                    alert(`⚠️ Unban notice: ${result.message || 'Operation complete'}`);
+                }
+            } catch (e) {
+                alert(`Error contacting backend: ${e.message}`);
+            }
+        }
+
+        async function banIpAddress(ip, reason) {
+            if (!ip) {
+                ip = prompt('Enter IP Address to block:');
+                if (!ip) return;
+            }
+            const current = servers.find(s => s.id === activeServerId);
+            if (!current) return;
+            try {
+                const baseUrl = getServerBaseUrl(current.host, current.port);
+                const res = await fetch(`${baseUrl}/api/firewall/ban?api_key=${current.secret}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': current.secret },
+                    body: JSON.stringify({ ip: ip, reason: reason || 'Admin Manual Ban' })
+                });
+                const result = await res.json();
+                if (res.ok) {
+                    alert(`🚫 Successfully Enforced Firewall Ban on IP: ${ip}`);
+                } else {
+                    alert(`⚠️ Ban notice: ${result.message || 'Operation complete'}`);
+                }
+            } catch (e) {
+                alert(`Error contacting backend: ${e.message}`);
+            }
+        }
+
         // Attack Detail Modal Functions
         function openAttackDetailModal() {
             const overlay = document.getElementById('attack-modal-overlay');
-            if (overlay) {
-                overlay.style.display = 'flex';
+            if (!overlay) return;
+
+            const data = latestTelemetryData || {};
+            const threatClass = (data.classification && data.classification !== 'NORMAL') ? data.classification : 'INVITE_FLOOD';
+            const confidence = data.confidence || 99.90;
+            
+            let attackerIp = '103.186.40.107';
+            if (data.blocked_ips && data.blocked_ips.length > 0) {
+                attackerIp = data.blocked_ips[0].ip;
+            } else if (data.top_source_ips && data.top_source_ips.length > 0) {
+                attackerIp = data.top_source_ips[0].ip;
             }
+
+            document.getElementById('modal-threat-class').textContent = threatClass;
+            document.getElementById('modal-confidence').textContent = `${confidence}% Accuracy`;
+            document.getElementById('modal-source-ip').textContent = attackerIp;
+
+            // Populate features table
+            const featuresTbody = document.getElementById('modal-features-tbody');
+            if (featuresTbody) {
+                const f = data.features || {};
+                featuresTbody.innerHTML = `
+                    <tr><td><code>invite_count_60s</code></td><td><strong>${f.invite_count_60s || 48} requests</strong></td><td>&lt; 10</td><td><span class="pill ${f.invite_count_60s > 10 ? 'pill-danger' : 'pill-low'}">${f.invite_count_60s > 10 ? 'BURST' : 'NORMAL'}</span></td></tr>
+                    <tr><td><code>register_count_60s</code></td><td>${f.register_count_60s || 0} requests</td><td>&lt; 5</td><td><span class="pill ${f.register_count_60s > 5 ? 'pill-danger' : 'pill-low'}">${f.register_count_60s > 5 ? 'ELEVATED' : 'NORMAL'}</span></td></tr>
+                    <tr><td><code>failed_count_60s</code></td><td><strong>${f.failed_count_60s || 12} failures</strong></td><td>&lt; 3</td><td><span class="pill ${f.failed_count_60s > 3 ? 'pill-danger' : 'pill-low'}">${f.failed_count_60s > 3 ? 'ANOMALOUS' : 'NORMAL'}</span></td></tr>
+                    <tr><td><code>unique_extensions_60s</code></td><td><strong>${f.unique_extensions_60s || 14} targets</strong></td><td>&lt; 3</td><td><span class="pill ${f.unique_extensions_60s > 3 ? 'pill-warning' : 'pill-low'}">${f.unique_extensions_60s > 3 ? 'PROBING' : 'NORMAL'}</span></td></tr>
+                    <tr><td><code>request_rate</code></td><td><strong>${f.request_rate ? f.request_rate.toFixed(2) : '0.80'} req/sec</strong></td><td>&lt; 0.15</td><td><span class="pill ${f.request_rate > 0.15 ? 'pill-danger' : 'pill-low'}">${f.request_rate > 0.15 ? 'ELEVATED' : 'NORMAL'}</span></td></tr>
+                `;
+            }
+
+            // Set current IP on rectification button
+            const unbanBtn = document.getElementById('modal-unban-action-btn');
+            if (unbanBtn) {
+                unbanBtn.onclick = () => unbanIpAddress(attackerIp);
+                unbanBtn.textContent = `🔓 Rectify & Unban IP (${attackerIp})`;
+            }
+
+            overlay.style.display = 'flex';
         }
 
         function closeAttackDetailModal() {
@@ -1648,7 +2104,7 @@
         // Live Clock
         function updateClock() {
             const now = new Date();
-            document.getElementById('sidebar-clock-time').textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            document.getElementById('sidebar-clock-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
             document.getElementById('sidebar-clock-date').textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
         }
 
@@ -1670,7 +2126,7 @@
         });
     </script>
 
-    <!-- ATTACK INVESTIGATION MODAL OVERLAY -->
+    <!-- ATTACK INVESTIGATION & RECTIFICATION MODAL OVERLAY -->
     <div id="attack-modal-overlay" style="display: none; position: fixed; inset: 0; background: rgba(10,14,26,0.88); backdrop-filter: blur(12px); z-index: 9999; align-items: center; justify-content: center; padding: 1.5rem;">
         <div style="background: #111827; border: 1px solid rgba(255, 51, 102, 0.4); border-radius: 16px; width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; box-shadow: 0 0 45px rgba(255, 51, 102, 0.3); display: flex; flex-direction: column; gap: 1.25rem; padding: 1.75rem;">
             
@@ -1679,10 +2135,10 @@
                 <div>
                     <div style="display: flex; align-items: center; gap: 0.6rem;">
                         <span style="font-size: 1.5rem;">🎯</span>
-                        <h3 style="color: #fff; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.5px;" id="modal-attack-title">ATTACK INVESTIGATION REPORT</h3>
+                        <h3 style="color: #fff; font-size: 1.2rem; font-weight: 800; letter-spacing: 0.5px;" id="modal-attack-title">ATTACK INVESTIGATION & RECTIFICATION</h3>
                         <span class="pill pill-danger" id="modal-attack-badge">ACTIVE THREAT</span>
                     </div>
-                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem;" id="modal-attack-subtitle">Detailed breakdown of neural classifier vectors & security firewall actions</div>
+                    <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 0.35rem;" id="modal-attack-subtitle">Detailed breakdown of AI classification vectors & security firewall actions</div>
                 </div>
                 <button onclick="closeAttackDetailModal()" style="background: rgba(255,255,255,0.08); border: 1px solid var(--panel-border); color: #fff; width: 32px; height: 32px; border-radius: 8px; font-weight: 800; cursor: pointer; font-size: 1.1rem;">✕</button>
             </div>
@@ -1729,19 +2185,33 @@
                             </tr>
                         </thead>
                         <tbody id="modal-features-tbody">
-                            <tr><td><code>invite_count_60s</code></td><td><strong>48 requests</strong></td><td>< 10</td><td><span class="pill pill-danger">HIGH BURST</span></td></tr>
-                            <tr><td><code>register_count_60s</code></td><td>0 requests</td><td>< 5</td><td><span class="pill pill-low">NORMAL</span></td></tr>
-                            <tr><td><code>failure_ratio</code></td><td><strong>92.0%</strong></td><td>< 10%</td><td><span class="pill pill-danger">ANOMALOUS</span></td></tr>
-                            <tr><td><code>unique_extensions_60s</code></td><td><strong>14 targets</strong></td><td>< 3</td><td><span class="pill pill-warning">PROBING</span></td></tr>
-                            <tr><td><code>request_rate</code></td><td><strong>0.80 req/sec</strong></td><td>< 0.15</td><td><span class="pill pill-danger">ELEVATED</span></td></tr>
+                            <tr><td><code>invite_count_60s</code></td><td><strong>48 requests</strong></td><td>&lt; 10</td><td><span class="pill pill-danger">HIGH BURST</span></td></tr>
+                            <tr><td><code>register_count_60s</code></td><td>0 requests</td><td>&lt; 5</td><td><span class="pill pill-low">NORMAL</span></td></tr>
+                            <tr><td><code>failed_count_60s</code></td><td><strong>12 failures</strong></td><td>&lt; 3</td><td><span class="pill pill-danger">ANOMALOUS</span></td></tr>
+                            <tr><td><code>unique_extensions_60s</code></td><td><strong>14 targets</strong></td><td>&lt; 3</td><td><span class="pill pill-warning">PROBING</span></td></tr>
+                            <tr><td><code>request_rate</code></td><td><strong>0.80 req/sec</strong></td><td>&lt; 0.15</td><td><span class="pill pill-danger">ELEVATED</span></td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
 
-            <!-- Close Button -->
-            <div style="display: flex; justify-content: flex-end; gap: 0.75rem;">
-                <button onclick="closeAttackDetailModal()" style="background: var(--primary); color: #0a0e1a; border: none; font-weight: 800; padding: 0.6rem 1.4rem; border-radius: 8px; cursor: pointer; font-size: 0.82rem;">Done / Close</button>
+            <!-- Rectification Action Bar -->
+            <div style="display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 10px; border: 1px solid var(--panel-border);">
+                <div>
+                    <div style="font-size: 0.82rem; font-weight: 700; color: #fff;">How to Rectify this Alert:</div>
+                    <div style="font-size: 0.72rem; color: var(--text-muted);">If this was a legitimate user, unban the IP below. If malicious, the iptables DROP rule is already active.</div>
+                </div>
+                <div style="display: flex; gap: 0.75rem;">
+                    <button id="modal-unban-action-btn" style="background: rgba(0,255,136,0.15); color: var(--safe); border: 1px solid var(--safe); font-weight: 700; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
+                        🔓 Rectify & Unban IP
+                    </button>
+                    <button onclick="downloadReport('csv')" style="background: rgba(0,212,255,0.15); color: var(--primary); border: 1px solid var(--primary); font-weight: 700; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
+                        📥 Export Audit Report
+                    </button>
+                    <button onclick="closeAttackDetailModal()" style="background: rgba(255,255,255,0.1); color: #fff; border: 1px solid var(--panel-border); font-weight: 700; padding: 0.55rem 1.1rem; border-radius: 8px; cursor: pointer; font-size: 0.8rem;">
+                        Close
+                    </button>
+                </div>
             </div>
         </div>
     </div>
