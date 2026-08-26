@@ -655,9 +655,24 @@
 
         <div class="content-area">
             
-            <!-- TAB 1: DASHBOARD (Matching Image 1) -->
-            <div id="tab-dashboard" class="tab-view active">
-                
+                <!-- Multi-Server Fleet Grid (Matching Mockup) -->
+                <div class="panel" style="margin-bottom: 1.25rem; padding: 1rem 1.25rem; border-color: rgba(0,212,255,0.25); background: linear-gradient(180deg, rgba(0,212,255,0.04) 0%, rgba(255,255,255,0.01) 100%);">
+                    <div class="panel-header" style="margin-bottom: 0.85rem;">
+                        <div style="display:flex; align-items:center; gap: 0.6rem;">
+                            <span class="panel-title" style="letter-spacing: 0.5px;">🌐 MULTI-SERVER PBX FLEET</span>
+                            <span style="font-size: 0.68rem; background: rgba(0,255,136,0.15); color: var(--safe); padding: 2px 8px; border-radius: 4px; font-weight: 700; border: 1px solid rgba(0,255,136,0.3);">
+                                ● FLEET HEALTH: 100% SECURE
+                            </span>
+                        </div>
+                        <button onclick="openConnectionModal()" style="background: rgba(0,212,255,0.15); border: 1px solid var(--primary); color: #fff; padding: 0.35rem 0.8rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                            ➕ Add PBX Server
+                        </button>
+                    </div>
+                    <div id="fleet-servers-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 0.85rem;">
+                        <!-- Server cards dynamically rendered from SQLite -->
+                    </div>
+                </div>
+
                 <!-- Top 4 Stats Cards (Fully Clickable Navigation) -->
                 <div class="stats-grid">
                     <div class="stat-card" onclick="switchTab('events')" style="cursor: pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='var(--primary)'" onmouseout="this.style.borderColor='var(--panel-border)'">
@@ -1365,38 +1380,81 @@
         }
 
         function renderManagedServersTab() {
+            // 1. Render Settings tab list
             const container = document.getElementById('servers-list-container');
-            if (!container) return;
-            container.innerHTML = '';
+            if (container) {
+                container.innerHTML = '';
+                servers.forEach(srv => {
+                    const card = document.createElement('div');
+                    const isActive = srv.id === activeServerId;
+                    const portLabel = (srv.port && srv.port !== '443' && srv.port !== '80') ? `:${srv.port}` : '';
+                    card.style.cssText = `
+                        background: rgba(255,255,255,0.03);
+                        border: 1px solid ${isActive ? 'var(--primary)' : 'var(--panel-border)'};
+                        padding: 1rem 1.25rem;
+                        border-radius: 10px;
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    `;
 
-            servers.forEach(srv => {
-                const card = document.createElement('div');
-                const isActive = srv.id === activeServerId;
-                const portLabel = (srv.port && srv.port !== '443' && srv.port !== '80') ? `:${srv.port}` : '';
-                card.style.cssText = `
-                    background: rgba(255,255,255,0.03);
-                    border: 1px solid ${isActive ? 'var(--primary)' : 'var(--panel-border)'};
-                    padding: 1rem 1.25rem;
-                    border-radius: 10px;
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                `;
-
-                card.innerHTML = `
-                    <div>
-                        <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">${srv.name} ${isActive ? '<span style="color:var(--safe); font-size:0.75rem; margin-left:0.5rem;">[ACTIVE]</span>' : ''}</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
-                            Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}${portLabel}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${(srv.secret || '').slice(-4)}</span>
+                    card.innerHTML = `
+                        <div>
+                            <div style="font-weight: 700; color: #fff; font-size: 0.95rem;">${srv.name} ${isActive ? '<span style="color:var(--safe); font-size:0.75rem; margin-left:0.5rem;">[ACTIVE]</span>' : ''}</div>
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.2rem;">
+                                Host: <span style="font-family:monospace; color:var(--primary);">${srv.host}${portLabel}</span> | Key: <span style="font-family:monospace; color:var(--text-muted);">••••••••${(srv.secret || '').slice(-4)}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div style="display: flex; gap: 0.5rem;">
-                        ${!isActive ? `<button onclick="switchActiveServer('${srv.id}')" style="background: rgba(0,212,255,0.15); border: 1px solid var(--primary); color: #fff; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Connect</button>` : ''}
-                        ${servers.length > 1 ? `<button onclick="deleteServer('${srv.id}')" style="background: rgba(255,51,102,0.15); border: 1px solid var(--danger); color: var(--danger); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Delete</button>` : ''}
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+                        <div style="display: flex; gap: 0.5rem;">
+                            ${!isActive ? `<button onclick="switchActiveServer('${srv.id}')" style="background: rgba(0,212,255,0.15); border: 1px solid var(--primary); color: #fff; padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Connect</button>` : ''}
+                            ${servers.length > 1 ? `<button onclick="deleteServer('${srv.id}')" style="background: rgba(255,51,102,0.15); border: 1px solid var(--danger); color: var(--danger); padding: 0.4rem 0.8rem; border-radius: 6px; font-size: 0.78rem; font-weight: 600; cursor: pointer;">Delete</button>` : ''}
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+
+            // 2. Render Multi-Server Fleet Grid on Dashboard (Matching Mockup)
+            const fleetGrid = document.getElementById('fleet-servers-grid');
+            if (fleetGrid) {
+                fleetGrid.innerHTML = '';
+                servers.forEach(srv => {
+                    const card = document.createElement('div');
+                    const isActive = srv.id === activeServerId;
+                    const portLabel = (srv.port && srv.port !== '443' && srv.port !== '80') ? `:${srv.port}` : '';
+                    card.style.cssText = `
+                        background: ${isActive ? 'rgba(0, 212, 255, 0.08)' : 'rgba(255,255,255,0.02)'};
+                        border: 1px solid ${isActive ? 'var(--primary)' : 'var(--panel-border)'};
+                        padding: 0.9rem 1.1rem;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        transition: all 0.2s ease;
+                        display: flex;
+                        flex-direction: column;
+                        gap: 0.4rem;
+                    `;
+                    card.onclick = () => switchActiveServer(srv.id);
+
+                    card.innerHTML = `
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span style="font-weight: 700; color: #fff; font-size: 0.88rem; display: flex; align-items: center; gap: 6px;">
+                                📞 ${srv.name}
+                            </span>
+                            <span class="pill ${isActive ? 'pill-low' : 'pill-info'}" style="font-size: 0.65rem; padding: 2px 6px;">
+                                ${isActive ? '● ACTIVE STREAM' : 'STANDBY'}
+                            </span>
+                        </div>
+                        <div style="font-size: 0.75rem; color: var(--text-muted);">
+                            Host: <span style="color: var(--primary); font-family: monospace;">${srv.host}${portLabel}</span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.25rem; font-size: 0.72rem;">
+                            <span style="color: var(--safe); font-weight: 600;">Status: 🟢 Online</span>
+                            <span style="color: var(--text-muted);">Attacks: <strong style="color: #fff;">0</strong></span>
+                        </div>
+                    `;
+                    fleetGrid.appendChild(card);
+                });
+            }
         }
 
         function switchActiveServer(serverId) {
