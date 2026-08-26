@@ -1126,10 +1126,10 @@
             timelineChart = new Chart(ctxTimeline, {
                 type: 'line',
                 data: {
-                    labels: ['11:34 AM', '11:35 AM', '11:36 AM', '11:37 AM', '11:38 AM'],
+                    labels: [],
                     datasets: [{
-                        label: 'SIP Requests',
-                        data: [10, 27, 19, 25, 16],
+                        label: 'SIP Call Requests',
+                        data: [],
                         borderColor: '#00d4ff',
                         borderWidth: 2.5,
                         backgroundColor: gradient,
@@ -1792,12 +1792,12 @@
                 }
             }
 
-            // Update Timeline Chart
-            if (timelineChart && data.stats) {
-                const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            // Update Timeline Chart — ONLY when real call events occur!
+            if (timelineChart && data.stats && (data.event_count || 0) > 0) {
+                const nowStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
                 timelineChart.data.labels.push(nowStr);
-                timelineChart.data.datasets[0].data.push(data.event_count || Math.floor(Math.random() * 20) + 10);
-                if (timelineChart.data.labels.length > 8) {
+                timelineChart.data.datasets[0].data.push(data.event_count);
+                if (timelineChart.data.labels.length > 12) {
                     timelineChart.data.labels.shift();
                     timelineChart.data.datasets[0].data.shift();
                 }
