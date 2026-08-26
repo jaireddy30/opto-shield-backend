@@ -21,9 +21,9 @@ HOST = os.getenv("HOST", "0.0.0.0")
 PORT = int(os.getenv("PORT", 9000))
 FRONTEND_ADMIN_USER = os.getenv("FRONTEND_ADMIN_USER", "admin")
 FRONTEND_ADMIN_PASS = os.getenv("FRONTEND_ADMIN_PASS", "admin123")
-DEFAULT_BACKEND_HOST = os.getenv("DEFAULT_BACKEND_HOST", "app.optoxcrm.com")
-DEFAULT_BACKEND_PORT = os.getenv("DEFAULT_BACKEND_PORT", "443")
-DEFAULT_API_KEY = os.getenv("DEFAULT_API_KEY", "5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78")
+DEFAULT_BACKEND_HOST = "13.126.90.199"
+DEFAULT_BACKEND_PORT = "5000"
+DEFAULT_API_KEY = "5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78"
 
 class PBXFrontendHandler(http.server.SimpleHTTPRequestHandler):
     def translate_path(self, path):
@@ -86,8 +86,8 @@ class PBXFrontendHandler(http.server.SimpleHTTPRequestHandler):
             self.send_header("Access-Control-Allow-Origin", "*")
             self.end_headers()
             data = {
-                "backend_host": DEFAULT_BACKEND_HOST,
-                "backend_port": DEFAULT_BACKEND_PORT,
+                "backend_host": "13.126.90.199",
+                "backend_port": "5000",
                 "api_key": DEFAULT_API_KEY,
                 "frontend_port": PORT,
                 "frontend_host": HOST,

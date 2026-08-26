@@ -1182,7 +1182,16 @@
 
         async function initServerManagement() {
             const defaultConfig = await loadRuntimeConfig();
-            const saved = localStorage.getItem('pbx_servers_list');
+            let saved = localStorage.getItem('pbx_servers_list');
+
+            // Purge stale 13.201.136.47 entries from localStorage
+            if (saved && saved.includes('13.201.136.47')) {
+                localStorage.removeItem('pbx_servers_list');
+                localStorage.removeItem('pbx_active_server_id');
+                saved = null;
+                servers = [];
+            }
+
             if (saved) {
                 try { servers = JSON.parse(saved); } catch (e) { servers = []; }
             }
@@ -1191,10 +1200,13 @@
             const targetPort = defaultConfig.backend_port || '5000';
             const targetKey = defaultConfig.api_key || '5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78';
 
-            if (servers.length === 0 || servers[0].host === '127.0.0.1' || servers[0].host === 'localhost') {
+            // Filter out any stale 13.201.136.47 servers
+            servers = servers.filter(s => s.host !== '13.201.136.47');
+
+            if (servers.length === 0 || servers[0].host === '127.0.0.1' || servers[0].host === 'localhost' || servers[0].host === '13.201.136.47') {
                 servers = [{
                     id: 'server_default',
-                    name: 'Optox Production Asterisk Backend',
+                    name: 'Primary Asterisk PBX Backend',
                     host: targetHost,
                     port: targetPort,
                     secret: targetKey
@@ -1393,9 +1405,11 @@
             if (!ev) return;
             
             const method = (ev.sip_method || '').toUpperCase();
-            
-            // 1. FILTER OUT softphone logins (REGISTER) and keepalives (OPTIONS) from Call Logs table
-            if (method === 'REGISTER' || method === 'OPTIONS') {
+            const evtType = (ev.event || '').toUpperCase();
+            const callerStr = String(ev.caller_id || '').toUpperCase();
+
+            // Strict Hard Filter: Drop REGISTER, OPTIONS, SIP_AUTH, and Agent-XXXX softphone pings
+            if (method === 'REGISTER' || method === 'OPTIONS' || evtType === 'SIP_AUTH' || callerStr.startsWith('AGENT-')) {
                 return;
             }
 
@@ -1469,18 +1483,18 @@
                 dirPill = '<span class="pill pill-low">🏠 INTERNAL</span>';
             }
 
-            // Highlight DID 8031339333 numbers
+            // Highlight primary Production DID 918031339333
             let callerDisplay = rawCaller;
             let extDisplay = rawExt;
 
-            if (String(callerDisplay).includes('8031339333') || String(callerDisplay).endsWith('333')) {
-                callerDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${callerDisplay}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.15); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.3);">PROD DID</span>`;
+            if (String(callerDisplay).includes('918031339333') || String(callerDisplay).includes('8031339333')) {
+                callerDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 918031339333</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.18); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.4); font-weight:700;">PROD MAIN DID</span>`;
             } else {
                 callerDisplay = `<span style="font-weight:700; color:var(--primary);">${callerDisplay}</span>`;
             }
 
-            if (String(extDisplay).includes('8031339333') || String(extDisplay).endsWith('333')) {
-                extDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 ${extDisplay}</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.15); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.3);">PROD DID</span>`;
+            if (String(extDisplay).includes('918031339333') || String(extDisplay).includes('8031339333')) {
+                extDisplay = `<span style="color:#00e5ff; font-weight:800;">📞 918031339333</span> <span style="font-size:0.65rem; background:rgba(0,229,255,0.18); color:#00e5ff; padding:2px 6px; border-radius:4px; border:1px solid rgba(0,229,255,0.4); font-weight:700;">PROD MAIN DID</span>`;
             } else {
                 extDisplay = `<span style="font-weight:600; color:#fff;">${extDisplay}</span>`;
             }
