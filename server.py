@@ -97,6 +97,12 @@ class PBXFrontendHandler(http.server.SimpleHTTPRequestHandler):
             return
         return super().do_GET()
 
+    def end_headers(self):
+        self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+        self.send_header("Pragma", "no-cache")
+        self.send_header("Expires", "0")
+        super().end_headers()
+
 class ReusableThreadingServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
     allow_reuse_address = True
     daemon_threads = True
