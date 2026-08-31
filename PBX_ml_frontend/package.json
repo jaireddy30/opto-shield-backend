@@ -1,0 +1,10 @@
+{
+  "name": "optox-shield-frontend",
+  "version": "2.0.0",
+  "description": "Standalone SOC Frontend Dashboard for Optox Shield",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

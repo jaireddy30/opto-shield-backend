@@ -1,0 +1,8 @@
+{
+  "backend_host": "0.0.0.0",
+  "backend_port": 5000,
+  "api_secret_key": "5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78",
+  "dry_run": true,
+  "ban_duration": 10,
+  "whitelist": []
+}
