@@ -311,8 +311,8 @@ def db_save_event(ev):
     except Exception as e:
         print(f"  [!] Database save error: {e}")
 
-def db_get_historical_events(limit=500):
-    """Retrieve call logs stored in SQLite Database system with minimal RAM footprint."""
+def db_get_historical_events(limit=500, date=None):
+    """Retrieve call logs stored in SQLite Database system with date filtering support."""
     events = []
     try:
         conn = sqlite3.connect(DB_PATH, timeout=5, check_same_thread=False)
@@ -320,11 +320,19 @@ def db_get_historical_events(limit=500):
         cursor = conn.cursor()
         cursor.execute("PRAGMA cache_size=-2000;")
         cursor.execute("PRAGMA mmap_size=0;")
-        cursor.execute("""
-            SELECT * FROM events 
-            WHERE sip_method != 'REGISTER' AND sip_method != 'OPTIONS'
-            ORDER BY timestamp DESC LIMIT ?
-        """, (limit,))
+        if date:
+            cursor.execute("""
+                SELECT * FROM events 
+                WHERE sip_method != 'REGISTER' AND sip_method != 'OPTIONS'
+                AND (timestamp LIKE ? OR created_at LIKE ?)
+                ORDER BY timestamp DESC LIMIT ?
+            """, (f"{date}%", f"{date}%", limit))
+        else:
+            cursor.execute("""
+                SELECT * FROM events 
+                WHERE sip_method != 'REGISTER' AND sip_method != 'OPTIONS'
+                ORDER BY timestamp DESC LIMIT ?
+            """, (limit,))
         rows = cursor.fetchall()
         conn.close()
         for r in rows:
@@ -1215,8 +1223,9 @@ def index():
 
 @app.route("/api/events/history", methods=["GET"])
 def api_events_history():
-    """Retrieve historical call events from Yesterday (00:00:00) through Today from SQLite Database System."""
-    events = db_get_historical_events()
+    """Retrieve historical call events filtered by date from SQLite Database System."""
+    date_param = request.args.get("date")
+    events = db_get_historical_events(date=date_param)
     return jsonify({
         "status": "success",
         "count": len(events),
