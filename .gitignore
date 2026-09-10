@@ -27,6 +27,11 @@ build/
 Thumbs.db
 desktop.ini
 
+# Databases
+*.db
+data/*.db
+data/**/*.db
+
 # Raw data (too large for GitHub)
 data/raw/*.json
 

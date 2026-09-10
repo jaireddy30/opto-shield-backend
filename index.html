@@ -2623,17 +2623,17 @@
                     <div class="date-filter-bar">
                         <div class="date-pills-group">
                             <span class="date-filter-label">Filter by Date</span>
-                            <button class="date-filter-pill" id="pill-date-today" onclick="filterCallsByDate('2026-09-09', this)">
-                                <span>Today (09 Sep)</span>
+                            <button class="date-filter-pill active" id="pill-date-today" onclick="filterCallsByDate(DYNAMIC_DATES.todayISO, this)">
+                                <span>Today (10 Sep)</span>
                             </button>
-                            <button class="date-filter-pill" id="pill-date-yesterday" onclick="filterCallsByDate('2026-09-08', this)">
-                                <span>Yesterday (08 Sep)</span>
+                            <button class="date-filter-pill" id="pill-date-yesterday" onclick="filterCallsByDate(DYNAMIC_DATES.yesterdayISO, this)">
+                                <span>Yesterday (09 Sep)</span>
                             </button>
-                            <button class="date-filter-pill active" id="pill-date-sep7" onclick="filterCallsByDate('2026-09-07', this)">
-                                <span>07 Sep</span>
+                            <button class="date-filter-pill" id="pill-date-sep7" onclick="filterCallsByDate(DYNAMIC_DATES.day2ISO, this)">
+                                <span>08 Sep</span>
                             </button>
-                            <button class="date-filter-pill" id="pill-date-sep6" onclick="filterCallsByDate('2026-09-06', this)">
-                                <span>06 Sep (Archived in DB)</span>
+                            <button class="date-filter-pill" id="pill-date-sep6" onclick="filterCallsByDate('2026-09-07', this)">
+                                <span>07 Sep (Archived in DB)</span>
                             </button>
                             <button class="date-filter-pill" id="pill-date-all" onclick="filterCallsByDate('all', this)">
                                 <span>All Database Records</span>
@@ -2641,8 +2641,8 @@
                         </div>
                         <div style="display: flex; align-items: center; gap: 0.6rem;">
                             <span class="date-picker-label">Pick Custom Date</span>
-                            <input type="date" id="call-date-picker" class="date-select-input" value="2026-09-07" onchange="filterCallsByDate(this.value)" />
-                            <span id="call-date-count-label" class="call-count-badge">221 Calls</span>
+                            <input type="date" id="call-date-picker" class="date-select-input" value="2026-09-10" onchange="filterCallsByDate(this.value)" />
+                            <span id="call-date-count-label" class="call-count-badge">13 Calls</span>
                         </div>
                     </div>
 
@@ -2761,9 +2761,10 @@
                                 <span class="date-filter-label">Date</span>
                                 <div style="position: relative;">
                                     <select id="incident-date-select" onchange="filterIncidentsByDate(this.value)" class="date-select-input" style="padding-right: 1.8rem; font-weight: 600;">
-                                        <option value="2026-09-09" selected>Today (09 Sep 2026)</option>
-                                        <option value="2026-09-08">Yesterday (08 Sep 2026)</option>
-                                        <option value="2026-09-07">07 Sep 2026</option>
+                                        <option value="2026-09-10" selected>Today (10 Sep 2026)</option>
+                                        <option value="2026-09-09">Yesterday (09 Sep 2026)</option>
+                                        <option value="2026-09-08">08 Sep 2026</option>
+                                        <option value="2026-09-07">07 Sep 2026 (Archived)</option>
                                         <option value="all">All Database Records</option>
                                     </select>
                                 </div>
@@ -3078,7 +3079,7 @@
                         </div>
                         <div class="report-date-badge">
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-                            <span>07 Sept 2026 – 09 Sept 2026</span>
+                            <span id="report-window-badge-text">08 Sept 2026 – 10 Sept 2026</span>
                             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
                         </div>
                     </div>
@@ -3193,7 +3194,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td><strong style="color: #101828;">Yesterday (08 Sep 2026)</strong></td>
+                                    <td><strong id="report-yesterday-label" style="color: #101828;">Yesterday (09 Sep 2026)</strong></td>
                                     <td>Historical Archive (840 events)</td>
                                     <td><span class="pill-signal-info">100% MITIGATED</span></td>
                                     <td><span class="ml-status-active"><span class="ml-status-active-dot"></span>HEALTHY</span></td>
@@ -3466,7 +3467,7 @@
                 document.getElementById('page-subtitle').textContent = titles[tabId][1];
             }
             if (tabId === 'events') {
-                renderFilteredEvents();
+                filterCallsByDate(DYNAMIC_DATES.todayISO);
             }
         }
 
@@ -3924,9 +3925,110 @@
         // Fetch Historical Call Logs from Yesterday & Today from SQLite DB
         
         // ===========================================================================
-        // Date-By-Date Call Management & SQLite Archiving System
+        // Dynamic Date Calculations & Date-By-Date Call Management
         // ===========================================================================
-        let selectedCallDate = '2026-09-07'; // Default active view matching reference: 07 Sep (221 Calls)
+        const DYNAMIC_DATES = (function() {
+            const now = new Date();
+            const formatISO = (d) => {
+                const y = d.getFullYear();
+                const m = String(d.getMonth() + 1).padStart(2, '0');
+                const day = String(d.getDate()).padStart(2, '0');
+                return `${y}-${m}-${day}`;
+            };
+            const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+            const monthsLong = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+            const formatShort = (d) => `${String(d.getDate()).padStart(2, '0')} ${monthsShort[d.getMonth()]}`;
+            const formatFull = (d) => `${String(d.getDate()).padStart(2, '0')} ${monthsShort[d.getMonth()]} ${d.getFullYear()}`;
+            const formatSept = (d) => `${String(d.getDate()).padStart(2, '0')} ${monthsLong[d.getMonth()]} ${d.getFullYear()}`;
+
+            const today = new Date(now);
+            const yesterday = new Date(now);
+            yesterday.setDate(now.getDate() - 1);
+            const day2 = new Date(now);
+            day2.setDate(now.getDate() - 2);
+            const day3 = new Date(now);
+            day3.setDate(now.getDate() - 3);
+
+            return {
+                todayISO: formatISO(today),
+                yesterdayISO: formatISO(yesterday),
+                day2ISO: formatISO(day2),
+                day3ISO: formatISO(day3),
+                todayShort: formatShort(today),
+                yesterdayShort: formatShort(yesterday),
+                day2Short: formatShort(day2),
+                day3Short: formatShort(day3),
+                todayFull: formatFull(today),
+                yesterdayFull: formatFull(yesterday),
+                day2Full: formatFull(day2),
+                day3Full: formatFull(day3),
+                todaySept: formatSept(today),
+                day2Sept: formatSept(day2)
+            };
+        })();
+
+        // Automatically update all UI date labels, pill attributes & dropdowns
+        function applyDynamicDatesToUI() {
+            const pillToday = document.getElementById('pill-date-today');
+            if (pillToday) {
+                const span = pillToday.querySelector('span');
+                if (span) span.textContent = `Today (${DYNAMIC_DATES.todayShort})`;
+                pillToday.setAttribute('onclick', `filterCallsByDate('${DYNAMIC_DATES.todayISO}', this)`);
+            }
+
+            const pillYesterday = document.getElementById('pill-date-yesterday');
+            if (pillYesterday) {
+                const span = pillYesterday.querySelector('span');
+                if (span) span.textContent = `Yesterday (${DYNAMIC_DATES.yesterdayShort})`;
+                pillYesterday.setAttribute('onclick', `filterCallsByDate('${DYNAMIC_DATES.yesterdayISO}', this)`);
+            }
+
+            const pillDay2 = document.getElementById('pill-date-sep7');
+            if (pillDay2) {
+                const span = pillDay2.querySelector('span');
+                if (span) span.textContent = DYNAMIC_DATES.day2Short;
+                pillDay2.setAttribute('onclick', `filterCallsByDate('${DYNAMIC_DATES.day2ISO}', this)`);
+            }
+
+            const pillDay3 = document.getElementById('pill-date-sep6');
+            if (pillDay3) {
+                const span = pillDay3.querySelector('span');
+                if (span) span.textContent = '07 Sep (Archived in DB)';
+                pillDay3.setAttribute('onclick', `filterCallsByDate('2026-09-07', this)`);
+            }
+
+            // Attack analysis select dropdown
+            const incSelect = document.getElementById('incident-date-select');
+            if (incSelect) {
+                incSelect.innerHTML = `
+                    <option value="${DYNAMIC_DATES.todayISO}" selected>Today (${DYNAMIC_DATES.todayFull})</option>
+                    <option value="${DYNAMIC_DATES.yesterdayISO}">Yesterday (${DYNAMIC_DATES.yesterdayFull})</option>
+                    <option value="${DYNAMIC_DATES.day2ISO}">${DYNAMIC_DATES.day2Full}</option>
+                    <option value="2026-09-07">07 Sep 2026 (Archived)</option>
+                    <option value="all">All Database Records</option>
+                `;
+            }
+
+            // Reports tab badge
+            const reportBadge = document.getElementById('report-window-badge-text');
+            if (reportBadge) {
+                reportBadge.textContent = `${DYNAMIC_DATES.day2Sept} – ${DYNAMIC_DATES.todaySept}`;
+            }
+
+            // Reports table row
+            const reportYest = document.getElementById('report-yesterday-label');
+            if (reportYest) {
+                reportYest.textContent = `Yesterday (${DYNAMIC_DATES.yesterdayFull})`;
+            }
+
+            // Custom date picker default value
+            const picker = document.getElementById('call-date-picker');
+            if (picker && (!picker.value || picker.value === '2026-09-07' || picker.value === '2026-09-09')) {
+                picker.value = selectedCallDate;
+            }
+        }
+
+        let selectedCallDate = DYNAMIC_DATES.todayISO; // Default active view: Today
         let allLoadedEvents = [];
         let eventsCurrentPage = 1;
         let eventsPageSize = 12;
@@ -3949,7 +4051,22 @@
             { id: "evt_07_11", timestamp: "2026-09-07 18:22:04", event: "Call", sip_method: "INVITE", caller_id: "918031337227", context: "from-internal", extension: "919968902083", destination_extension: "919968902083", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
             { id: "evt_07_12", timestamp: "2026-09-07 18:20:51", event: "Call", sip_method: "INVITE", caller_id: "+91987654321", context: "from-internal", extension: "918031337227", destination_extension: "918031337227", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
 
-            // TODAY: 2026-09-09 (Active Calls)
+            // TODAY: Dynamic Today Calls
+            { id: "evt_today_1", timestamp: `${DYNAMIC_DATES.todayISO} 13:12:08`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919845135189", destination_extension: "919845135189", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_2", timestamp: `${DYNAMIC_DATES.todayISO} 13:10:45`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "918904543644", destination_extension: "918904543644", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_3", timestamp: `${DYNAMIC_DATES.todayISO} 13:08:30`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "918897961181", destination_extension: "918897961181", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
+            { id: "evt_today_4", timestamp: `${DYNAMIC_DATES.todayISO} 13:05:12`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "918407856557", destination_extension: "918407856557", response: "486", cause_txt: "USER BUSY / DECLINED", source_ip: "10.0.0.1" },
+            { id: "evt_today_5", timestamp: `${DYNAMIC_DATES.todayISO} 13:01:22`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "919820267096", destination_extension: "919820267096", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_6", timestamp: `${DYNAMIC_DATES.todayISO} 12:55:40`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919409541251", destination_extension: "919409541251", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_7", timestamp: `${DYNAMIC_DATES.todayISO} 12:48:19`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919964272164", destination_extension: "919964272164", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
+            { id: "evt_today_8", timestamp: `${DYNAMIC_DATES.todayISO} 12:40:05`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "917760681376", destination_extension: "917760681376", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_9", timestamp: `${DYNAMIC_DATES.todayISO} 12:32:50`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919035276268", destination_extension: "919035276268", response: "486", cause_txt: "USER BUSY / DECLINED", source_ip: "10.0.0.1" },
+            { id: "evt_today_10", timestamp: `${DYNAMIC_DATES.todayISO} 12:15:33`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "919582095569", destination_extension: "919582095569", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_11", timestamp: `${DYNAMIC_DATES.todayISO} 11:58:10`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919998104795", destination_extension: "919998104795", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
+            { id: "evt_today_12", timestamp: `${DYNAMIC_DATES.todayISO} 11:30:22`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "919738690595", destination_extension: "919738690595", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_13", timestamp: `${DYNAMIC_DATES.todayISO} 10:45:00`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919845135189", destination_extension: "919845135189", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+
+            // YESTERDAY: 2026-09-09 (Calls)
             { id: "evt_09_1", timestamp: "2026-09-09 13:12:08", event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919845135189", destination_extension: "919845135189", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
             { id: "evt_09_2", timestamp: "2026-09-09 13:10:45", event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "918904543644", destination_extension: "918904543644", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
             { id: "evt_09_3", timestamp: "2026-09-09 13:08:30", event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "918897961181", destination_extension: "918897961181", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
@@ -4016,10 +4133,10 @@
             if (el) {
                 el.classList.add('active');
             } else {
-                if (dateStr === '2026-09-09') document.getElementById('pill-date-today')?.classList.add('active');
-                else if (dateStr === '2026-09-08') document.getElementById('pill-date-yesterday')?.classList.add('active');
-                else if (dateStr === '2026-09-07') document.getElementById('pill-date-sep7')?.classList.add('active');
-                else if (dateStr === '2026-09-06') document.getElementById('pill-date-sep6')?.classList.add('active');
+                if (dateStr === DYNAMIC_DATES.todayISO) document.getElementById('pill-date-today')?.classList.add('active');
+                else if (dateStr === DYNAMIC_DATES.yesterdayISO) document.getElementById('pill-date-yesterday')?.classList.add('active');
+                else if (dateStr === DYNAMIC_DATES.day2ISO) document.getElementById('pill-date-sep7')?.classList.add('active');
+                else if (dateStr === '2026-09-07' || dateStr === DYNAMIC_DATES.day3ISO) document.getElementById('pill-date-sep6')?.classList.add('active');
                 else if (dateStr === 'all') document.getElementById('pill-date-all')?.classList.add('active');
             }
 
@@ -4594,7 +4711,7 @@
         // ===========================================================================
         let incidentsCurrentPage = 1;
         let incidentsPageSize = 8;
-        let selectedIncidentDate = '2026-09-09';
+        let selectedIncidentDate = DYNAMIC_DATES.todayISO;
 
         const SEED_INCIDENTS = [
             { id: "inc_1", time: "06:57:07 PM", attacking_ip: "+91994296547", threat_class: "INVITE_FLOOD", ai_confidence: "92%", status: "Mitigated" },
@@ -6287,10 +6404,12 @@
 
         // Initialize on page load
         window.addEventListener('DOMContentLoaded', () => {
+            applyDynamicDatesToUI();
+            setInterval(applyDynamicDatesToUI, 60000); // Check and roll over date if left open past midnight
+            filterCallsByDate(DYNAMIC_DATES.todayISO);
             initCharts();
             updateClock();
             setInterval(updateClock, 1000);
-            renderFilteredEvents();
             renderDynamicThresholds(currentThresholds);
             checkAuthSession();
         });
