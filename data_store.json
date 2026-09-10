@@ -1,0 +1,39 @@
+{
+  "whitelist": [
+    "54.172.60.0/24",
+    "54.244.51.0/24",
+    "13.52.9.0/25",
+    "216.120.187.128/26",
+    "18.214.109.128/25",
+    "18.215.142.0/26",
+    "204.89.148.128/26",
+    "199.127.61.0/24",
+    "3.120.121.128/26",
+    "18.228.70.64/26",
+    "13.238.202.192/26"
+  ],
+  "blacklisted_numbers": [],
+  "blocked_ips": [],
+  "thresholds": {
+    "invite_flood_threshold": 15,
+    "register_brute_threshold": 3,
+    "extension_scan_threshold": 5,
+    "options_flood_threshold": 20,
+    "toll_fraud_duration_sec": 180,
+    "velocity_burst_count": 10
+  },
+  "servers": [
+    {
+      "id": "srv-default",
+      "name": "Production PBX",
+      "host": "127.0.0.1",
+      "port": "5000",
+      "secret": "5e2930ea32cdf5c8cc6f6a6476077b82103ef6456e92050fa2acbd7d09d4ce78"
+    }
+  ],
+  "admin_credentials": {
+    "username": "admin",
+    "password": "OptoxSecure2026#"
+  },
+  "active_token": "YWRtaW46MTc4OTA0MTk2NzMyNTowLjYwNTA0MjI4MzM5NjIwNTQ="
+}
