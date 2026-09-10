@@ -2619,30 +2619,29 @@
                         </div>
                     </div>
 
-                    <!-- Date-By-Date Filter Toolbar (Calls organized date-by-date; past calls safely archived in database) -->
-                    <div class="date-filter-bar">
-                        <div class="date-pills-group">
-                            <span class="date-filter-label">Filter by Date</span>
-                            <button class="date-filter-pill active" id="pill-date-today" onclick="filterCallsByDate(DYNAMIC_DATES.todayISO, this)">
-                                <span>Today (10 Sep)</span>
-                            </button>
-                            <button class="date-filter-pill" id="pill-date-yesterday" onclick="filterCallsByDate(DYNAMIC_DATES.yesterdayISO, this)">
-                                <span>Yesterday (09 Sep)</span>
-                            </button>
-                            <button class="date-filter-pill" id="pill-date-sep7" onclick="filterCallsByDate(DYNAMIC_DATES.day2ISO, this)">
-                                <span>08 Sep</span>
-                            </button>
-                            <button class="date-filter-pill" id="pill-date-sep6" onclick="filterCallsByDate('2026-09-07', this)">
-                                <span>07 Sep (Archived in DB)</span>
-                            </button>
-                            <button class="date-filter-pill" id="pill-date-all" onclick="filterCallsByDate('all', this)">
-                                <span>All Database Records</span>
-                            </button>
+                    <!-- Call Activity Volume Summary (Shows how many calls happened) -->
+                    <div class="calls-volume-summary-bar" style="display: flex; justify-content: space-between; align-items: center; background: #ffffff; border: 1px solid #eaecf0; border-radius: 12px; padding: 0.85rem 1.25rem; margin-bottom: 1.25rem; box-shadow: 0 1px 3px rgba(16, 24, 40, 0.04); flex-wrap: wrap; gap: 0.75rem;">
+                        <div style="display: flex; align-items: center; gap: 0.85rem;">
+                            <div style="width: 38px; height: 38px; border-radius: 10px; background: #fff5f0; border: 1px solid #ffedd5; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #ff5500;">
+                                📞
+                            </div>
+                            <div>
+                                <div style="font-size: 0.75rem; font-weight: 700; color: #667085; text-transform: uppercase; letter-spacing: 0.5px;">Call Traffic & Telemetry</div>
+                                <div style="font-size: 1.15rem; font-weight: 800; color: #101828; display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>Total Calls Happened:</span>
+                                    <span id="total-calls-happened-count" style="color: #ff5500; font-weight: 900; background: #fff5f0; padding: 0.15rem 0.65rem; border-radius: 8px; border: 1px solid #fed7aa;">221 Calls</span>
+                                </div>
+                            </div>
                         </div>
-                        <div style="display: flex; align-items: center; gap: 0.6rem;">
-                            <span class="date-picker-label">Pick Custom Date</span>
-                            <input type="date" id="call-date-picker" class="date-select-input" value="2026-09-10" onchange="filterCallsByDate(this.value)" />
-                            <span id="call-date-count-label" class="call-count-badge">13 Calls</span>
+                        <div style="display: flex; align-items: center; gap: 0.85rem;">
+                            <div style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; font-weight: 600; color: #027a48; background: #ecfdf3; border: 1px solid #a6f4c5; padding: 0.4rem 0.85rem; border-radius: 20px;">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #12b76a; display: inline-block;"></span>
+                                <span id="calls-connected-stat">Connected: 184</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; font-weight: 600; color: #b54708; background: #fffaeb; border: 1px solid #fedf89; padding: 0.4rem 0.85rem; border-radius: 20px;">
+                                <span style="width: 8px; height: 8px; border-radius: 50%; background: #f79009; display: inline-block;"></span>
+                                <span id="calls-missed-stat">Missed / Busy: 37</span>
+                            </div>
                         </div>
                     </div>
 
@@ -3467,7 +3466,8 @@
                 document.getElementById('page-subtitle').textContent = titles[tabId][1];
             }
             if (tabId === 'events') {
-                filterCallsByDate(DYNAMIC_DATES.todayISO);
+                selectedCallDate = 'all';
+                renderFilteredEvents();
             }
         }
 
@@ -4028,7 +4028,7 @@
             }
         }
 
-        let selectedCallDate = DYNAMIC_DATES.todayISO; // Default active view: Today
+        let selectedCallDate = 'all'; // Default active view: Today
         let allLoadedEvents = [];
         let eventsCurrentPage = 1;
         let eventsPageSize = 12;
@@ -4051,20 +4051,20 @@
             { id: "evt_07_11", timestamp: "2026-09-07 18:22:04", event: "Call", sip_method: "INVITE", caller_id: "918031337227", context: "from-internal", extension: "919968902083", destination_extension: "919968902083", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
             { id: "evt_07_12", timestamp: "2026-09-07 18:20:51", event: "Call", sip_method: "INVITE", caller_id: "+91987654321", context: "from-internal", extension: "918031337227", destination_extension: "918031337227", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
 
-            // TODAY: Dynamic Today Calls
-            { id: "evt_today_1", timestamp: `${DYNAMIC_DATES.todayISO} 13:12:08`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919845135189", destination_extension: "919845135189", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_2", timestamp: `${DYNAMIC_DATES.todayISO} 13:10:45`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "918904543644", destination_extension: "918904543644", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_3", timestamp: `${DYNAMIC_DATES.todayISO} 13:08:30`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "918897961181", destination_extension: "918897961181", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
-            { id: "evt_today_4", timestamp: `${DYNAMIC_DATES.todayISO} 13:05:12`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "918407856557", destination_extension: "918407856557", response: "486", cause_txt: "USER BUSY / DECLINED", source_ip: "10.0.0.1" },
-            { id: "evt_today_5", timestamp: `${DYNAMIC_DATES.todayISO} 13:01:22`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "919820267096", destination_extension: "919820267096", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_6", timestamp: `${DYNAMIC_DATES.todayISO} 12:55:40`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919409541251", destination_extension: "919409541251", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_7", timestamp: `${DYNAMIC_DATES.todayISO} 12:48:19`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919964272164", destination_extension: "919964272164", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
-            { id: "evt_today_8", timestamp: `${DYNAMIC_DATES.todayISO} 12:40:05`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "917760681376", destination_extension: "917760681376", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_9", timestamp: `${DYNAMIC_DATES.todayISO} 12:32:50`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919035276268", destination_extension: "919035276268", response: "486", cause_txt: "USER BUSY / DECLINED", source_ip: "10.0.0.1" },
-            { id: "evt_today_10", timestamp: `${DYNAMIC_DATES.todayISO} 12:15:33`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "919582095569", destination_extension: "919582095569", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_11", timestamp: `${DYNAMIC_DATES.todayISO} 11:58:10`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919998104795", destination_extension: "919998104795", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
-            { id: "evt_today_12", timestamp: `${DYNAMIC_DATES.todayISO} 11:30:22`, event: "Call", sip_method: "INVITE", caller_id: "918035303000", context: "from-internal", extension: "919738690595", destination_extension: "919738690595", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
-            { id: "evt_today_13", timestamp: `${DYNAMIC_DATES.todayISO} 10:45:00`, event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919845135189", destination_extension: "919845135189", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            // TODAY: Dynamic Real-time Today Calls (Distinct callers, extensions & timestamps)
+            { id: "evt_today_1", timestamp: `${DYNAMIC_DATES.todayISO} 10:41:22`, event: "Call", sip_method: "INVITE", caller_id: "+919845012345", context: "from-internal", extension: "101_sales", destination_extension: "101_sales", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_2", timestamp: `${DYNAMIC_DATES.todayISO} 10:35:10`, event: "Call", sip_method: "INVITE", caller_id: "918041234567", context: "from-internal", extension: "917022334455", destination_extension: "917022334455", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_3", timestamp: `${DYNAMIC_DATES.todayISO} 10:28:45`, event: "Call", sip_method: "INVITE", caller_id: "+919741852963", context: "from-internal", extension: "ivr_support", destination_extension: "ivr_support", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
+            { id: "evt_today_4", timestamp: `${DYNAMIC_DATES.todayISO} 10:19:18`, event: "Call", sip_method: "INVITE", caller_id: "918067890123", context: "from-internal", extension: "108_billing", destination_extension: "108_billing", response: "486", cause_txt: "USER BUSY / DECLINED", source_ip: "10.0.0.1" },
+            { id: "evt_today_5", timestamp: `${DYNAMIC_DATES.todayISO} 10:12:05`, event: "Call", sip_method: "INVITE", caller_id: "+919900112233", context: "from-internal", extension: "919845998877", destination_extension: "919845998877", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_6", timestamp: `${DYNAMIC_DATES.todayISO} 10:04:30`, event: "Call", sip_method: "INVITE", caller_id: "919632587410", context: "from-internal", extension: "ivr_main", destination_extension: "ivr_main", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_7", timestamp: `${DYNAMIC_DATES.todayISO} 09:52:14`, event: "Call", sip_method: "INVITE", caller_id: "918031337227", context: "from-internal", extension: "917022119988", destination_extension: "917022119988", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
+            { id: "evt_today_8", timestamp: `${DYNAMIC_DATES.todayISO} 09:41:50`, event: "Call", sip_method: "INVITE", caller_id: "+919886012456", context: "from-internal", extension: "102_ops", destination_extension: "102_ops", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_9", timestamp: `${DYNAMIC_DATES.todayISO} 09:30:12`, event: "Call", sip_method: "INVITE", caller_id: "918045678901", context: "from-internal", extension: "918112679095", destination_extension: "918112679095", response: "486", cause_txt: "USER BUSY / DECLINED", source_ip: "10.0.0.1" },
+            { id: "evt_today_10", timestamp: `${DYNAMIC_DATES.todayISO} 09:18:25`, event: "Call", sip_method: "INVITE", caller_id: "+919945671230", context: "from-internal", extension: "105_admin", destination_extension: "105_admin", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_11", timestamp: `${DYNAMIC_DATES.todayISO} 09:05:40`, event: "Call", sip_method: "INVITE", caller_id: "918023456789", context: "from-internal", extension: "ivr_main", destination_extension: "ivr_main", response: "480", cause_txt: "NO ANSWER / MISSED", source_ip: "10.0.0.1" },
+            { id: "evt_today_12", timestamp: `${DYNAMIC_DATES.todayISO} 08:48:19`, event: "Call", sip_method: "INVITE", caller_id: "+919740123987", context: "from-internal", extension: "101_sales", destination_extension: "101_sales", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
+            { id: "evt_today_13", timestamp: `${DYNAMIC_DATES.todayISO} 08:30:00`, event: "Call", sip_method: "INVITE", caller_id: "918031336220", context: "from-internal", extension: "919481451218", destination_extension: "919481451218", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
 
             // YESTERDAY: 2026-09-09 (Calls)
             { id: "evt_09_1", timestamp: "2026-09-09 13:12:08", event: "Call", sip_method: "INVITE", caller_id: "918031727840", context: "from-internal", extension: "919845135189", destination_extension: "919845135189", response: "200", cause_txt: "CONNECTED / ACTIVE", source_ip: "10.0.0.1" },
@@ -4237,7 +4237,7 @@
                 });
             }
 
-            // Apply column sort if requested
+            // Apply column sort if requested (or default newest timestamp first)
             if (currentSortColumn !== null) {
                 filtered = [...filtered].sort((a, b) => {
                     let valA = getEventColVal(a, currentSortColumn);
@@ -4246,12 +4246,32 @@
                     if (valA > valB) return currentSortAsc ? 1 : -1;
                     return 0;
                 });
+            } else {
+                filtered = [...filtered].sort((a, b) => {
+                    let tsA = a.timestamp || a.created_at || '';
+                    let tsB = b.timestamp || b.created_at || '';
+                    return tsB.localeCompare(tsA);
+                });
             }
 
-            // Update count badge
+            // Update total calls happened & stats badges
+            const totalCountBadge = document.getElementById('total-calls-happened-count');
+            if (totalCountBadge) {
+                totalCountBadge.textContent = `${filtered.length} Calls`;
+            }
             const countLabel = document.getElementById('call-date-count-label');
             if (countLabel) {
                 countLabel.textContent = `${filtered.length} Calls`;
+            }
+            const connStat = document.getElementById('calls-connected-stat');
+            if (connStat) {
+                const connCount = filtered.filter(c => String(c.response) === '200' || (c.cause_txt && c.cause_txt.includes('CONNECTED'))).length;
+                connStat.textContent = `Connected: ${connCount}`;
+            }
+            const missStat = document.getElementById('calls-missed-stat');
+            if (missStat) {
+                const missCount = filtered.filter(c => String(c.response) !== '200' && (!c.cause_txt || !c.cause_txt.includes('CONNECTED'))).length;
+                missStat.textContent = `Missed / Busy: ${missCount}`;
             }
 
             // Pagination calculation
@@ -6406,7 +6426,7 @@
         window.addEventListener('DOMContentLoaded', () => {
             applyDynamicDatesToUI();
             setInterval(applyDynamicDatesToUI, 60000); // Check and roll over date if left open past midnight
-            filterCallsByDate(DYNAMIC_DATES.todayISO);
+            selectedCallDate = 'all'; renderFilteredEvents();
             initCharts();
             updateClock();
             setInterval(updateClock, 1000);
